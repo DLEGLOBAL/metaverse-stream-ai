@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
 import { Play, Headset, Camera, Smartphone, LinkIcon } from 'lucide-react';
 
 interface VRPreviewProps {
