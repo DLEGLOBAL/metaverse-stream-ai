@@ -7,8 +7,9 @@ import SceneSelector from '@/components/dashboard/SceneSelector';
 import SourcesList from '@/components/dashboard/SourcesList';
 import StatsPanel from '@/components/dashboard/StatsPanel';
 import AiFeatures from '@/components/dashboard/AiFeatures';
+import VRIntegrationPanel from '@/components/dashboard/VRIntegrationPanel';
 import { useAppContext } from '@/contexts/AppContext';
-import { Camera, Computer, Headset, Mic, Video, Bot, Wand2, Camera as CameraIcon, Mic as MicIcon } from 'lucide-react';
+import { Camera, Computer, Headset, Mic, Video, Bot, Wand2 } from 'lucide-react';
 
 const Dashboard = () => {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
@@ -142,6 +143,7 @@ const Dashboard = () => {
               <div>
                 <div className="grid grid-cols-1 gap-4">
                   <StatsPanel />
+                  <VRIntegrationPanel />
                 </div>
               </div>
             </div>
