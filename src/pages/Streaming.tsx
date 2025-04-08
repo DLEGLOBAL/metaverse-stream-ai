@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import DashboardLayout from '@/components/layouts/DashboardLayout';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Globe, Youtube, Play, ChevronRight, TrendingUp, Clock, Users, Twitch, Facebook, X, Link, TikTok } from 'lucide-react';
+import { Globe, Youtube, Play, ChevronRight, TrendingUp, Clock, Users, Twitch, Facebook, X, Link, Video } from 'lucide-react';
 import { useAppContext } from '@/contexts/AppContext';
 import { toast } from '@/hooks/use-toast';
 
@@ -14,7 +14,7 @@ const Streaming = () => {
     { id: 2, name: 'Twitch', icon: Twitch, connected: true, enabled: true },
     { id: 3, name: 'Facebook', icon: Facebook, connected: false, enabled: false },
     { id: 4, name: 'X', icon: X, connected: false, enabled: false },
-    { id: 5, name: 'TikTok', icon: TikTok, connected: true, enabled: true },
+    { id: 5, name: 'TikTok', icon: Video, connected: true, enabled: true },
   ];
   
   const [platformStates, setPlatformStates] = useState(
