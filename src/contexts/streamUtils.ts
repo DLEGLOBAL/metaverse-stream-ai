@@ -31,7 +31,7 @@ export const startStream = (
     toast({
       title: 'Stream Started Without Audio',
       description: 'Warning: No active audio source. Your stream will be silent.',
-      variant: 'warning',
+      variant: 'default',
     });
   }
   
