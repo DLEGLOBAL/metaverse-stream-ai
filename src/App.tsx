@@ -15,6 +15,7 @@ import VRIntegration from "./pages/VRIntegration";
 import Streaming from "./pages/Streaming";
 import Community from "./pages/Community";
 import Settings from "./pages/Settings";
+import CreatorNetwork from "./pages/CreatorNetwork";
 import NotFound from "./pages/NotFound";
 import { AppProvider } from "./contexts/AppContext";
 
@@ -38,6 +39,7 @@ const App = () => (
             <Route path="/dashboard/vr" element={<VRIntegration />} />
             <Route path="/dashboard/streaming" element={<Streaming />} />
             <Route path="/dashboard/community" element={<Community />} />
+            <Route path="/dashboard/creator-network" element={<CreatorNetwork />} />
             <Route path="/dashboard/settings" element={<Settings />} />
             <Route path="*" element={<NotFound />} />
           </Routes>

@@ -14,6 +14,7 @@ import {
   Mic,
   Settings,
   Share2,
+  Star,
   Users
 } from 'lucide-react';
 
@@ -109,6 +110,13 @@ const Sidebar = ({ collapsed, toggleSidebar }: SidebarProps) => {
             to="/dashboard/community" 
             collapsed={collapsed} 
             active={location.pathname === '/dashboard/community'} 
+          />
+          <SidebarItem 
+            icon={<Star size={iconSize} />} 
+            label="Creator Network" 
+            to="/dashboard/creator-network" 
+            collapsed={collapsed} 
+            active={location.pathname === '/dashboard/creator-network'} 
           />
         </nav>
       </div>
