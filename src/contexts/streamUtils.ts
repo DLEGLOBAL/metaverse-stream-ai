@@ -1,19 +1,38 @@
 
-import { Stats, StreamStatus } from './types';
+import { Stats, StreamStatus, Source } from './types';
 import { toast } from '@/hooks/use-toast';
 
 export const startStream = (
   isStreamPreviewAvailable: boolean, 
   setStreamStatus: (status: StreamStatus) => void,
-  simulateStatsChange: () => void
+  simulateStatsChange: () => void,
+  sources: Source[]
 ) => {
-  if (!isStreamPreviewAvailable) {
+  // Check if any video source is active
+  const hasActiveVideoSource = sources.some(
+    source => source.active && (source.type === 'camera' || source.type === 'display')
+  );
+  
+  // Check for active audio
+  const hasActiveAudio = sources.some(
+    source => source.active && source.type === 'audio'
+  );
+  
+  if (!hasActiveVideoSource) {
     toast({
       title: 'Cannot Start Stream',
       description: 'No active video source available. Please enable a camera or display source.',
       variant: 'destructive',
     });
     return;
+  }
+  
+  if (!hasActiveAudio) {
+    toast({
+      title: 'Stream Started Without Audio',
+      description: 'Warning: No active audio source. Your stream will be silent.',
+      variant: 'warning',
+    });
   }
   
   setStreamStatus('live');
@@ -34,8 +53,13 @@ export const stopStream = (setStreamStatus: (status: StreamStatus) => void) => {
   });
 };
 
-export const testStream = (isStreamPreviewAvailable: boolean) => {
-  if (!isStreamPreviewAvailable) {
+export const testStream = (isStreamPreviewAvailable: boolean, sources: Source[]) => {
+  // Check if any video source is active
+  const hasActiveVideoSource = sources.some(
+    source => source.active && (source.type === 'camera' || source.type === 'display')
+  );
+  
+  if (!hasActiveVideoSource) {
     toast({
       title: 'Cannot Test Stream',
       description: 'No active video source available. Please enable a camera or display source.',

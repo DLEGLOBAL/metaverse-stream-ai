@@ -1,4 +1,3 @@
-
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { toast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
@@ -78,7 +77,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   const handleStartStream = () => {
     startStream(isStreamPreviewAvailable, setStreamStatus, () => 
-      simulateStatsChange(streamStatus, setStats)
+      simulateStatsChange(streamStatus, setStats),
+      sources
     );
   };
 
@@ -87,7 +87,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   };
 
   const handleTestStream = () => {
-    testStream(isStreamPreviewAvailable);
+    testStream(isStreamPreviewAvailable, sources);
   };
 
   return (

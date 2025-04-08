@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Camera, LayoutPanelTop, Mic, Wand2 } from 'lucide-react';
+import { Camera, LayoutPanelTop, Mic, Wand2, Computer } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useAppContext } from '@/contexts/AppContext';
 import { toast } from '@/hooks/use-toast';
@@ -43,6 +43,19 @@ const StreamPreview = () => {
     }
   };
   
+  const handleScreenShareToggle = () => {
+    const displaySource = sources.find(source => source.type === 'display');
+    if (displaySource) {
+      toggleSourceActive(displaySource.id);
+    } else {
+      toast({
+        title: 'Display Source Not Found',
+        description: 'No screen sharing source is available.',
+        variant: 'destructive',
+      });
+    }
+  };
+  
   const handleLayoutToggle = () => {
     toast({
       title: 'Layout Options',
@@ -56,6 +69,11 @@ const StreamPreview = () => {
       description: 'AI enhancements will be available in the next update.',
     });
   };
+
+  // Get active status of different source types
+  const isCameraActive = sources.some(s => s.type === 'camera' && s.active);
+  const isMicActive = sources.some(s => s.type === 'audio' && s.active);
+  const isScreenShareActive = sources.some(s => s.type === 'display' && s.active);
 
   return (
     <Card className="h-full glass-card">
@@ -83,9 +101,24 @@ const StreamPreview = () => {
             {isStreamPreviewAvailable ? (
               <div className="text-center">
                 <div className="w-full h-full bg-gradient-to-tr from-meta-dark-blue/80 to-meta-slate/80 absolute inset-0 flex items-center justify-center">
-                  <div className="flex flex-col items-center animate-pulse">
-                    <Camera className="h-12 w-12 text-meta-teal mb-2" />
-                    <p className="text-meta-teal">Camera Active</p>
+                  <div className="flex flex-col items-center">
+                    {isScreenShareActive ? (
+                      <div className="animate-pulse">
+                        <Computer className="h-12 w-12 text-meta-teal mb-2" />
+                        <p className="text-meta-teal">Screen Share Active</p>
+                      </div>
+                    ) : (
+                      <div className="animate-pulse">
+                        <Camera className="h-12 w-12 text-meta-teal mb-2" />
+                        <p className="text-meta-teal">Camera Active</p>
+                      </div>
+                    )}
+                    
+                    {isMicActive ? (
+                      <p className="text-xs text-green-400 mt-2">Microphone Active</p>
+                    ) : (
+                      <p className="text-xs text-red-400 mt-2">Microphone Inactive</p>
+                    )}
                   </div>
                 </div>
               </div>
@@ -105,7 +138,7 @@ const StreamPreview = () => {
                 variant="ghost" 
                 size="icon" 
                 className={`h-8 w-8 text-white hover:bg-white/20 bg-black/40 ${
-                  sources.find(s => s.type === 'camera' && s.active) ? 'text-meta-teal' : 'text-white'
+                  isCameraActive ? 'text-meta-teal' : 'text-white'
                 }`}
                 onClick={handleCameraToggle}
               >
@@ -115,11 +148,21 @@ const StreamPreview = () => {
                 variant="ghost" 
                 size="icon" 
                 className={`h-8 w-8 text-white hover:bg-white/20 bg-black/40 ${
-                  sources.find(s => s.type === 'audio' && s.active) ? 'text-meta-teal' : 'text-white'
+                  isMicActive ? 'text-meta-teal' : 'text-white'
                 }`}
                 onClick={handleMicToggle}
               >
                 <Mic className="h-4 w-4" />
+              </Button>
+              <Button 
+                variant="ghost" 
+                size="icon" 
+                className={`h-8 w-8 text-white hover:bg-white/20 bg-black/40 ${
+                  isScreenShareActive ? 'text-meta-teal' : 'text-white'
+                }`}
+                onClick={handleScreenShareToggle}
+              >
+                <Computer className="h-4 w-4" />
               </Button>
               <Button 
                 variant="ghost" 
