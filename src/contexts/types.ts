@@ -1,4 +1,3 @@
-
 export type Scene = {
   id: number;
   name: string;
@@ -30,7 +29,7 @@ export type Stats = {
   status: 'good' | 'warning' | 'error';
 };
 
-export type StreamStatus = 'offline' | 'live' | 'recording';
+export type StreamStatus = 'live' | 'offline' | 'recording';
 
 export interface AppContextType {
   scenes: Scene[];

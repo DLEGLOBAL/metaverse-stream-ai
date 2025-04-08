@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Play } from 'lucide-react';
 
 interface StreamStatusCardProps {
-  streamStatus: 'live' | 'offline';
+  streamStatus: 'live' | 'offline' | 'recording';
   activeStreamPlatforms: number;
   onStartStream: () => void;
   onStopStream: () => void;
@@ -26,10 +26,12 @@ const StreamStatusCard: React.FC<StreamStatusCardProps> = ({
         <div className="bg-meta-dark-blue p-4 rounded-md border border-meta-teal/20">
           <div className="flex items-center mb-3">
             <div className={`h-3 w-3 rounded-full mr-2 ${
-              streamStatus === 'live' ? 'bg-red-500 animate-pulse' : 'bg-meta-teal'
+              streamStatus === 'live' ? 'bg-red-500 animate-pulse' : 
+              streamStatus === 'recording' ? 'bg-yellow-500 animate-pulse' : 'bg-meta-teal'
             }`}></div>
             <span className="text-white font-medium">
-              {streamStatus === 'live' ? 'LIVE' : 'OFFLINE'}
+              {streamStatus === 'live' ? 'LIVE' : 
+               streamStatus === 'recording' ? 'RECORDING' : 'OFFLINE'}
             </span>
           </div>
           
@@ -37,7 +39,7 @@ const StreamStatusCard: React.FC<StreamStatusCardProps> = ({
             <div className="flex justify-between">
               <span className="text-gray-400">Uptime:</span>
               <span className="text-white">
-                {streamStatus === 'live' ? '00:00:00' : '--:--:--'}
+                {streamStatus !== 'offline' ? '00:00:00' : '--:--:--'}
               </span>
             </div>
             <div className="flex justify-between">
@@ -53,7 +55,7 @@ const StreamStatusCard: React.FC<StreamStatusCardProps> = ({
           </div>
           
           <div className="mt-4">
-            {streamStatus === 'live' ? (
+            {streamStatus !== 'offline' ? (
               <Button 
                 variant="outline" 
                 className="w-full border-red-500/30 hover:bg-red-500/10 text-red-400"
