@@ -1,14 +1,12 @@
-
 import React, { useState } from 'react';
-import Sidebar from '@/components/dashboard/Sidebar';
-import Header from '@/components/dashboard/Header';
+import DashboardLayout from '@/components/layouts/DashboardLayout';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Headset, Camera, RefreshCw, Smartphone, LinkIcon, Gamepad2, Plug, Play } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
+import { useEpilepsySafeMode, EpilepsySafeModeProvider } from '@/components/accessibility/EpilepsySafeMode';
 
 const VRIntegration = () => {
-  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [deviceConnected, setDeviceConnected] = useState(false);
   
   const handleConnectDevice = () => {
@@ -43,16 +41,41 @@ const VRIntegration = () => {
   };
 
   return (
-    <div className="min-h-screen bg-meta-slate">
-      <Sidebar collapsed={sidebarCollapsed} toggleSidebar={() => setSidebarCollapsed(!sidebarCollapsed)} />
-      <Header sidebarCollapsed={sidebarCollapsed} />
-      
-      <main className={`pt-20 px-4 pb-4 transition-all duration-300 ${sidebarCollapsed ? 'ml-16' : 'ml-64'}`}>
-        <div className="flex justify-between items-center mb-6">
-          <div>
-            <h1 className="text-2xl font-bold text-white">VR Integration</h1>
-            <p className="text-gray-400 mt-1">Connect and stream from VR devices</p>
-          </div>
+    <DashboardLayout>
+      <EpilepsySafeModeProvider>
+        <VRIntegrationContent 
+          deviceConnected={deviceConnected}
+          handleConnectDevice={handleConnectDevice}
+          handleDisconnectDevice={handleDisconnectDevice}
+          handleStartCapture={handleStartCapture}
+        />
+      </EpilepsySafeModeProvider>
+    </DashboardLayout>
+  );
+};
+
+const VRIntegrationContent = ({
+  deviceConnected,
+  handleConnectDevice,
+  handleDisconnectDevice,
+  handleStartCapture
+}: {
+  deviceConnected: boolean;
+  handleConnectDevice: () => void;
+  handleDisconnectDevice: () => void;
+  handleStartCapture: () => void;
+}) => {
+  const { EpilepsySafeModeToggle } = useEpilepsySafeMode();
+  
+  return (
+    <div className="flex flex-col gap-6">
+      <div className="flex justify-between items-center mb-6">
+        <div>
+          <h1 className="text-2xl font-bold text-white dark:text-white">VR Integration</h1>
+          <p className="text-gray-400 mt-1">Connect and stream from VR devices</p>
+        </div>
+        <div className="flex space-x-4 items-center">
+          <EpilepsySafeModeToggle />
           {deviceConnected ? (
             <Button 
               variant="outline"
@@ -70,44 +93,44 @@ const VRIntegration = () => {
             </Button>
           )}
         </div>
-        
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Device selection */}
-          <div>
-            <Card className="glass-card h-full">
-              <CardHeader className="pb-2">
-                <CardTitle className="text-white">VR Devices</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-3">
-                  <div className={`p-4 rounded-md border ${deviceConnected ? 'border-meta-teal/40 bg-meta-teal/10' : 'border-gray-700'}`}>
-                    <div className="flex items-center">
-                      <Headset className={`h-6 w-6 mr-3 ${deviceConnected ? 'text-meta-teal' : 'text-gray-400'}`} />
-                      <div>
-                        <p className="font-medium text-white">Meta Quest 3</p>
-                        <p className="text-xs text-gray-400">Standalone VR Headset</p>
-                      </div>
-                      <div className="ml-auto">
-                        {deviceConnected && (
-                          <div className="flex items-center">
-                            <div className="h-2 w-2 bg-meta-teal rounded-full mr-2 animate-pulse"></div>
-                            <span className="text-xs text-meta-teal">Connected</span>
-                          </div>
-                        )}
+      </div>
+      
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Device selection */}
+        <div>
+          <Card className="glass-card h-full">
+            <CardHeader className="pb-2">
+              <CardTitle className="text-white">VR Devices</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-3">
+                <div className={`p-4 rounded-md border ${deviceConnected ? 'border-meta-teal/40 bg-meta-teal/10' : 'border-gray-700'}`}>
+                  <div className="flex items-center">
+                    <Headset className={`h-6 w-6 mr-3 ${deviceConnected ? 'text-meta-teal' : 'text-gray-400'}`} />
+                    <div>
+                      <p className="font-medium text-white">Meta Quest 3</p>
+                      <p className="text-xs text-gray-400">Standalone VR Headset</p>
+                    </div>
+                    <div className="ml-auto">
+                      {deviceConnected && (
+                        <div className="flex items-center">
+                          <div className="h-2 w-2 bg-meta-teal rounded-full mr-2 animate-pulse"></div>
+                          <span className="text-xs text-meta-teal">Connected</span>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                  
+                  {deviceConnected && (
+                    <div className="mt-3 pt-3 border-t border-gray-700">
+                      <div className="grid grid-cols-2 gap-2 text-xs text-gray-300">
+                        <div>Battery: <span className="text-meta-teal">82%</span></div>
+                        <div>Resolution: <span className="text-meta-teal">2064 x 2208</span></div>
+                        <div>Connection: <span className="text-meta-teal">WiFi</span></div>
+                        <div>Latency: <span className="text-meta-teal">35ms</span></div>
                       </div>
                     </div>
-                    
-                    {deviceConnected && (
-                      <div className="mt-3 pt-3 border-t border-gray-700">
-                        <div className="grid grid-cols-2 gap-2 text-xs text-gray-300">
-                          <div>Battery: <span className="text-meta-teal">82%</span></div>
-                          <div>Resolution: <span className="text-meta-teal">2064 x 2208</span></div>
-                          <div>Connection: <span className="text-meta-teal">WiFi</span></div>
-                          <div>Latency: <span className="text-meta-teal">35ms</span></div>
-                        </div>
-                      </div>
-                    )}
-                  </div>
+                  )}
                   
                   <div className="p-4 rounded-md border border-gray-700">
                     <div className="flex items-center">
@@ -262,7 +285,7 @@ const VRIntegration = () => {
             </Card>
           </div>
         </div>
-      </main>
+      </div>
     </div>
   );
 };

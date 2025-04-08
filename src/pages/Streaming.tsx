@@ -1,15 +1,12 @@
-
 import React, { useState } from 'react';
-import Sidebar from '@/components/dashboard/Sidebar';
-import Header from '@/components/dashboard/Header';
+import DashboardLayout from '@/components/layouts/DashboardLayout';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Globe, Youtube, Play, ChevronRight, TrendingUp, Clock, Users, Twitch, Facebook, X, Link } from 'lucide-react';
+import { Globe, Youtube, Play, ChevronRight, TrendingUp, Clock, Users, Twitch, Facebook, X, Link, TikTok } from 'lucide-react';
 import { useAppContext } from '@/contexts/AppContext';
 import { toast } from '@/hooks/use-toast';
 
 const Streaming = () => {
-  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const { streamStatus, startStream, stopStream } = useAppContext();
   
   const platforms = [
@@ -17,6 +14,7 @@ const Streaming = () => {
     { id: 2, name: 'Twitch', icon: Twitch, connected: true, enabled: true },
     { id: 3, name: 'Facebook', icon: Facebook, connected: false, enabled: false },
     { id: 4, name: 'X', icon: X, connected: false, enabled: false },
+    { id: 5, name: 'TikTok', icon: TikTok, connected: true, enabled: true },
   ];
   
   const [platformStates, setPlatformStates] = useState(
@@ -64,14 +62,11 @@ const Streaming = () => {
   };
 
   return (
-    <div className="min-h-screen bg-meta-slate">
-      <Sidebar collapsed={sidebarCollapsed} toggleSidebar={() => setSidebarCollapsed(!sidebarCollapsed)} />
-      <Header sidebarCollapsed={sidebarCollapsed} />
-      
-      <main className={`pt-20 px-4 pb-4 transition-all duration-300 ${sidebarCollapsed ? 'ml-16' : 'ml-64'}`}>
+    <DashboardLayout>
+      <div className="flex flex-col gap-6">
         <div className="flex justify-between items-center mb-6">
           <div>
-            <h1 className="text-2xl font-bold text-white">Streaming</h1>
+            <h1 className="text-2xl font-bold text-white dark:text-white">Streaming</h1>
             <p className="text-gray-400 mt-1">Manage your stream destinations and settings</p>
           </div>
           {streamStatus === 'live' ? (
@@ -93,7 +88,6 @@ const Streaming = () => {
         </div>
         
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Platforms section */}
           <div className="lg:col-span-2">
             <Card className="glass-card">
               <CardHeader className="pb-2">
@@ -180,7 +174,6 @@ const Streaming = () => {
               </CardContent>
             </Card>
             
-            {/* Stream settings */}
             <Card className="glass-card mt-4">
               <CardHeader className="pb-2">
                 <CardTitle className="text-white">Stream Settings</CardTitle>
@@ -244,7 +237,6 @@ const Streaming = () => {
             </Card>
           </div>
           
-          {/* Status and Stream Key */}
           <div>
             <Card className="glass-card">
               <CardHeader className="pb-2">
@@ -369,8 +361,8 @@ const Streaming = () => {
             </Card>
           </div>
         </div>
-      </main>
-    </div>
+      </div>
+    </DashboardLayout>
   );
 };
 

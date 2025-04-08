@@ -123,6 +123,7 @@ export default {
         "feature-gradient": "linear-gradient(135deg, #1a2b4b 0%, #7e22ce 100%)",
         "button-gradient": "linear-gradient(90deg, #0CFFE1 0%, #00FFFF 100%)",
         "glow-gradient": "linear-gradient(45deg, rgba(12, 255, 225, 0.3) 0%, rgba(0, 255, 255, 0.3) 100%)",
+        "light-gradient": "linear-gradient(90deg, #f0f9ff 0%, #e1f5fe 100%)",
       },
     },
   },
