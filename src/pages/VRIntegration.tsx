@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import DashboardLayout from '@/components/layouts/DashboardLayout';
 import { Button } from '@/components/ui/button';
@@ -131,159 +132,159 @@ const VRIntegrationContent = ({
                       </div>
                     </div>
                   )}
-                  
-                  <div className="p-4 rounded-md border border-gray-700">
-                    <div className="flex items-center">
-                      <Gamepad2 className="h-6 w-6 mr-3 text-gray-400" />
-                      <div>
-                        <p className="font-medium text-white">PCVR / SteamVR</p>
-                        <p className="text-xs text-gray-400">PC-Connected VR</p>
-                      </div>
-                    </div>
-                  </div>
-                  
-                  <div className="p-4 rounded-md border border-gray-700">
-                    <div className="flex items-center">
-                      <Camera className="h-6 w-6 mr-3 text-gray-400" />
-                      <div>
-                        <p className="font-medium text-white">360° Camera</p>
-                        <p className="text-xs text-gray-400">External VR Camera</p>
-                      </div>
-                    </div>
-                  </div>
-                  
-                  <Button 
-                    variant="outline" 
-                    className="w-full border-meta-teal/30 hover:bg-meta-teal/10 text-white mt-2"
-                  >
-                    <RefreshCw className="h-4 w-4 mr-2" /> Refresh Devices
-                  </Button>
                 </div>
-              </CardContent>
-            </Card>
-          </div>
-          
-          {/* Preview area */}
-          <div className="lg:col-span-2">
-            <Card className="glass-card">
-              <CardHeader className="flex flex-row items-center justify-between pb-2">
-                <CardTitle className="text-white">VR Preview</CardTitle>
-                <Button 
-                  className="bg-meta-teal/20 hover:bg-meta-teal/30 text-meta-teal border border-meta-teal/30"
-                  disabled={!deviceConnected}
-                  onClick={handleStartCapture}
-                >
-                  <Play className="h-4 w-4 mr-2" /> Start Capture
-                </Button>
-              </CardHeader>
-              <CardContent>
-                <div className="aspect-video bg-gray-900 rounded-md flex items-center justify-center relative overflow-hidden border border-meta-teal/20">
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="w-full h-full bg-gradient-to-tr from-meta-dark-blue/80 to-meta-slate/80 absolute inset-0 flex items-center justify-center">
-                      {deviceConnected ? (
-                        <div className="flex flex-col items-center">
-                          <Headset className="h-12 w-12 text-meta-teal mb-2" />
-                          <p className="text-meta-teal">Meta Quest 3 Connected</p>
-                          <p className="text-xs text-gray-400 mt-1">Ready to start capturing</p>
-                        </div>
-                      ) : (
-                        <div className="flex flex-col items-center">
-                          <Headset className="h-12 w-12 text-meta-teal/40 mb-2" />
-                          <p className="text-gray-400">No VR device connected</p>
-                          <p className="text-xs text-gray-500 mt-1">Connect a VR headset to begin</p>
-                        </div>
-                      )}
+                
+                <div className="p-4 rounded-md border border-gray-700">
+                  <div className="flex items-center">
+                    <Gamepad2 className="h-6 w-6 mr-3 text-gray-400" />
+                    <div>
+                      <p className="font-medium text-white">PCVR / SteamVR</p>
+                      <p className="text-xs text-gray-400">PC-Connected VR</p>
                     </div>
                   </div>
                 </div>
                 
-                <div className="mt-4 grid grid-cols-1 md:grid-cols-3 gap-3">
-                  <div className="bg-meta-dark-blue p-3 rounded-md border border-meta-teal/20">
-                    <div className="flex items-center">
-                      <div className="bg-meta-teal/20 p-2 rounded-md mr-3">
-                        <Camera className="h-4 w-4 text-meta-teal" />
-                      </div>
-                      <div>
-                        <p className="text-sm text-white">First Person</p>
-                        <p className="text-xs text-gray-400">View from headset</p>
-                      </div>
-                    </div>
-                  </div>
-                  
-                  <div className="bg-meta-dark-blue p-3 rounded-md border border-meta-teal/20">
-                    <div className="flex items-center">
-                      <div className="bg-meta-teal/20 p-2 rounded-md mr-3">
-                        <Smartphone className="h-4 w-4 text-meta-teal" />
-                      </div>
-                      <div>
-                        <p className="text-sm text-white">Mixed Reality</p>
-                        <p className="text-xs text-gray-400">Blended view</p>
-                      </div>
-                    </div>
-                  </div>
-                  
-                  <div className="bg-meta-dark-blue p-3 rounded-md border border-meta-teal/20">
-                    <div className="flex items-center">
-                      <div className="bg-meta-teal/20 p-2 rounded-md mr-3">
-                        <LinkIcon className="h-4 w-4 text-meta-teal" />
-                      </div>
-                      <div>
-                        <p className="text-sm text-white">Third Person</p>
-                        <p className="text-xs text-gray-400">External view</p>
-                      </div>
+                <div className="p-4 rounded-md border border-gray-700">
+                  <div className="flex items-center">
+                    <Camera className="h-6 w-6 mr-3 text-gray-400" />
+                    <div>
+                      <p className="font-medium text-white">360° Camera</p>
+                      <p className="text-xs text-gray-400">External VR Camera</p>
                     </div>
                   </div>
                 </div>
-              </CardContent>
-            </Card>
-            
-            <Card className="glass-card mt-4">
-              <CardHeader className="pb-2">
-                <CardTitle className="text-white">VR Stream Settings</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-1">Stream Resolution</label>
-                    <select className="w-full bg-meta-dark-blue border border-meta-teal/30 rounded-md py-2 px-3 text-white" disabled={!deviceConnected}>
-                      <option>1080p (Full HD)</option>
-                      <option selected>1440p (QHD)</option>
-                      <option>2160p (4K UHD)</option>
-                    </select>
-                  </div>
-                  
-                  <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-1">Frame Rate</label>
-                    <select className="w-full bg-meta-dark-blue border border-meta-teal/30 rounded-md py-2 px-3 text-white" disabled={!deviceConnected}>
-                      <option>30 fps</option>
-                      <option selected>60 fps</option>
-                      <option>90 fps</option>
-                      <option>120 fps</option>
-                    </select>
-                  </div>
-                  
-                  <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-1">Bitrate</label>
-                    <select className="w-full bg-meta-dark-blue border border-meta-teal/30 rounded-md py-2 px-3 text-white" disabled={!deviceConnected}>
-                      <option>10 Mbps</option>
-                      <option>15 Mbps</option>
-                      <option selected>20 Mbps</option>
-                      <option>30 Mbps</option>
-                    </select>
-                  </div>
-                  
-                  <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-1">Encoding</label>
-                    <select className="w-full bg-meta-dark-blue border border-meta-teal/30 rounded-md py-2 px-3 text-white" disabled={!deviceConnected}>
-                      <option>Software (CPU)</option>
-                      <option selected>Hardware (GPU)</option>
-                      <option>Auto (Recommended)</option>
-                    </select>
+                
+                <Button 
+                  variant="outline" 
+                  className="w-full border-meta-teal/30 hover:bg-meta-teal/10 text-white mt-2"
+                >
+                  <RefreshCw className="h-4 w-4 mr-2" /> Refresh Devices
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+          
+        {/* Preview area */}
+        <div className="lg:col-span-2">
+          <Card className="glass-card">
+            <CardHeader className="flex flex-row items-center justify-between pb-2">
+              <CardTitle className="text-white">VR Preview</CardTitle>
+              <Button 
+                className="bg-meta-teal/20 hover:bg-meta-teal/30 text-meta-teal border border-meta-teal/30"
+                disabled={!deviceConnected}
+                onClick={handleStartCapture}
+              >
+                <Play className="h-4 w-4 mr-2" /> Start Capture
+              </Button>
+            </CardHeader>
+            <CardContent>
+              <div className="aspect-video bg-gray-900 rounded-md flex items-center justify-center relative overflow-hidden border border-meta-teal/20">
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <div className="w-full h-full bg-gradient-to-tr from-meta-dark-blue/80 to-meta-slate/80 absolute inset-0 flex items-center justify-center">
+                    {deviceConnected ? (
+                      <div className="flex flex-col items-center">
+                        <Headset className="h-12 w-12 text-meta-teal mb-2" />
+                        <p className="text-meta-teal">Meta Quest 3 Connected</p>
+                        <p className="text-xs text-gray-400 mt-1">Ready to start capturing</p>
+                      </div>
+                    ) : (
+                      <div className="flex flex-col items-center">
+                        <Headset className="h-12 w-12 text-meta-teal/40 mb-2" />
+                        <p className="text-gray-400">No VR device connected</p>
+                        <p className="text-xs text-gray-500 mt-1">Connect a VR headset to begin</p>
+                      </div>
+                    )}
                   </div>
                 </div>
-              </CardContent>
-            </Card>
-          </div>
+              </div>
+              
+              <div className="mt-4 grid grid-cols-1 md:grid-cols-3 gap-3">
+                <div className="bg-meta-dark-blue p-3 rounded-md border border-meta-teal/20">
+                  <div className="flex items-center">
+                    <div className="bg-meta-teal/20 p-2 rounded-md mr-3">
+                      <Camera className="h-4 w-4 text-meta-teal" />
+                    </div>
+                    <div>
+                      <p className="text-sm text-white">First Person</p>
+                      <p className="text-xs text-gray-400">View from headset</p>
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="bg-meta-dark-blue p-3 rounded-md border border-meta-teal/20">
+                  <div className="flex items-center">
+                    <div className="bg-meta-teal/20 p-2 rounded-md mr-3">
+                      <Smartphone className="h-4 w-4 text-meta-teal" />
+                    </div>
+                    <div>
+                      <p className="text-sm text-white">Mixed Reality</p>
+                      <p className="text-xs text-gray-400">Blended view</p>
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="bg-meta-dark-blue p-3 rounded-md border border-meta-teal/20">
+                  <div className="flex items-center">
+                    <div className="bg-meta-teal/20 p-2 rounded-md mr-3">
+                      <LinkIcon className="h-4 w-4 text-meta-teal" />
+                    </div>
+                    <div>
+                      <p className="text-sm text-white">Third Person</p>
+                      <p className="text-xs text-gray-400">External view</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+          
+          <Card className="glass-card mt-4">
+            <CardHeader className="pb-2">
+              <CardTitle className="text-white">VR Stream Settings</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-1">Stream Resolution</label>
+                  <select className="w-full bg-meta-dark-blue border border-meta-teal/30 rounded-md py-2 px-3 text-white" disabled={!deviceConnected}>
+                    <option>1080p (Full HD)</option>
+                    <option selected>1440p (QHD)</option>
+                    <option>2160p (4K UHD)</option>
+                  </select>
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-1">Frame Rate</label>
+                  <select className="w-full bg-meta-dark-blue border border-meta-teal/30 rounded-md py-2 px-3 text-white" disabled={!deviceConnected}>
+                    <option>30 fps</option>
+                    <option selected>60 fps</option>
+                    <option>90 fps</option>
+                    <option>120 fps</option>
+                  </select>
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-1">Bitrate</label>
+                  <select className="w-full bg-meta-dark-blue border border-meta-teal/30 rounded-md py-2 px-3 text-white" disabled={!deviceConnected}>
+                    <option>10 Mbps</option>
+                    <option>15 Mbps</option>
+                    <option selected>20 Mbps</option>
+                    <option>30 Mbps</option>
+                  </select>
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-1">Encoding</label>
+                  <select className="w-full bg-meta-dark-blue border border-meta-teal/30 rounded-md py-2 px-3 text-white" disabled={!deviceConnected}>
+                    <option>Software (CPU)</option>
+                    <option selected>Hardware (GPU)</option>
+                    <option>Auto (Recommended)</option>
+                  </select>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
         </div>
       </div>
     </div>
