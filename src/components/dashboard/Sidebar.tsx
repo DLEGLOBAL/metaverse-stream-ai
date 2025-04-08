@@ -16,7 +16,6 @@ import {
   Share2,
   Users
 } from 'lucide-react';
-import { toast } from '@/hooks/use-toast';
 
 type SidebarProps = {
   collapsed: boolean;
@@ -136,17 +135,6 @@ type SidebarItemProps = {
 };
 
 const SidebarItem = ({ icon, label, to, collapsed, active }: SidebarItemProps) => {
-  const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
-    // Only prevent navigation for non-dashboard routes (coming soon features)
-    if (to !== '/dashboard') {
-      e.preventDefault();
-      toast({
-        title: 'Coming Soon',
-        description: `The ${label} feature will be available in the next update.`,
-      });
-    }
-  };
-
   return (
     <Link 
       to={to} 
@@ -155,7 +143,6 @@ const SidebarItem = ({ icon, label, to, collapsed, active }: SidebarItemProps) =
           ? 'bg-sidebar-accent text-meta-teal' 
           : 'text-sidebar-foreground hover:bg-sidebar-accent hover:text-meta-teal'
         }`}
-      onClick={handleClick}
     >
       <span className="flex items-center justify-center w-6 h-6">{icon}</span>
       {!collapsed && <span className="ml-3 whitespace-nowrap">{label}</span>}
