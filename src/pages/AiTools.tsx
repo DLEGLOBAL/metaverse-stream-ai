@@ -147,7 +147,7 @@ const AiTools = () => {
                       
                       <div className="p-2 border border-meta-teal/20 rounded bg-meta-slate/50">
                         <div className="flex items-center text-xs text-meta-teal mb-1">
-                          <Robot className="h-3 w-3 mr-1" /> Auto Action
+                          <Bot className="h-3 w-3 mr-1" /> Auto Action
                         </div>
                         <p className="text-xs text-gray-300">Balanced audio levels for optimal sound</p>
                       </div>
