@@ -2,8 +2,11 @@
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Cpu, MemoryStick, Terminal, Upload } from 'lucide-react';
+import { useAppContext } from '@/contexts/AppContext';
 
 const StatsPanel = () => {
+  const { stats, streamStatus } = useAppContext();
+  
   return (
     <Card className="h-full glass-card">
       <CardHeader className="pb-2">
@@ -14,31 +17,47 @@ const StatsPanel = () => {
           <StatItem 
             icon={<Upload className="h-4 w-4" />}
             label="Bitrate"
-            value="6000 kbps"
-            status="good"
+            value={stats.bitrate}
+            status={stats.status}
           />
           <StatItem 
             icon={<Cpu className="h-4 w-4" />}
             label="CPU Usage"
-            value="32%"
-            status="good"
+            value={stats.cpuUsage}
+            status={stats.status}
           />
           <StatItem 
             icon={<MemoryStick className="h-4 w-4" />}
             label="RAM Usage"
-            value="3.2 GB"
-            status="good"
+            value={stats.ramUsage}
+            status={stats.status}
           />
           <StatItem 
             icon={<Terminal className="h-4 w-4" />}
             label="GPU Encoding"
-            value="NVENC"
-            status="good"
+            value={stats.gpuEncoding}
+            status={stats.status}
           />
+          
+          {streamStatus === 'live' && (
+            <div className="mt-4 pt-2 border-t border-meta-teal/20">
+              <div className="flex items-center">
+                <div className="h-2 w-2 bg-meta-teal animate-pulse rounded-full mr-2"></div>
+                <span className="text-meta-teal text-sm">Live: {formatUptime()}</span>
+              </div>
+            </div>
+          )}
         </div>
       </CardContent>
     </Card>
   );
+};
+
+// Helper function to format uptime (for demo purposes, just shows a random uptime)
+const formatUptime = () => {
+  const minutes = Math.floor(Math.random() * 60);
+  const seconds = Math.floor(Math.random() * 60);
+  return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
 };
 
 type StatItemProps = {
