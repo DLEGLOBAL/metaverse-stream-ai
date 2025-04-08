@@ -58,7 +58,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   const handleToggleSceneActive = (id: number) => {
     setScenes(prevScenes => 
-      toggleSceneActive(prevScenes, id, setActiveSceneId)
+      toggleSceneActive(prevScenes, id, setScenes, setActiveSceneId)
     );
   };
 
