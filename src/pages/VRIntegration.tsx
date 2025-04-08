@@ -1,42 +1,30 @@
 
-import React, { useState } from 'react';
+import React from 'react';
 import DashboardLayout from '@/components/layouts/DashboardLayout';
-import { toast } from '@/hooks/use-toast';
 import { EpilepsySafeModeProvider } from '@/components/accessibility/EpilepsySafeMode';
 import VRIntegrationContent from '@/components/vr/VRIntegrationContent';
+import { useVRContext } from '@/contexts/VRContext';
 
 const VRIntegration = () => {
-  const [deviceConnected, setDeviceConnected] = useState(false);
+  const { 
+    devices, 
+    activeDeviceId, 
+    connectDevice, 
+    disconnectDevice, 
+    startCapture 
+  } = useVRContext();
+  
+  const deviceConnected = !!activeDeviceId;
   
   const handleConnectDevice = () => {
-    toast({
-      title: "Connecting VR Device",
-      description: "Searching for compatible VR devices...",
-    });
-    
-    // Simulate connection after 2 seconds
-    setTimeout(() => {
-      setDeviceConnected(true);
-      toast({
-        title: "VR Device Connected",
-        description: "Meta Quest 3 has been connected successfully.",
-      });
-    }, 2000);
+    // Connect the first available device (Quest 3)
+    connectDevice('quest3');
   };
   
   const handleDisconnectDevice = () => {
-    setDeviceConnected(false);
-    toast({
-      title: "VR Device Disconnected",
-      description: "Device has been disconnected.",
-    });
-  };
-  
-  const handleStartCapture = () => {
-    toast({
-      title: "Starting VR Capture",
-      description: "Capturing VR content stream...",
-    });
+    if (activeDeviceId) {
+      disconnectDevice(activeDeviceId);
+    }
   };
 
   return (
@@ -46,7 +34,7 @@ const VRIntegration = () => {
           deviceConnected={deviceConnected}
           handleConnectDevice={handleConnectDevice}
           handleDisconnectDevice={handleDisconnectDevice}
-          handleStartCapture={handleStartCapture}
+          handleStartCapture={startCapture}
         />
       </EpilepsySafeModeProvider>
     </DashboardLayout>

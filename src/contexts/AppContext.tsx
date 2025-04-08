@@ -13,6 +13,7 @@ import { startStream, stopStream, testStream, simulateStatsChange } from './stre
 const AppContext = createContext<AppContextType | undefined>(undefined);
 
 export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  // State definitions
   const [scenes, setScenes] = useState<Scene[]>([]);
   const [sources, setSources] = useState<Source[]>([]);
   const [aiFeatures, setAiFeatures] = useState<AiFeature[]>([]);
@@ -27,11 +28,9 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const [activeSceneId, setActiveSceneId] = useState<number | null>(null);
   const [isStreamPreviewAvailable, setIsStreamPreviewAvailable] = useState(false);
 
-  // Initialize with dummy data from DB or hardcoded values
+  // Initialize with data
   useEffect(() => {
-    // In a real app, you would fetch this from the database
     try {
-      // Simulate loading from Supabase
       console.log('Initializing app data');
       
       // Set active scene ID from the first active scene
@@ -56,6 +55,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     }
   }, [scenes, sources]);
 
+  // Event handlers
   const handleToggleSceneActive = (id: number) => {
     setScenes(prevScenes => 
       toggleSceneActive(prevScenes, id, setScenes, setActiveSceneId)

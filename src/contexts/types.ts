@@ -1,3 +1,4 @@
+
 export type Scene = {
   id: number;
   name: string;
@@ -54,3 +55,5 @@ export interface AppContextType {
   stopStream: () => void;
   testStream: () => void;
 }
+
+// New VR types could be added here if needed

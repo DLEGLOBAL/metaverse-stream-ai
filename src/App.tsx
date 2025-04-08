@@ -18,6 +18,7 @@ import Settings from "./pages/Settings";
 import CreatorNetwork from "./pages/CreatorNetwork";
 import NotFound from "./pages/NotFound";
 import { AppProvider } from "./contexts/AppContext";
+import { VRProvider } from "./contexts/VRContext";
 import { ThemeProvider } from "./contexts/ThemeContext";
 
 const queryClient = new QueryClient();
@@ -27,25 +28,27 @@ const App = () => (
     <TooltipProvider>
       <ThemeProvider>
         <AppProvider>
-          <Toaster />
-          <Sonner />
-          <BrowserRouter>
-            <Routes>
-              <Route path="/" element={<Landing />} />
-              <Route path="/dashboard" element={<Dashboard />} />
-              <Route path="/dashboard/studio" element={<Studio />} />
-              <Route path="/dashboard/scenes" element={<Scenes />} />
-              <Route path="/dashboard/audio" element={<Audio />} />
-              <Route path="/dashboard/sources" element={<Sources />} />
-              <Route path="/dashboard/ai-tools" element={<AiTools />} />
-              <Route path="/dashboard/vr" element={<VRIntegration />} />
-              <Route path="/dashboard/streaming" element={<Streaming />} />
-              <Route path="/dashboard/community" element={<Community />} />
-              <Route path="/dashboard/creator-network" element={<CreatorNetwork />} />
-              <Route path="/dashboard/settings" element={<Settings />} />
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-          </BrowserRouter>
+          <VRProvider>
+            <Toaster />
+            <Sonner />
+            <BrowserRouter>
+              <Routes>
+                <Route path="/" element={<Landing />} />
+                <Route path="/dashboard" element={<Dashboard />} />
+                <Route path="/dashboard/studio" element={<Studio />} />
+                <Route path="/dashboard/scenes" element={<Scenes />} />
+                <Route path="/dashboard/audio" element={<Audio />} />
+                <Route path="/dashboard/sources" element={<Sources />} />
+                <Route path="/dashboard/ai-tools" element={<AiTools />} />
+                <Route path="/dashboard/vr" element={<VRIntegration />} />
+                <Route path="/dashboard/streaming" element={<Streaming />} />
+                <Route path="/dashboard/community" element={<Community />} />
+                <Route path="/dashboard/creator-network" element={<CreatorNetwork />} />
+                <Route path="/dashboard/settings" element={<Settings />} />
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </BrowserRouter>
+          </VRProvider>
         </AppProvider>
       </ThemeProvider>
     </TooltipProvider>
