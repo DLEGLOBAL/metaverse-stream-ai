@@ -4,7 +4,7 @@ import Sidebar from '@/components/dashboard/Sidebar';
 import Header from '@/components/dashboard/Header';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Headset, Camera, Refresh, RefreshCw, Smartphone, LinkIcon, Gamepad2, Plug, Play } from 'lucide-react';
+import { Headset, Camera, RefreshCw, Smartphone, LinkIcon, Gamepad2, Plug, Play } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
 
 const VRIntegration = () => {

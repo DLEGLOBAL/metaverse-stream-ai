@@ -4,7 +4,7 @@ import Sidebar from '@/components/dashboard/Sidebar';
 import Header from '@/components/dashboard/Header';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Bot, Wand2, Mic, Monitor, Video, Brain, Camera, Robot, PlayCircle, ArrowRight } from 'lucide-react';
+import { Bot, Wand2, Mic, Monitor, Video, Brain, Camera, PlayCircle, ArrowRight } from 'lucide-react';
 import { useAppContext } from '@/contexts/AppContext';
 import { Switch } from '@/components/ui/switch';
 import { toast } from '@/hooks/use-toast';
