@@ -1,3 +1,4 @@
+
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { toast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
@@ -191,6 +192,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         setAiFeatures,
         setStats,
         setStreamStatus,
+        setStreamAlerts,
         toggleSceneActive: handleToggleSceneActive,
         toggleSourceActive: handleToggleSourceActive,
         toggleAiFeature: handleToggleAiFeature,

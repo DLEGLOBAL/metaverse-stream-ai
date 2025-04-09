@@ -16,22 +16,27 @@ const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [theme, setTheme] = useState<Theme>(() => {
     // Check for saved theme preference or system preference
-    const savedTheme = localStorage.getItem('metastream-theme');
-    if (savedTheme) return savedTheme as Theme;
-    
-    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    if (typeof window !== 'undefined') {
+      const savedTheme = localStorage.getItem('metastream-theme');
+      if (savedTheme) return savedTheme as Theme;
+      
+      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    }
+    return 'dark'; // Default theme
   });
 
   useEffect(() => {
     // Update document class when theme changes
-    if (theme === 'dark') {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
+    if (typeof document !== 'undefined') {
+      if (theme === 'dark') {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
+      
+      // Save preference
+      localStorage.setItem('metastream-theme', theme);
     }
-    
-    // Save preference
-    localStorage.setItem('metastream-theme', theme);
   }, [theme]);
 
   const toggleTheme = () => {
