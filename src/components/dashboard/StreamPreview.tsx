@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Camera, LayoutPanelTop, Mic, Wand2, Computer } from 'lucide-react';
+import { Camera, LayoutPanelTop, Mic, Wand2, Computer, Video } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useAppContext } from '@/contexts/AppContext';
 import { toast } from '@/hooks/use-toast';
@@ -14,7 +14,10 @@ const StreamPreview = () => {
     stopStream, 
     testStream, 
     toggleSourceActive, 
-    sources 
+    sources,
+    startRecording,
+    stopRecording,
+    isRecording
   } = useAppContext();
   
   const handleCameraToggle = () => {
@@ -86,6 +89,11 @@ const StreamPreview = () => {
                 <div className="h-2 w-2 bg-red-500 rounded-full mr-2 animate-pulse"></div>
                 <span className="text-xs text-red-500">Live</span>
               </>
+            ) : streamStatus === 'recording' ? (
+              <>
+                <div className="h-2 w-2 bg-red-500 rounded-full mr-2 animate-pulse"></div>
+                <span className="text-xs text-red-500">Recording</span>
+              </>
             ) : (
               <>
                 <div className="h-2 w-2 bg-meta-teal rounded-full mr-2 animate-pulse"></div>
@@ -118,6 +126,13 @@ const StreamPreview = () => {
                       <p className="text-xs text-green-400 mt-2">Microphone Active</p>
                     ) : (
                       <p className="text-xs text-red-400 mt-2">Microphone Inactive</p>
+                    )}
+                    
+                    {streamStatus === 'recording' && (
+                      <div className="mt-4 bg-red-500/20 px-3 py-1 rounded-full flex items-center">
+                        <div className="h-2 w-2 bg-red-500 rounded-full mr-2 animate-pulse"></div>
+                        <span className="text-xs text-red-400">Recording</span>
+                      </div>
                     )}
                   </div>
                 </div>
@@ -184,20 +199,39 @@ const StreamPreview = () => {
           </div>
         </div>
         
-        <div className="flex justify-between">
+        <div className="flex justify-between space-x-2">
           {streamStatus === 'live' ? (
+            <>
+              <Button 
+                variant="outline" 
+                className="border-red-500/30 hover:bg-red-500/10 text-red-400 flex-1"
+                onClick={stopStream}
+              >
+                Stop Stream
+              </Button>
+              {!isRecording && (
+                <Button 
+                  variant="outline" 
+                  className="border-meta-teal/30 hover:bg-meta-teal/10 text-meta-teal flex-1"
+                  onClick={startRecording}
+                >
+                  <Video className="h-4 w-4 mr-2" /> Record
+                </Button>
+              )}
+            </>
+          ) : streamStatus === 'recording' ? (
             <Button 
               variant="outline" 
               className="border-red-500/30 hover:bg-red-500/10 text-red-400 flex-1"
-              onClick={stopStream}
+              onClick={stopRecording}
             >
-              Stop Stream
+              Stop Recording
             </Button>
           ) : (
             <>
               <Button 
                 variant="outline" 
-                className="border-meta-teal/30 hover:bg-meta-teal/10 flex-1 mr-2"
+                className="border-meta-teal/30 hover:bg-meta-teal/10 flex-1"
                 onClick={testStream}
               >
                 Test Stream
@@ -207,6 +241,13 @@ const StreamPreview = () => {
                 onClick={startStream}
               >
                 Go Live
+              </Button>
+              <Button 
+                variant="outline" 
+                className="border-meta-teal/30 hover:bg-meta-teal/10 text-meta-teal flex-1"
+                onClick={startRecording}
+              >
+                <Video className="h-4 w-4 mr-2" /> Record
               </Button>
             </>
           )}

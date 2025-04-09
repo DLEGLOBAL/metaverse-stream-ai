@@ -1,13 +1,18 @@
+
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { toast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
 import { 
-  Scene, Source, AiFeature, Stats, StreamStatus, AppContextType 
+  Scene, Source, AiFeature, Stats, StreamStatus, AppContextType,
+  ScheduledStream, AudioSettings
 } from './types';
 import { toggleSceneActive } from './sceneUtils';
 import { toggleSourceActive } from './sourceUtils';
 import { toggleAiFeature, updateAiFeatureSlider } from './aiFeatureUtils';
 import { startStream, stopStream, testStream, simulateStatsChange } from './streamUtils';
+import { startRecording, stopRecording } from './recordingUtils';
+import { scheduleStream, deleteScheduledStream } from './schedulingUtils';
+import { updateAudioSettings } from './audioUtils';
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
 
@@ -26,6 +31,16 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const [streamStatus, setStreamStatus] = useState<StreamStatus>('offline');
   const [activeSceneId, setActiveSceneId] = useState<number | null>(null);
   const [isStreamPreviewAvailable, setIsStreamPreviewAvailable] = useState(false);
+  
+  // New state
+  const [scheduledStreams, setScheduledStreams] = useState<ScheduledStream[]>([]);
+  const [isRecording, setIsRecording] = useState(false);
+  const [audioSettings, setAudioSettings] = useState<AudioSettings>({
+    volume: 75,
+    noiseSuppression: true,
+    echoCancellation: true,
+    autoGainControl: false
+  });
 
   // Initialize with data
   useEffect(() => {
@@ -89,6 +104,27 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const handleTestStream = () => {
     testStream(isStreamPreviewAvailable, sources);
   };
+  
+  // New handlers
+  const handleStartRecording = () => {
+    startRecording(setStreamStatus, setIsRecording);
+  };
+  
+  const handleStopRecording = () => {
+    stopRecording(setStreamStatus, setIsRecording);
+  };
+  
+  const handleScheduleStream = (stream: Omit<ScheduledStream, 'id' | 'notificationSent'>) => {
+    scheduleStream(scheduledStreams, setScheduledStreams, stream);
+  };
+  
+  const handleDeleteScheduledStream = (id: number) => {
+    deleteScheduledStream(id, scheduledStreams, setScheduledStreams);
+  };
+  
+  const handleUpdateAudioSettings = (settings: Partial<AudioSettings>) => {
+    updateAudioSettings(audioSettings, setAudioSettings, settings);
+  };
 
   return (
     <AppContext.Provider
@@ -100,6 +136,9 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         streamStatus,
         activeSceneId,
         isStreamPreviewAvailable,
+        scheduledStreams,
+        isRecording,
+        audioSettings,
         setScenes,
         setSources,
         setAiFeatures,
@@ -112,6 +151,11 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         startStream: handleStartStream,
         stopStream: handleStopStream,
         testStream: handleTestStream,
+        startRecording: handleStartRecording,
+        stopRecording: handleStopRecording,
+        scheduleStream: handleScheduleStream,
+        deleteScheduledStream: handleDeleteScheduledStream,
+        updateAudioSettings: handleUpdateAudioSettings,
       }}
     >
       {children}

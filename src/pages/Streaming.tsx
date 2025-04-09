@@ -2,17 +2,20 @@
 import React, { useState } from 'react';
 import DashboardLayout from '@/components/layouts/DashboardLayout';
 import { Button } from '@/components/ui/button';
-import { Play } from 'lucide-react';
+import { Play, Tabs } from 'lucide-react';
 import { Youtube, Twitch, Facebook, X, Video } from 'lucide-react';
 import { useAppContext } from '@/contexts/AppContext';
 import { toast } from '@/hooks/use-toast';
+import { Tabs as TabsComponent, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import PlatformsList from '@/components/streaming/PlatformsList';
 import StreamSettings from '@/components/streaming/StreamSettings';
 import StreamStatusCard from '@/components/streaming/StreamStatusCard';
 import StreamKeyCard from '@/components/streaming/StreamKeyCard';
+import AudioControls from '@/components/streaming/AudioControls';
+import ScheduleStream from '@/components/streaming/ScheduleStream';
 
 const Streaming = () => {
-  const { streamStatus, startStream, stopStream } = useAppContext();
+  const { streamStatus, startStream, stopStream, isRecording } = useAppContext();
   
   const platforms = [
     { id: 1, name: 'YouTube', icon: Youtube, connected: true, enabled: true },
@@ -84,6 +87,19 @@ const Streaming = () => {
             >
               Stop Stream
             </Button>
+          ) : streamStatus === 'recording' ? (
+            <div className="flex items-center">
+              <div className="mr-2 flex items-center">
+                <div className="h-2 w-2 bg-red-500 rounded-full mr-2 animate-pulse"></div>
+                <span className="text-sm text-red-400">Recording in progress</span>
+              </div>
+              <Button 
+                variant="outline" 
+                className="border-red-500/30 hover:bg-red-500/10 text-red-400"
+              >
+                Stop Recording
+              </Button>
+            </div>
           ) : (
             <Button 
               className="bg-button-gradient text-meta-dark-blue hover:brightness-110"
@@ -94,27 +110,88 @@ const Streaming = () => {
           )}
         </div>
         
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <div className="lg:col-span-2">
-            <PlatformsList 
-              platforms={platforms}
-              platformStates={platformStates}
-              onPlatformToggle={handlePlatformToggle}
-              onConnectPlatform={handleConnectPlatform}
-            />
-            <StreamSettings />
-          </div>
+        <TabsComponent defaultValue="platforms" className="w-full">
+          <TabsList className="bg-meta-dark-blue border border-gray-700 mb-4">
+            <TabsTrigger value="platforms" className="data-[state=active]:bg-meta-teal/10 data-[state=active]:text-meta-teal">Platforms</TabsTrigger>
+            <TabsTrigger value="schedule" className="data-[state=active]:bg-meta-teal/10 data-[state=active]:text-meta-teal">Schedule</TabsTrigger>
+            <TabsTrigger value="audio" className="data-[state=active]:bg-meta-teal/10 data-[state=active]:text-meta-teal">Audio</TabsTrigger>
+            <TabsTrigger value="settings" className="data-[state=active]:bg-meta-teal/10 data-[state=active]:text-meta-teal">Settings</TabsTrigger>
+          </TabsList>
           
-          <div>
-            <StreamStatusCard 
-              streamStatus={streamStatus}
-              activeStreamPlatforms={activePlatformsCount}
-              onStartStream={startStream}
-              onStopStream={stopStream}
-            />
-            <StreamKeyCard />
-          </div>
-        </div>
+          <TabsContent value="platforms">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+              <div className="lg:col-span-2">
+                <PlatformsList 
+                  platforms={platforms}
+                  platformStates={platformStates}
+                  onPlatformToggle={handlePlatformToggle}
+                  onConnectPlatform={handleConnectPlatform}
+                />
+              </div>
+              
+              <div>
+                <StreamStatusCard 
+                  streamStatus={streamStatus}
+                  activeStreamPlatforms={activePlatformsCount}
+                  onStartStream={startStream}
+                  onStopStream={stopStream}
+                />
+                <StreamKeyCard />
+              </div>
+            </div>
+          </TabsContent>
+          
+          <TabsContent value="schedule">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+              <div className="lg:col-span-2">
+                <ScheduleStream />
+              </div>
+              
+              <div>
+                <StreamStatusCard 
+                  streamStatus={streamStatus}
+                  activeStreamPlatforms={activePlatformsCount}
+                  onStartStream={startStream}
+                  onStopStream={stopStream}
+                />
+              </div>
+            </div>
+          </TabsContent>
+          
+          <TabsContent value="audio">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+              <div className="lg:col-span-2">
+                <AudioControls />
+              </div>
+              
+              <div>
+                <StreamStatusCard 
+                  streamStatus={streamStatus}
+                  activeStreamPlatforms={activePlatformsCount}
+                  onStartStream={startStream}
+                  onStopStream={stopStream}
+                />
+              </div>
+            </div>
+          </TabsContent>
+          
+          <TabsContent value="settings">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+              <div className="lg:col-span-2">
+                <StreamSettings />
+              </div>
+              
+              <div>
+                <StreamStatusCard 
+                  streamStatus={streamStatus}
+                  activeStreamPlatforms={activePlatformsCount}
+                  onStartStream={startStream}
+                  onStopStream={stopStream}
+                />
+              </div>
+            </div>
+          </TabsContent>
+        </TabsComponent>
       </div>
     </DashboardLayout>
   );

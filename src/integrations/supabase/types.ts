@@ -9,7 +9,90 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      [_ in never]: never
+      ai_models: {
+        Row: {
+          description: string | null
+          id: string
+          is_active: boolean
+          name: string
+        }
+        Insert: {
+          description?: string | null
+          id: string
+          is_active?: boolean
+          name: string
+        }
+        Update: {
+          description?: string | null
+          id?: string
+          is_active?: boolean
+          name?: string
+        }
+        Relationships: []
+      }
+      avatars: {
+        Row: {
+          created_at: string
+          id: string
+          model_type: string
+          model_url: string | null
+          name: string
+          processing_id: string | null
+          settings: Json
+          source_image_url: string | null
+          status: string | null
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          model_type: string
+          model_url?: string | null
+          name: string
+          processing_id?: string | null
+          settings?: Json
+          source_image_url?: string | null
+          status?: string | null
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          model_type?: string
+          model_url?: string | null
+          name?: string
+          processing_id?: string | null
+          settings?: Json
+          source_image_url?: string | null
+          status?: string | null
+          updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      export_formats: {
+        Row: {
+          description: string | null
+          id: string
+          is_active: boolean
+          name: string
+        }
+        Insert: {
+          description?: string | null
+          id: string
+          is_active?: boolean
+          name: string
+        }
+        Update: {
+          description?: string | null
+          id?: string
+          is_active?: boolean
+          name?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
