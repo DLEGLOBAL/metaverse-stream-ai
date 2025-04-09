@@ -1,58 +1,54 @@
 
-import { Toaster } from "@/components/ui/toaster";
-import { Toaster as Sonner } from "@/components/ui/sonner";
-import { TooltipProvider } from "@/components/ui/tooltip";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Landing from "./pages/Landing";
-import Dashboard from "./pages/Dashboard";
-import Studio from "./pages/Studio";
-import Scenes from "./pages/Scenes";
-import Audio from "./pages/Audio";
-import Sources from "./pages/Sources";
-import AiTools from "./pages/AiTools";
-import VRIntegration from "./pages/VRIntegration";
-import Streaming from "./pages/Streaming";
-import Community from "./pages/Community";
-import Settings from "./pages/Settings";
-import CreatorNetwork from "./pages/CreatorNetwork";
-import NotFound from "./pages/NotFound";
-import { AppProvider } from "./contexts/AppContext";
-import { VRProvider } from "./contexts/VRContext";
-import { ThemeProvider } from "./contexts/ThemeContext";
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { ThemeProvider } from './contexts/ThemeContext';
+import { AppProvider } from './contexts/AppContext';
+import { Toaster } from './components/ui/toaster';
+import Landing from './pages/Landing';
+import Dashboard from './pages/Dashboard';
+import Scenes from './pages/Scenes';
+import Sources from './pages/Sources';
+import Streaming from './pages/Streaming';
+import AiTools from './pages/AiTools';
+import Settings from './pages/Settings';
+import Studio from './pages/Studio';
+import Community from './pages/Community';
+import CreatorNetwork from './pages/CreatorNetwork';
+import VRIntegration from './pages/VRIntegration';
+import Audio from './pages/Audio';
+import NotFound from './pages/NotFound';
+import Index from './pages/Index';
+import Chat from './pages/Chat';
 
-const queryClient = new QueryClient();
+import './App.css';
 
-const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <ThemeProvider>
-        <AppProvider>
-          <VRProvider>
-            <Toaster />
-            <Sonner />
-            <BrowserRouter>
-              <Routes>
-                <Route path="/" element={<Landing />} />
-                <Route path="/dashboard" element={<Dashboard />} />
-                <Route path="/dashboard/studio" element={<Studio />} />
-                <Route path="/dashboard/scenes" element={<Scenes />} />
-                <Route path="/dashboard/audio" element={<Audio />} />
-                <Route path="/dashboard/sources" element={<Sources />} />
-                <Route path="/dashboard/ai-tools" element={<AiTools />} />
-                <Route path="/dashboard/vr" element={<VRIntegration />} />
-                <Route path="/dashboard/streaming" element={<Streaming />} />
-                <Route path="/dashboard/community" element={<Community />} />
-                <Route path="/dashboard/creator-network" element={<CreatorNetwork />} />
-                <Route path="/dashboard/settings" element={<Settings />} />
-                <Route path="*" element={<NotFound />} />
-              </Routes>
-            </BrowserRouter>
-          </VRProvider>
-        </AppProvider>
-      </ThemeProvider>
-    </TooltipProvider>
-  </QueryClientProvider>
-);
+function App() {
+  return (
+    <ThemeProvider>
+      <AppProvider>
+        <Router>
+          <Routes>
+            <Route path="/" element={<Index />} />
+            <Route path="/landing" element={<Landing />} />
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/scenes" element={<Scenes />} />
+            <Route path="/sources" element={<Sources />} />
+            <Route path="/streaming" element={<Streaming />} />
+            <Route path="/ai-tools" element={<AiTools />} />
+            <Route path="/settings" element={<Settings />} />
+            <Route path="/studio" element={<Studio />} />
+            <Route path="/community" element={<Community />} />
+            <Route path="/creator-network" element={<CreatorNetwork />} />
+            <Route path="/vr-integration" element={<VRIntegration />} />
+            <Route path="/audio" element={<Audio />} />
+            <Route path="/chat" element={<Chat />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </Router>
+        <Toaster />
+      </AppProvider>
+    </ThemeProvider>
+  );
+}
 
 export default App;

@@ -1,18 +1,18 @@
-
 import React, { useState } from 'react';
 import DashboardLayout from '@/components/layouts/DashboardLayout';
 import { Button } from '@/components/ui/button';
-import { Play, Tabs } from 'lucide-react';
+import { Play } from 'lucide-react';
 import { Youtube, Twitch, Facebook, X, Video } from 'lucide-react';
 import { useAppContext } from '@/contexts/AppContext';
 import { toast } from '@/hooks/use-toast';
-import { Tabs as TabsComponent, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import PlatformsList from '@/components/streaming/PlatformsList';
 import StreamSettings from '@/components/streaming/StreamSettings';
 import StreamStatusCard from '@/components/streaming/StreamStatusCard';
 import StreamKeyCard from '@/components/streaming/StreamKeyCard';
 import AudioControls from '@/components/streaming/AudioControls';
 import ScheduleStream from '@/components/streaming/ScheduleStream';
+import StreamAlerts from '@/components/streaming/StreamAlerts';
 
 const Streaming = () => {
   const { streamStatus, startStream, stopStream, isRecording } = useAppContext();
@@ -110,10 +110,11 @@ const Streaming = () => {
           )}
         </div>
         
-        <TabsComponent defaultValue="platforms" className="w-full">
+        <Tabs defaultValue="platforms" className="w-full">
           <TabsList className="bg-meta-dark-blue border border-gray-700 mb-4">
             <TabsTrigger value="platforms" className="data-[state=active]:bg-meta-teal/10 data-[state=active]:text-meta-teal">Platforms</TabsTrigger>
             <TabsTrigger value="schedule" className="data-[state=active]:bg-meta-teal/10 data-[state=active]:text-meta-teal">Schedule</TabsTrigger>
+            <TabsTrigger value="alerts" className="data-[state=active]:bg-meta-teal/10 data-[state=active]:text-meta-teal">Alerts</TabsTrigger>
             <TabsTrigger value="audio" className="data-[state=active]:bg-meta-teal/10 data-[state=active]:text-meta-teal">Audio</TabsTrigger>
             <TabsTrigger value="settings" className="data-[state=active]:bg-meta-teal/10 data-[state=active]:text-meta-teal">Settings</TabsTrigger>
           </TabsList>
@@ -145,6 +146,23 @@ const Streaming = () => {
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
               <div className="lg:col-span-2">
                 <ScheduleStream />
+              </div>
+              
+              <div>
+                <StreamStatusCard 
+                  streamStatus={streamStatus}
+                  activeStreamPlatforms={activePlatformsCount}
+                  onStartStream={startStream}
+                  onStopStream={stopStream}
+                />
+              </div>
+            </div>
+          </TabsContent>
+          
+          <TabsContent value="alerts">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+              <div className="lg:col-span-2">
+                <StreamAlerts />
               </div>
               
               <div>
@@ -191,7 +209,7 @@ const Streaming = () => {
               </div>
             </div>
           </TabsContent>
-        </TabsComponent>
+        </Tabs>
       </div>
     </DashboardLayout>
   );

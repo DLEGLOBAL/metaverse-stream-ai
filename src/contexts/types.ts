@@ -1,4 +1,3 @@
-
 export type Scene = {
   id: number;
   name: string;
@@ -49,6 +48,16 @@ export type AudioSettings = {
   autoGainControl: boolean;
 };
 
+export type StreamAlert = {
+  id: number;
+  type: 'follower' | 'subscriber' | 'donation' | 'host' | 'raid';
+  message: string;
+  enabled: boolean;
+  sound: boolean;
+  visual: boolean;
+  duration: number; // in seconds
+};
+
 export interface AppContextType {
   scenes: Scene[];
   sources: Source[];
@@ -60,12 +69,14 @@ export interface AppContextType {
   scheduledStreams: ScheduledStream[];
   isRecording: boolean;
   audioSettings: AudioSettings;
+  streamAlerts: StreamAlert[];
   
   setScenes: (scenes: Scene[]) => void;
   setSources: (sources: Source[]) => void;
   setAiFeatures: (features: AiFeature[]) => void;
   setStats: (stats: Stats) => void;
   setStreamStatus: (status: StreamStatus) => void;
+  setStreamAlerts: (alerts: StreamAlert[]) => void;
   
   toggleSceneActive: (id: number) => void;
   toggleSourceActive: (id: number) => void;
@@ -74,8 +85,9 @@ export interface AppContextType {
   startStream: () => void;
   stopStream: () => void;
   testStream: () => void;
+  toggleStreamAlert: (id: number) => void;
+  updateStreamAlert: (id: number, alert: Partial<StreamAlert>) => void;
   
-  // New functions
   startRecording: () => void;
   stopRecording: () => void;
   scheduleStream: (stream: Omit<ScheduledStream, 'id' | 'notificationSent'>) => void;

@@ -1,10 +1,9 @@
-
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { toast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
 import { 
   Scene, Source, AiFeature, Stats, StreamStatus, AppContextType,
-  ScheduledStream, AudioSettings
+  ScheduledStream, AudioSettings, StreamAlert
 } from './types';
 import { toggleSceneActive } from './sceneUtils';
 import { toggleSourceActive } from './sourceUtils';
@@ -13,6 +12,7 @@ import { startStream, stopStream, testStream, simulateStatsChange } from './stre
 import { startRecording, stopRecording } from './recordingUtils';
 import { scheduleStream, deleteScheduledStream } from './schedulingUtils';
 import { updateAudioSettings } from './audioUtils';
+import { toggleStreamAlert, updateStreamAlert } from './alertUtils';
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
 
@@ -41,6 +41,44 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     echoCancellation: true,
     autoGainControl: false
   });
+  const [streamAlerts, setStreamAlerts] = useState<StreamAlert[]>([
+    {
+      id: 1,
+      type: 'follower',
+      message: 'New follower: {username}',
+      enabled: true,
+      sound: true,
+      visual: true,
+      duration: 3
+    },
+    {
+      id: 2,
+      type: 'subscriber',
+      message: '{username} just subscribed!',
+      enabled: true,
+      sound: true,
+      visual: true,
+      duration: 5
+    },
+    {
+      id: 3,
+      type: 'donation',
+      message: '{username} donated {amount}!',
+      enabled: true,
+      sound: true,
+      visual: true,
+      duration: 5
+    },
+    {
+      id: 4,
+      type: 'raid',
+      message: '{username} is raiding with {count} viewers!',
+      enabled: true,
+      sound: true,
+      visual: true,
+      duration: 6
+    }
+  ]);
 
   // Initialize with data
   useEffect(() => {
@@ -126,6 +164,14 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     updateAudioSettings(audioSettings, setAudioSettings, settings);
   };
 
+  const handleToggleStreamAlert = (id: number) => {
+    setStreamAlerts(prevAlerts => toggleStreamAlert(prevAlerts, id));
+  };
+  
+  const handleUpdateStreamAlert = (id: number, alert: Partial<StreamAlert>) => {
+    setStreamAlerts(prevAlerts => updateStreamAlert(prevAlerts, id, alert));
+  };
+
   return (
     <AppContext.Provider
       value={{
@@ -139,6 +185,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         scheduledStreams,
         isRecording,
         audioSettings,
+        streamAlerts,
         setScenes,
         setSources,
         setAiFeatures,
@@ -156,6 +203,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         scheduleStream: handleScheduleStream,
         deleteScheduledStream: handleDeleteScheduledStream,
         updateAudioSettings: handleUpdateAudioSettings,
+        toggleStreamAlert: handleToggleStreamAlert,
+        updateStreamAlert: handleUpdateStreamAlert,
       }}
     >
       {children}
