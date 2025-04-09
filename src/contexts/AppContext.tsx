@@ -6,6 +6,8 @@ import {
   Scene, Source, AiFeature, Stats, StreamStatus, AppContextType,
   ScheduledStream, AudioSettings, StreamAlert
 } from './types';
+
+// Import utility functions from separate files
 import { toggleSceneActive } from './sceneUtils';
 import { toggleSourceActive } from './sourceUtils';
 import { toggleAiFeature, updateAiFeatureSlider } from './aiFeatureUtils';
