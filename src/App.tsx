@@ -22,6 +22,7 @@ import Index from './pages/Index';
 import Chat from './pages/Chat';
 import Pricing from './pages/Pricing';
 import VideoEditing from './pages/VideoEditing';
+import Branding from './pages/Branding';
 
 import './App.css';
 
@@ -48,6 +49,7 @@ function App() {
               <Route path="/dashboard/audio" element={<Audio />} />
               <Route path="/dashboard/pricing" element={<Pricing />} />
               <Route path="/dashboard/video-editing" element={<VideoEditing />} />
+              <Route path="/dashboard/branding" element={<Branding />} />
               
               <Route path="/scenes" element={<Scenes />} />
               <Route path="/sources" element={<Sources />} />
@@ -62,6 +64,7 @@ function App() {
               <Route path="/chat" element={<Chat />} />
               <Route path="/pricing" element={<Pricing />} />
               <Route path="/video-editing" element={<VideoEditing />} />
+              <Route path="/branding" element={<Branding />} />
               
               <Route path="*" element={<NotFound />} />
             </Routes>

@@ -17,7 +17,8 @@ import {
   Share2,
   Star,
   Users,
-  Scissors
+  Scissors,
+  Palette
 } from 'lucide-react';
 
 type SidebarProps = {
@@ -91,6 +92,13 @@ const Sidebar = ({ collapsed, toggleSidebar }: SidebarProps) => {
             to="/dashboard/video-editing" 
             collapsed={collapsed} 
             active={location.pathname === '/dashboard/video-editing'} 
+          />
+          <SidebarItem 
+            icon={<Palette size={iconSize} />} 
+            label="Branding" 
+            to="/dashboard/branding" 
+            collapsed={collapsed} 
+            active={location.pathname === '/dashboard/branding'} 
           />
           <SidebarItem 
             icon={<Cpu size={iconSize} />} 
