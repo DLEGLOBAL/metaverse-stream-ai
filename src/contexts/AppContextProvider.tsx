@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { toast } from '@/hooks/use-toast';
 import { 
@@ -15,6 +14,8 @@ import { useScheduleHandlers } from './hooks/useScheduleHandlers';
 import { useAudioHandlers } from './hooks/useAudioHandlers';
 import { useAlertHandlers } from './hooks/useAlertHandlers';
 import { AppContext } from './AppContext';
+import { ThemeProvider } from './theme/ThemeContext';
+import { CustomThemeProvider } from './theme/CustomThemeContext';
 
 export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const {
@@ -73,18 +74,15 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     setStreamAlerts
   });
 
-  // Initialize with data
   useEffect(() => {
     try {
       console.log('Initializing app data');
       
-      // Set active scene ID from the first active scene
       const activeScene = scenes.find(scene => scene.active);
       if (activeScene) {
         setActiveSceneId(activeScene.id);
       }
       
-      // Check if any video source is active
       const hasActiveVideoSource = sources.some(
         source => source.active && (source.type === 'camera' || source.type === 'display')
       );
@@ -101,42 +99,46 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   }, [scenes, sources, setActiveSceneId, setIsStreamPreviewAvailable]);
 
   return (
-    <AppContext.Provider
-      value={{
-        scenes,
-        sources,
-        aiFeatures,
-        stats,
-        streamStatus,
-        activeSceneId,
-        isStreamPreviewAvailable,
-        scheduledStreams,
-        isRecording,
-        audioSettings,
-        streamAlerts,
-        setScenes,
-        setSources,
-        setAiFeatures,
-        setStats,
-        setStreamStatus,
-        setStreamAlerts,
-        toggleSceneActive,
-        toggleSourceActive,
-        toggleAiFeature,
-        updateAiFeatureSlider,
-        startStream,
-        stopStream,
-        testStream,
-        startRecording,
-        stopRecording,
-        scheduleStream,
-        deleteScheduledStream,
-        updateAudioSettings,
-        toggleStreamAlert,
-        updateStreamAlert,
-      }}
-    >
-      {children}
-    </AppContext.Provider>
+    <ThemeProvider>
+      <CustomThemeProvider>
+        <AppContext.Provider
+          value={{
+            scenes,
+            sources,
+            aiFeatures,
+            stats,
+            streamStatus,
+            activeSceneId,
+            isStreamPreviewAvailable,
+            scheduledStreams,
+            isRecording,
+            audioSettings,
+            streamAlerts,
+            setScenes,
+            setSources,
+            setAiFeatures,
+            setStats,
+            setStreamStatus,
+            setStreamAlerts,
+            toggleSceneActive,
+            toggleSourceActive,
+            toggleAiFeature,
+            updateAiFeatureSlider,
+            startStream,
+            stopStream,
+            testStream,
+            startRecording,
+            stopRecording,
+            scheduleStream,
+            deleteScheduledStream,
+            updateAudioSettings,
+            toggleStreamAlert,
+            updateStreamAlert,
+          }}
+        >
+          {children}
+        </AppContext.Provider>
+      </CustomThemeProvider>
+    </ThemeProvider>
   );
 };
