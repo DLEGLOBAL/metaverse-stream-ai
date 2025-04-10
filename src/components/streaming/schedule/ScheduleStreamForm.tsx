@@ -2,10 +2,7 @@
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Calendar } from '@/components/ui/calendar';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { format } from 'date-fns';
-import { Calendar as CalendarIcon } from 'lucide-react';
+import { DatePicker } from '@/components/ui/date-picker';
 import { toast } from '@/hooks/use-toast';
 
 interface PlatformOption {
@@ -105,24 +102,12 @@ const ScheduleStreamForm: React.FC<ScheduleStreamFormProps> = ({ onSchedule }) =
       <div className="grid grid-cols-2 gap-4">
         <div>
           <label className="block text-sm font-medium text-gray-300 mb-1">Date</label>
-          <Popover>
-            <PopoverTrigger asChild>
-              <Button
-                variant="outline"
-                className="w-full justify-start text-left border-gray-700 bg-meta-slate text-white"
-              >
-                {date ? format(date, 'PPP') : <span className="text-gray-500">Pick a date</span>}
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent className="w-auto p-0 bg-meta-dark-blue border-gray-700">
-              <Calendar
-                mode="single"
-                selected={date}
-                onSelect={setDate}
-                initialFocus
-              />
-            </PopoverContent>
-          </Popover>
+          <DatePicker 
+            date={date} 
+            onDateChange={setDate}
+            className="border-gray-700 bg-meta-slate text-white"
+            placeholder="Pick a date"
+          />
         </div>
         
         <div>
