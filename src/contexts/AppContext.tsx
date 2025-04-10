@@ -1,3 +1,4 @@
+
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { toast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
@@ -203,4 +204,21 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         startRecording: handleStartRecording,
         stopRecording: handleStopRecording,
         scheduleStream: handleScheduleStream,
-        deleteScheduledStream: handle
+        deleteScheduledStream: handleDeleteScheduledStream,
+        updateAudioSettings: handleUpdateAudioSettings,
+        toggleStreamAlert: handleToggleStreamAlert,
+        updateStreamAlert: handleUpdateStreamAlert,
+      }}
+    >
+      {children}
+    </AppContext.Provider>
+  );
+};
+
+export const useAppContext = () => {
+  const context = useContext(AppContext);
+  if (context === undefined) {
+    throw new Error('useAppContext must be used within an AppProvider');
+  }
+  return context;
+};
