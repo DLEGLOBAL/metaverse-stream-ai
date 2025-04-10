@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ThemeToggle } from '@/contexts/theme';
@@ -9,7 +10,7 @@ import { Switch } from '@/components/ui/switch';
 import { Slider } from '@/components/ui/slider';
 import { 
   Palette, Layout, Monitor, Maximize, 
-  Layers, ArrowsMaximize, MousePointer, 
+  Layers, Maximize2, MousePointer, 
   PanelLeft, PanelRight, MonitorSmartphone
 } from 'lucide-react';
 import { toast } from "@/hooks/use-toast";
@@ -186,7 +187,7 @@ const LayoutCustomization = () => {
                   onValueChange={(value) => handleSliderChange('contentWidth', value)}
                   className="flex-1"
                 />
-                <ArrowsMaximize className="text-gray-400 h-5 w-5" />
+                <Maximize2 className="text-gray-400 h-5 w-5" />
               </div>
               <div className="text-xs text-gray-400 mt-2">
                 Content width: {layoutSettings.contentWidth}%

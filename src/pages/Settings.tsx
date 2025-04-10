@@ -1,6 +1,8 @@
+
 import React, { useState } from 'react';
 import DashboardLayout from '@/components/layouts/DashboardLayout';
 import { Button } from '@/components/ui/button';
+import { Switch } from '@/components/ui/switch';
 import { Save } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
 
