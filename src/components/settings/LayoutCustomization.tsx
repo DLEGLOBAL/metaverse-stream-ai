@@ -9,8 +9,8 @@ import {
 import { Switch } from '@/components/ui/switch';
 import { Slider } from '@/components/ui/slider';
 import { 
-  Palette, Layout, Monitor, Maximize, 
-  Layers, Maximize2, MousePointer, 
+  Palette, Layout, Monitor, Maximize2, 
+  Layers, MousePointer, 
   PanelLeft, PanelRight, MonitorSmartphone
 } from 'lucide-react';
 import { toast } from "@/hooks/use-toast";
@@ -102,7 +102,7 @@ const LayoutCustomization = () => {
               Display
             </TabsTrigger>
             <TabsTrigger value="accessibility" className="data-[state=active]:bg-meta-teal/20 data-[state=active]:text-meta-teal">
-              <Maximize className="h-4 w-4 mr-2" />
+              <Maximize2 className="h-4 w-4 mr-2" />
               Accessibility
             </TabsTrigger>
           </TabsList>
