@@ -1,9 +1,9 @@
-
 import { useState } from 'react';
 import { 
   Scene, Source, AiFeature, Stats, StreamStatus,
   ScheduledStream, AudioSettings, StreamAlert
 } from '../types';
+import { Camera, Computer, Mic } from 'lucide-react';
 
 export const useAppState = () => {
   // Scene state
@@ -31,19 +31,22 @@ export const useAppState = () => {
       id: 1,
       name: 'Webcam',
       type: 'camera',
-      active: true
+      active: true,
+      icon: <Camera className="h-4 w-4" />
     },
     {
       id: 2,
       name: 'Microphone',
       type: 'audio',
-      active: true
+      active: true,
+      icon: <Mic className="h-4 w-4" />
     },
     {
       id: 3,
       name: 'Screen Share',
       type: 'display',
-      active: false
+      active: false,
+      icon: <Computer className="h-4 w-4" />
     }
   ]);
   
