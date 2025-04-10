@@ -262,6 +262,12 @@ const Branding = () => {
               </CardHeader>
               <CardContent>
                 <Tabs value={activeTab}>
+                  <TabsList className="hidden">
+                    <TabsTrigger value="logo">Logos</TabsTrigger>
+                    <TabsTrigger value="theme">Themes</TabsTrigger>
+                    <TabsTrigger value="images">Images</TabsTrigger>
+                  </TabsList>
+                  
                   <TabsContent value="logo" className="mt-0">
                     {generatedItems.logos.length > 0 ? (
                       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
