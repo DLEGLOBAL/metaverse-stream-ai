@@ -2,7 +2,7 @@
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Play } from 'lucide-react';
+import { Play, Circle, WifiOff } from 'lucide-react';
 
 interface StreamStatusCardProps {
   streamStatus: 'live' | 'offline' | 'recording';
@@ -25,14 +25,22 @@ const StreamStatusCard: React.FC<StreamStatusCardProps> = ({
       <CardContent>
         <div className="bg-meta-dark-blue p-4 rounded-md border border-meta-teal/20">
           <div className="flex items-center mb-3">
-            <div className={`h-3 w-3 rounded-full mr-2 ${
-              streamStatus === 'live' ? 'bg-red-500 animate-pulse' : 
-              streamStatus === 'recording' ? 'bg-yellow-500 animate-pulse' : 'bg-meta-teal'
-            }`}></div>
-            <span className="text-white font-medium">
-              {streamStatus === 'live' ? 'LIVE' : 
-               streamStatus === 'recording' ? 'RECORDING' : 'OFFLINE'}
-            </span>
+            {streamStatus === 'live' ? (
+              <>
+                <div className="h-3 w-3 rounded-full mr-2 bg-red-500 animate-pulse"></div>
+                <span className="text-white font-medium uppercase">LIVE</span>
+              </>
+            ) : streamStatus === 'recording' ? (
+              <>
+                <Circle className="h-4 w-4 mr-2 text-yellow-500 fill-yellow-500 animate-pulse" />
+                <span className="text-white font-medium uppercase">RECORDING</span>
+              </>
+            ) : (
+              <>
+                <WifiOff className="h-4 w-4 mr-2 text-meta-teal" />
+                <span className="text-white font-medium uppercase">OFFLINE</span>
+              </>
+            )}
           </div>
           
           <div className="space-y-2 text-sm">
@@ -61,7 +69,7 @@ const StreamStatusCard: React.FC<StreamStatusCardProps> = ({
                 className="w-full border-red-500/30 hover:bg-red-500/10 text-red-400"
                 onClick={onStopStream}
               >
-                End Stream
+                {streamStatus === 'live' ? 'End Stream' : 'Stop Recording'}
               </Button>
             ) : (
               <Button 

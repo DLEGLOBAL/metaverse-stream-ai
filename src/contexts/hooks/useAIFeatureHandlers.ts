@@ -6,16 +6,20 @@ import {
 import { AiFeature } from '../types';
 
 type UseAIFeatureHandlersProps = {
-  setAiFeatures: (features: AiFeature[]) => void;
+  setAiFeatures: (features: AiFeature[] | ((prev: AiFeature[]) => AiFeature[])) => void;
 };
 
 export const useAIFeatureHandlers = ({ setAiFeatures }: UseAIFeatureHandlersProps) => {
   const toggleAiFeature = (id: number) => {
-    setAiFeatures(prevFeatures => toggleAiFeatureUtil(prevFeatures, id));
+    setAiFeatures((prevFeatures: AiFeature[]) => 
+      toggleAiFeatureUtil(prevFeatures, id)
+    );
   };
 
   const updateAiFeatureSlider = (id: number, value: number) => {
-    setAiFeatures(prevFeatures => updateAiFeatureSliderUtil(prevFeatures, id, value));
+    setAiFeatures((prevFeatures: AiFeature[]) => 
+      updateAiFeatureSliderUtil(prevFeatures, id, value)
+    );
   };
 
   return { toggleAiFeature, updateAiFeatureSlider };
