@@ -1,8 +1,8 @@
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Play, Circle, WifiOff } from 'lucide-react';
+import { Play, Circle, WifiOff, Clock } from 'lucide-react';
 
 interface StreamStatusCardProps {
   streamStatus: 'live' | 'offline' | 'recording';
@@ -17,6 +17,41 @@ const StreamStatusCard: React.FC<StreamStatusCardProps> = ({
   onStartStream,
   onStopStream
 }) => {
+  const [elapsedTime, setElapsedTime] = useState<number>(0);
+  const [startTime, setStartTime] = useState<number>(Date.now());
+  
+  // Reset and start timer when stream status changes
+  useEffect(() => {
+    if (streamStatus !== 'offline') {
+      // Reset start time
+      setStartTime(Date.now());
+      setElapsedTime(0);
+      
+      // Start interval for counter
+      const intervalId = setInterval(() => {
+        const currentTime = Date.now();
+        const elapsed = Math.floor((currentTime - startTime) / 1000);
+        setElapsedTime(elapsed);
+      }, 1000);
+      
+      // Cleanup interval on unmount or when inactive
+      return () => clearInterval(intervalId);
+    }
+  }, [streamStatus]);
+  
+  // Format seconds to HH:MM:SS
+  const formatTime = (totalSeconds: number): string => {
+    const hours = Math.floor(totalSeconds / 3600);
+    const minutes = Math.floor((totalSeconds % 3600) / 60);
+    const seconds = totalSeconds % 60;
+    
+    return [
+      hours.toString().padStart(2, '0'),
+      minutes.toString().padStart(2, '0'),
+      seconds.toString().padStart(2, '0')
+    ].join(':');
+  };
+  
   return (
     <Card className="glass-card">
       <CardHeader className="pb-2">
@@ -44,11 +79,16 @@ const StreamStatusCard: React.FC<StreamStatusCardProps> = ({
           </div>
           
           <div className="space-y-2 text-sm">
-            <div className="flex justify-between">
+            <div className="flex justify-between items-center">
               <span className="text-gray-400">Uptime:</span>
-              <span className="text-white">
-                {streamStatus !== 'offline' ? '00:00:00' : '--:--:--'}
-              </span>
+              {streamStatus !== 'offline' ? (
+                <span className="text-white flex items-center">
+                  <Clock className="h-3 w-3 mr-1 text-meta-teal" />
+                  {formatTime(elapsedTime)}
+                </span>
+              ) : (
+                <span className="text-white">--:--:--</span>
+              )}
             </div>
             <div className="flex justify-between">
               <span className="text-gray-400">Active Platforms:</span>

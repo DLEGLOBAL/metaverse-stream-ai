@@ -1,7 +1,8 @@
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
-import { Play } from 'lucide-react';
+import { Play, Clock } from 'lucide-react';
+import CountdownTimer from '@/components/stream/CountdownTimer';
 
 interface StreamingHeaderProps {
   streamStatus: 'live' | 'offline' | 'recording';
@@ -14,6 +15,15 @@ const StreamingHeader: React.FC<StreamingHeaderProps> = ({
   startStream,
   stopStream
 }) => {
+  const [startTime, setStartTime] = useState<number>(Date.now());
+  
+  // Reset timer when stream status changes to active
+  useEffect(() => {
+    if (streamStatus === 'live' || streamStatus === 'recording') {
+      setStartTime(Date.now());
+    }
+  }, [streamStatus]);
+  
   return (
     <div className="flex justify-between items-center mb-6">
       <div>
@@ -21,22 +31,35 @@ const StreamingHeader: React.FC<StreamingHeaderProps> = ({
         <p className="text-gray-400 mt-1">Manage your stream destinations and settings</p>
       </div>
       {streamStatus === 'live' ? (
-        <Button 
-          variant="outline" 
-          className="border-red-500/30 hover:bg-red-500/10 text-red-400"
-          onClick={stopStream}
-        >
-          Stop Stream
-        </Button>
-      ) : streamStatus === 'recording' ? (
-        <div className="flex items-center">
-          <div className="mr-2 flex items-center">
-            <div className="h-2 w-2 bg-red-500 rounded-full mr-2 animate-pulse"></div>
-            <span className="text-sm text-red-400">Recording in progress</span>
-          </div>
+        <div className="flex items-center space-x-3">
+          <CountdownTimer 
+            isActive={true} 
+            startTime={startTime} 
+            className="text-sm text-meta-teal bg-meta-teal/10 px-3 py-1 rounded-md" 
+          />
           <Button 
             variant="outline" 
             className="border-red-500/30 hover:bg-red-500/10 text-red-400"
+            onClick={stopStream}
+          >
+            Stop Stream
+          </Button>
+        </div>
+      ) : streamStatus === 'recording' ? (
+        <div className="flex items-center space-x-3">
+          <div className="flex items-center">
+            <div className="h-2 w-2 bg-yellow-500 rounded-full mr-2 animate-pulse"></div>
+            <span className="text-sm text-yellow-400">Recording</span>
+          </div>
+          <CountdownTimer 
+            isActive={true} 
+            startTime={startTime} 
+            className="text-sm text-meta-teal bg-meta-teal/10 px-3 py-1 rounded-md" 
+          />
+          <Button 
+            variant="outline" 
+            className="border-red-500/30 hover:bg-red-500/10 text-red-400"
+            onClick={stopStream}
           >
             Stop Recording
           </Button>
