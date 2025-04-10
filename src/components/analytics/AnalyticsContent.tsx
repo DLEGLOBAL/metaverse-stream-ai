@@ -21,13 +21,15 @@ const AnalyticsContent = ({ dateRange, activePlatform }: AnalyticsContentProps) 
   return (
     <div className="space-y-6">
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-        <TabsList className="grid grid-cols-5 w-full">
-          <TabsTrigger value="overview">Overview</TabsTrigger>
-          <TabsTrigger value="growth">Growth</TabsTrigger>
-          <TabsTrigger value="engagement">Engagement</TabsTrigger>
-          <TabsTrigger value="audience">Audience</TabsTrigger>
-          <TabsTrigger value="revenue">Revenue</TabsTrigger>
-        </TabsList>
+        <div className="overflow-x-auto">
+          <TabsList className="grid grid-cols-5 w-full min-w-[500px]">
+            <TabsTrigger value="overview">Overview</TabsTrigger>
+            <TabsTrigger value="growth">Growth</TabsTrigger>
+            <TabsTrigger value="engagement">Engagement</TabsTrigger>
+            <TabsTrigger value="audience">Audience</TabsTrigger>
+            <TabsTrigger value="revenue">Revenue</TabsTrigger>
+          </TabsList>
+        </div>
         
         <TabsContent value="overview" className="mt-6">
           <AnalyticsOverview dateRange={dateRange} activePlatform={activePlatform} />

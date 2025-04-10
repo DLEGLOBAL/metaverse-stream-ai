@@ -19,17 +19,19 @@ const Analytics = () => {
         <title>Stream Analytics | MetaStream</title>
       </Helmet>
       <DashboardLayout>
-        <div className="flex flex-col gap-6 p-6">
+        <div className="flex flex-col gap-6 p-6 overflow-hidden">
           <AnalyticsHeader 
             dateRange={dateRange} 
             setDateRange={setDateRange}
             activePlatform={activePlatform}
             setActivePlatform={setActivePlatform}
           />
-          <AnalyticsContent 
-            dateRange={dateRange} 
-            activePlatform={activePlatform}
-          />
+          <div className="overflow-x-auto">
+            <AnalyticsContent 
+              dateRange={dateRange} 
+              activePlatform={activePlatform}
+            />
+          </div>
         </div>
       </DashboardLayout>
     </React.Fragment>
