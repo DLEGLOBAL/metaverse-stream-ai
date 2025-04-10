@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import { Video, YouTube, Twitch, Facebook, X } from 'lucide-react';
+import { Video, Youtube, Twitch, Facebook, X } from 'lucide-react';
 import { useAppContext } from '@/contexts/AppContext';
 import { toast } from '@/hooks/use-toast';
 import PlatformsList from '@/components/streaming/PlatformsList';
@@ -15,7 +15,7 @@ const StreamingContent = () => {
   
   // Define real platform configurations
   const platforms = [
-    { id: 1, name: 'YouTube', icon: YouTube, connected: true, enabled: true },
+    { id: 1, name: 'YouTube', icon: Youtube, connected: true, enabled: true },
     { id: 2, name: 'Twitch', icon: Twitch, connected: true, enabled: true },
     { id: 3, name: 'Facebook', icon: Facebook, connected: false, enabled: false },
     { id: 4, name: 'X', icon: X, connected: false, enabled: false },

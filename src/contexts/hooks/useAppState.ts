@@ -31,31 +31,19 @@ export const useAppState = () => {
       id: 1,
       name: 'Webcam',
       type: 'camera',
-      active: true,
-      settings: {
-        resolution: '1080p',
-        framerate: 60
-      }
+      active: true
     },
     {
       id: 2,
       name: 'Microphone',
       type: 'audio',
-      active: true,
-      settings: {
-        gain: 75,
-        noiseSuppression: true
-      }
+      active: true
     },
     {
       id: 3,
       name: 'Screen Share',
       type: 'display',
-      active: false,
-      settings: {
-        captureArea: 'window',
-        quality: 'high'
-      }
+      active: false
     }
   ]);
   
