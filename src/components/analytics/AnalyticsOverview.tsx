@@ -19,7 +19,7 @@ const AnalyticsOverview = ({ dateRange, activePlatform }: AnalyticsOverviewProps
   const { overviewMetrics, viewershipData, platformBreakdown } = getAnalyticsData(dateRange, activePlatform);
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 w-full">
       {/* KPI Metrics */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <MetricCard 
@@ -53,98 +53,100 @@ const AnalyticsOverview = ({ dateRange, activePlatform }: AnalyticsOverviewProps
       </div>
 
       {/* Viewership Chart */}
-      <Card>
+      <Card className="overflow-hidden">
         <CardHeader>
           <CardTitle>Viewership Trends</CardTitle>
           <CardDescription>Average viewers over time across all platforms</CardDescription>
         </CardHeader>
-        <CardContent>
-          <div className="h-80">
-            <ChartContainer
-              config={{
-                twitch: {
-                  label: 'Twitch',
-                  theme: {
-                    light: '#9146FF',
-                    dark: '#9146FF'
+        <CardContent className="p-0 md:p-6">
+          <div className="h-80 w-full min-w-[300px] overflow-x-auto">
+            <div className="min-w-[600px] h-full px-4 md:px-0">
+              <ChartContainer
+                config={{
+                  twitch: {
+                    label: 'Twitch',
+                    theme: {
+                      light: '#9146FF',
+                      dark: '#9146FF'
+                    }
+                  },
+                  youtube: {
+                    label: 'YouTube',
+                    theme: {
+                      light: '#FF0000',
+                      dark: '#FF0000'
+                    }
+                  },
+                  facebook: {
+                    label: 'Facebook',
+                    theme: {
+                      light: '#1877F2',
+                      dark: '#1877F2'
+                    }
+                  },
+                  tiktok: {
+                    label: 'TikTok',
+                    theme: {
+                      light: '#000000',
+                      dark: '#FFFFFF'
+                    }
                   }
-                },
-                youtube: {
-                  label: 'YouTube',
-                  theme: {
-                    light: '#FF0000',
-                    dark: '#FF0000'
-                  }
-                },
-                facebook: {
-                  label: 'Facebook',
-                  theme: {
-                    light: '#1877F2',
-                    dark: '#1877F2'
-                  }
-                },
-                tiktok: {
-                  label: 'TikTok',
-                  theme: {
-                    light: '#000000',
-                    dark: '#FFFFFF'
-                  }
-                }
-              }}
-            >
-              <ResponsiveContainer width="100%" height="100%">
-                <AreaChart
-                  data={viewershipData}
-                  margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
-                >
-                  <CartesianGrid strokeDasharray="3 3" opacity={0.2} />
-                  <XAxis dataKey="date" />
-                  <YAxis />
-                  <Tooltip content={<ChartTooltipContent />} />
-                  <Legend />
-                  {activePlatform === 'all' || activePlatform === 'twitch' ? (
-                    <Area 
-                      type="monotone" 
-                      dataKey="twitch" 
-                      stackId="1"
-                      stroke="#9146FF" 
-                      fill="#9146FF" 
-                      fillOpacity={0.5} 
-                    />
-                  ) : null}
-                  {activePlatform === 'all' || activePlatform === 'youtube' ? (
-                    <Area 
-                      type="monotone" 
-                      dataKey="youtube" 
-                      stackId="1"
-                      stroke="#FF0000" 
-                      fill="#FF0000" 
-                      fillOpacity={0.5} 
-                    />
-                  ) : null}
-                  {activePlatform === 'all' || activePlatform === 'facebook' ? (
-                    <Area 
-                      type="monotone" 
-                      dataKey="facebook" 
-                      stackId="1"
-                      stroke="#1877F2" 
-                      fill="#1877F2" 
-                      fillOpacity={0.5} 
-                    />
-                  ) : null}
-                  {activePlatform === 'all' || activePlatform === 'tiktok' ? (
-                    <Area 
-                      type="monotone" 
-                      dataKey="tiktok" 
-                      stackId="1"
-                      stroke="#69C9D0" 
-                      fill="#69C9D0" 
-                      fillOpacity={0.5} 
-                    />
-                  ) : null}
-                </AreaChart>
-              </ResponsiveContainer>
-            </ChartContainer>
+                }}
+              >
+                <ResponsiveContainer width="100%" height="100%">
+                  <AreaChart
+                    data={viewershipData}
+                    margin={{ top: 10, right: 30, left: 0, bottom: 20 }}
+                  >
+                    <CartesianGrid strokeDasharray="3 3" opacity={0.2} />
+                    <XAxis dataKey="date" tick={{ fontSize: 12 }} />
+                    <YAxis tick={{ fontSize: 12 }} />
+                    <Tooltip content={<ChartTooltipContent />} />
+                    <Legend wrapperStyle={{ paddingTop: 10, fontSize: 12 }} />
+                    {activePlatform === 'all' || activePlatform === 'twitch' ? (
+                      <Area 
+                        type="monotone" 
+                        dataKey="twitch" 
+                        stackId="1"
+                        stroke="#9146FF" 
+                        fill="#9146FF" 
+                        fillOpacity={0.5} 
+                      />
+                    ) : null}
+                    {activePlatform === 'all' || activePlatform === 'youtube' ? (
+                      <Area 
+                        type="monotone" 
+                        dataKey="youtube" 
+                        stackId="1"
+                        stroke="#FF0000" 
+                        fill="#FF0000" 
+                        fillOpacity={0.5} 
+                      />
+                    ) : null}
+                    {activePlatform === 'all' || activePlatform === 'facebook' ? (
+                      <Area 
+                        type="monotone" 
+                        dataKey="facebook" 
+                        stackId="1"
+                        stroke="#1877F2" 
+                        fill="#1877F2" 
+                        fillOpacity={0.5} 
+                      />
+                    ) : null}
+                    {activePlatform === 'all' || activePlatform === 'tiktok' ? (
+                      <Area 
+                        type="monotone" 
+                        dataKey="tiktok" 
+                        stackId="1"
+                        stroke="#69C9D0" 
+                        fill="#69C9D0" 
+                        fillOpacity={0.5} 
+                      />
+                    ) : null}
+                  </AreaChart>
+                </ResponsiveContainer>
+              </ChartContainer>
+            </div>
           </div>
         </CardContent>
       </Card>
