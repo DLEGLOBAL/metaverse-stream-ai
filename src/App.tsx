@@ -3,6 +3,7 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { ThemeProvider } from './contexts/theme';
 import { AppProvider } from './contexts/AppContext';
+import { VRProvider } from './contexts/VRContext';
 import { Toaster } from './components/ui/toaster';
 import Landing from './pages/Landing';
 import Dashboard from './pages/Dashboard';
@@ -26,26 +27,28 @@ function App() {
   return (
     <ThemeProvider>
       <AppProvider>
-        <Router>
-          <Routes>
-            <Route path="/" element={<Index />} />
-            <Route path="/landing" element={<Landing />} />
-            <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/scenes" element={<Scenes />} />
-            <Route path="/sources" element={<Sources />} />
-            <Route path="/streaming" element={<Streaming />} />
-            <Route path="/ai-tools" element={<AiTools />} />
-            <Route path="/settings" element={<Settings />} />
-            <Route path="/studio" element={<Studio />} />
-            <Route path="/community" element={<Community />} />
-            <Route path="/creator-network" element={<CreatorNetwork />} />
-            <Route path="/vr-integration" element={<VRIntegration />} />
-            <Route path="/audio" element={<Audio />} />
-            <Route path="/chat" element={<Chat />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </Router>
-        <Toaster />
+        <VRProvider>
+          <Router>
+            <Routes>
+              <Route path="/" element={<Index />} />
+              <Route path="/landing" element={<Landing />} />
+              <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/scenes" element={<Scenes />} />
+              <Route path="/sources" element={<Sources />} />
+              <Route path="/streaming" element={<Streaming />} />
+              <Route path="/ai-tools" element={<AiTools />} />
+              <Route path="/settings" element={<Settings />} />
+              <Route path="/studio" element={<Studio />} />
+              <Route path="/community" element={<Community />} />
+              <Route path="/creator-network" element={<CreatorNetwork />} />
+              <Route path="/vr-integration" element={<VRIntegration />} />
+              <Route path="/audio" element={<Audio />} />
+              <Route path="/chat" element={<Chat />} />
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </Router>
+          <Toaster />
+        </VRProvider>
       </AppProvider>
     </ThemeProvider>
   );
