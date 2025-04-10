@@ -5,7 +5,7 @@ import Header from '@/components/dashboard/Header';
 import { useAppContext } from '@/contexts/AppContext';
 import { Camera, Computer, Headset, Mic, Video } from 'lucide-react';
 
-// Import components with error handling
+// Error boundary for catching rendering errors
 const ErrorBoundary = ({ children }: { children: React.ReactNode }) => {
   const [hasError, setHasError] = useState(false);
   const [error, setError] = useState<Error | null>(null);
@@ -39,7 +39,7 @@ const ErrorBoundary = ({ children }: { children: React.ReactNode }) => {
   return <>{children}</>;
 };
 
-// Lazy load components that might be causing issues
+// Lazy load components
 const LazyStreamPreview = React.lazy(() => import('@/components/dashboard/StreamPreview'));
 const LazySceneSelector = React.lazy(() => import('@/components/dashboard/SceneSelector'));
 const LazySourcesList = React.lazy(() => import('@/components/dashboard/SourcesList'));
@@ -48,6 +48,7 @@ const LazyVRIntegrationPanel = React.lazy(() => import('@/components/dashboard/V
 const LazyAiFeatures = React.lazy(() => import('@/components/dashboard/AiFeatures'));
 
 const Dashboard = () => {
+  console.log('Dashboard component rendering');
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const { 
@@ -156,18 +157,19 @@ const Dashboard = () => {
         }
       ]);
 
-      setIsLoading(false);
       console.log('Dashboard initialization complete');
+      setIsLoading(false);
     } catch (error) {
       console.error('Error initializing dashboard:', error);
       setIsLoading(false);
     }
   }, [setScenes, setSources, setAiFeatures]);
   
+  // Simple loading state to handle initialization
   if (isLoading) {
     return (
       <div className="min-h-screen bg-meta-slate flex items-center justify-center">
-        <p className="text-white">Loading dashboard...</p>
+        <p className="text-white text-lg">Loading dashboard...</p>
       </div>
     );
   }
