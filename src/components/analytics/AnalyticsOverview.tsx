@@ -5,6 +5,7 @@ import { ArrowUpRight, ArrowDownRight, TrendingUp, Users, Play, Clock, DollarSig
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, ResponsiveContainer, Tooltip, Legend } from 'recharts';
 import { getAnalyticsData } from '@/services/analyticsService';
+import { ScrollArea } from '@/components/ui/scroll-area';
 
 interface AnalyticsOverviewProps {
   dateRange: {
@@ -53,14 +54,14 @@ const AnalyticsOverview = ({ dateRange, activePlatform }: AnalyticsOverviewProps
       </div>
 
       {/* Viewership Chart */}
-      <Card className="overflow-hidden">
+      <Card>
         <CardHeader>
           <CardTitle>Viewership Trends</CardTitle>
           <CardDescription>Average viewers over time across all platforms</CardDescription>
         </CardHeader>
-        <CardContent className="p-0 md:p-6">
-          <div className="h-80 w-full min-w-[300px] overflow-x-auto">
-            <div className="min-w-[600px] h-full px-4 md:px-0">
+        <CardContent className="px-0 pb-1 pt-0">
+          <ScrollArea orientation="horizontal" className="w-full pb-4">
+            <div className="h-80 min-w-[700px] px-6">
               <ChartContainer
                 config={{
                   twitch: {
@@ -147,7 +148,7 @@ const AnalyticsOverview = ({ dateRange, activePlatform }: AnalyticsOverviewProps
                 </ResponsiveContainer>
               </ChartContainer>
             </div>
-          </div>
+          </ScrollArea>
         </CardContent>
       </Card>
 

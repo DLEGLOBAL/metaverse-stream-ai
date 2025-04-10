@@ -6,6 +6,7 @@ import AnalyticsGrowth from './AnalyticsGrowth';
 import AnalyticsEngagement from './AnalyticsEngagement';
 import AnalyticsAudience from './AnalyticsAudience';
 import AnalyticsRevenue from './AnalyticsRevenue';
+import { ScrollArea } from '@/components/ui/scroll-area';
 
 interface AnalyticsContentProps {
   dateRange: {
@@ -21,15 +22,15 @@ const AnalyticsContent = ({ dateRange, activePlatform }: AnalyticsContentProps) 
   return (
     <div className="space-y-6">
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-        <div className="overflow-x-auto">
+        <ScrollArea className="pb-2" orientation="horizontal">
           <TabsList className="grid grid-cols-5 w-full min-w-[500px]">
-            <TabsTrigger value="overview">Overview</TabsTrigger>
-            <TabsTrigger value="growth">Growth</TabsTrigger>
-            <TabsTrigger value="engagement">Engagement</TabsTrigger>
-            <TabsTrigger value="audience">Audience</TabsTrigger>
-            <TabsTrigger value="revenue">Revenue</TabsTrigger>
+            <TabsTrigger value="overview" className="py-3 text-base">Overview</TabsTrigger>
+            <TabsTrigger value="growth" className="py-3 text-base">Growth</TabsTrigger>
+            <TabsTrigger value="engagement" className="py-3 text-base">Engagement</TabsTrigger>
+            <TabsTrigger value="audience" className="py-3 text-base">Audience</TabsTrigger>
+            <TabsTrigger value="revenue" className="py-3 text-base">Revenue</TabsTrigger>
           </TabsList>
-        </div>
+        </ScrollArea>
         
         <TabsContent value="overview" className="mt-6">
           <AnalyticsOverview dateRange={dateRange} activePlatform={activePlatform} />
