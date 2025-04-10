@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Switch } from '@/components/ui/switch';
@@ -23,9 +22,9 @@ const VideoSettings: React.FC = () => {
   });
   
   const [devices, setDevices] = useState([
-    { id: 'cam1', name: 'Logitech C922 Pro', active: true },
-    { id: 'cam2', name: 'Webcam HD 720p', active: false },
-    { id: 'display1', name: 'Main Display', active: false }
+    { id: 'cam1', name: 'Logitech C922 Pro', type: 'camera', active: true },
+    { id: 'cam2', name: 'Webcam HD 720p', type: 'camera', active: false },
+    { id: 'display1', name: 'Main Display', type: 'display', active: false }
   ]);
   
   const handleToggle = (setting: string) => {
