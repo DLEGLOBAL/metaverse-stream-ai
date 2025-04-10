@@ -12,5 +12,5 @@ export const useAppContext = () => {
   return context;
 };
 
-// Export the provider from the provider file to maintain backward compatibility
+// Export the provider component
 export { AppProvider } from './AppContextProvider';
