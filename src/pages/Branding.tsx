@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Helmet } from 'react-helmet';
 import { useForm } from 'react-hook-form';
@@ -10,13 +9,15 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { BrandingPromptForm, formSchema } from '@/components/branding/BrandingPromptForm';
 import BrandingContentDisplay from '@/components/branding/BrandingContentDisplay';
 import type { BrandingFormValues } from '@/components/branding/BrandingPromptForm';
+import { generateBranding } from '@/services/brandingService';
+import type { Theme } from '@/services/brandingService';
 
 const Branding = () => {
   const [isGenerating, setIsGenerating] = useState(false);
   const [activeTab, setActiveTab] = useState('logo');
   const [generatedItems, setGeneratedItems] = useState<{
     logos: string[];
-    themes: {id: string, name: string, colors: {name: string, value: string}[]}[];
+    themes: Theme[];
     images: string[];
   }>({
     logos: [],
@@ -36,63 +37,21 @@ const Branding = () => {
     setIsGenerating(true);
     
     try {
-      // Simulate generation with mock data
-      // In a real implementation, you would call an API to generate content
-      await new Promise(resolve => setTimeout(resolve, 2000));
-
       if (activeTab === 'logo') {
-        const mockLogos = [
-          'https://via.placeholder.com/300x300.png?text=AI+Generated+Logo+1',
-          'https://via.placeholder.com/300x300.png?text=AI+Generated+Logo+2',
-          'https://via.placeholder.com/300x300.png?text=AI+Generated+Logo+3',
-          'https://via.placeholder.com/300x300.png?text=AI+Generated+Logo+4',
-        ];
-        setGeneratedItems(prev => ({ ...prev, logos: mockLogos }));
+        const result = await generateBranding(data.prompt, 'logo');
+        if (result.logos) {
+          setGeneratedItems(prev => ({ ...prev, logos: result.logos }));
+        }
       } else if (activeTab === 'theme') {
-        const mockThemes = [
-          {
-            id: 'theme1',
-            name: 'Neon Future',
-            colors: [
-              { name: 'primary', value: '#0CFFE1' },
-              { name: 'secondary', value: '#8B5CF6' },
-              { name: 'accent', value: '#F97316' },
-              { name: 'background', value: '#1a2b4b' },
-              { name: 'text', value: '#FFFFFF' }
-            ]
-          },
-          {
-            id: 'theme2',
-            name: 'Retro Wave',
-            colors: [
-              { name: 'primary', value: '#FF2E63' },
-              { name: 'secondary', value: '#252A34' },
-              { name: 'accent', value: '#08D9D6' },
-              { name: 'background', value: '#221F26' },
-              { name: 'text', value: '#EAEAEA' }
-            ]
-          },
-          {
-            id: 'theme3',
-            name: 'Forest Gaming',
-            colors: [
-              { name: 'primary', value: '#3EC70B' },
-              { name: 'secondary', value: '#2D4263' },
-              { name: 'accent', value: '#FFDD93' },
-              { name: 'background', value: '#0F3460' },
-              { name: 'text', value: '#E6E6E6' }
-            ]
-          }
-        ];
-        setGeneratedItems(prev => ({ ...prev, themes: mockThemes }));
+        const result = await generateBranding(data.prompt, 'theme');
+        if (result.themes) {
+          setGeneratedItems(prev => ({ ...prev, themes: result.themes }));
+        }
       } else if (activeTab === 'images') {
-        const mockImages = [
-          'https://via.placeholder.com/600x300.png?text=Banner+1',
-          'https://via.placeholder.com/600x300.png?text=Banner+2',
-          'https://via.placeholder.com/300x300.png?text=Profile+Pic+1',
-          'https://via.placeholder.com/300x300.png?text=Profile+Pic+2',
-        ];
-        setGeneratedItems(prev => ({ ...prev, images: mockImages }));
+        const result = await generateBranding(data.prompt, 'image');
+        if (result.images) {
+          setGeneratedItems(prev => ({ ...prev, images: result.images }));
+        }
       }
 
       toast({
@@ -100,20 +59,22 @@ const Branding = () => {
         description: `Your ${activeTab === 'logo' ? 'logos' : activeTab === 'theme' ? 'themes' : 'images'} have been generated based on your prompt!`,
       });
     } catch (error) {
-      toast({
-        title: "Generation Failed",
-        description: "There was an error generating your content. Please try again.",
-        variant: "destructive",
-      });
+      // Error handling is done in the service
     } finally {
       setIsGenerating(false);
     }
   };
 
   const handleApplyTheme = (themeId: string) => {
+    // Find the theme
+    const theme = generatedItems.themes.find(t => t.id === themeId);
+    if (!theme) return;
+
+    // Here you would actually apply the theme to your application
+    // For now, we'll just show a toast
     toast({
       title: "Theme Applied",
-      description: "The selected theme has been applied to your dashboard.",
+      description: `The ${theme.name} theme has been applied to your dashboard.`,
     });
   };
 
@@ -165,36 +126,35 @@ const Branding = () => {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            {/* Prompt Input Section */}
-            <Card className="lg:col-span-1">
-              <CardHeader>
-                <CardTitle>Generate Your Brand</CardTitle>
-                <CardDescription>
-                  Describe what you want and our AI will create options for you.
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <BrandingPromptForm 
-                  form={form}
-                  onSubmit={onSubmit}
-                  isGenerating={isGenerating}
-                  activeTab={activeTab}
-                  setActiveTab={setActiveTab}
-                  generatePromptSuggestion={generatePromptSuggestion}
-                />
-              </CardContent>
-            </Card>
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {/* Prompt Input Section */}
+          <Card className="lg:col-span-1">
+            <CardHeader>
+              <CardTitle>Generate Your Brand</CardTitle>
+              <CardDescription>
+                Describe what you want and our AI will create options for you.
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <BrandingPromptForm 
+                form={form}
+                onSubmit={onSubmit}
+                isGenerating={isGenerating}
+                activeTab={activeTab}
+                setActiveTab={setActiveTab}
+                generatePromptSuggestion={generatePromptSuggestion}
+              />
+            </CardContent>
+          </Card>
 
-            {/* Generated Content Display */}
-            <BrandingContentDisplay 
-              activeTab={activeTab}
-              generatedItems={generatedItems}
-              onDownload={handleDownload}
-              onDelete={handleDeleteItem}
-              onApplyTheme={handleApplyTheme}
-            />
-          </div>
+          {/* Generated Content Display */}
+          <BrandingContentDisplay 
+            activeTab={activeTab}
+            generatedItems={generatedItems}
+            onDownload={handleDownload}
+            onDelete={handleDeleteItem}
+            onApplyTheme={handleApplyTheme}
+          />
         </div>
       </DashboardLayout>
     </>

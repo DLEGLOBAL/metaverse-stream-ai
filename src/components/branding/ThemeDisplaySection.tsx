@@ -17,9 +17,10 @@ interface Theme {
 interface ThemeDisplaySectionProps {
   themes: Theme[];
   onApply: (themeId: string) => void;
+  onDelete?: (themeId: string) => void;
 }
 
-const ThemeDisplaySection = ({ themes, onApply }: ThemeDisplaySectionProps) => {
+const ThemeDisplaySection = ({ themes, onApply, onDelete }: ThemeDisplaySectionProps) => {
   return (
     <>
       {themes.length > 0 ? (
