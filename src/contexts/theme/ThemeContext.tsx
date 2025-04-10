@@ -1,6 +1,5 @@
 
 import React, { createContext, useContext } from 'react';
-import { ThemeToggle } from './ThemeToggle';
 import { useThemeToggle } from './useThemeToggle';
 import { Theme, ThemeContextType } from './types';
 
@@ -18,7 +17,6 @@ export const ThemeProvider: React.FC<{
   const themeContextValue: ThemeContextType = {
     theme,
     toggleTheme,
-    ThemeToggle,
     setTheme,
     applyTheme,
   };
