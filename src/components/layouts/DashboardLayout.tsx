@@ -13,10 +13,10 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [layoutSettings, setLayoutSettings] = useState({
     sidebarWidth: 64,
-    contentWidth: 80,
+    contentWidth: 95,
     compactMode: false,
     denseLayout: false,
-    fullWidthLayout: false
+    fullWidthLayout: true
   });
   
   // Load layout settings from localStorage
@@ -40,13 +40,13 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
     const classes = ['transition-all duration-300'];
     
     // Sidebar width adjustment
-    classes.push(sidebarCollapsed ? 'ml-16' : `ml-[${layoutSettings.sidebarWidth}px]`);
+    classes.push(sidebarCollapsed ? 'ml-16' : 'ml-64');
     
     // Content width
     if (layoutSettings.fullWidthLayout) {
       classes.push('px-4');
     } else {
-      classes.push(`px-4 container mx-auto max-w-[${layoutSettings.contentWidth}%]`);
+      classes.push('px-4 container mx-auto');
     }
     
     // Spacing

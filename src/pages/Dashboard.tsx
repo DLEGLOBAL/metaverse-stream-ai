@@ -1,9 +1,9 @@
-
 import React, { useState, useEffect, Suspense } from 'react';
 import Sidebar from '@/components/dashboard/Sidebar';
 import Header from '@/components/dashboard/Header';
 import { useAppContext } from '@/contexts/AppContext';
 import { Camera, Computer, Headset, Mic, Video } from 'lucide-react';
+import DashboardLayout from '@/components/layouts/DashboardLayout';
 
 // Error boundary for catching rendering errors
 const ErrorBoundary = ({ children }: { children: React.ReactNode }) => {
@@ -49,12 +49,15 @@ const LazyAiFeatures = React.lazy(() => import('@/components/dashboard/AiFeature
 
 const Dashboard = () => {
   console.log('Dashboard component rendering');
-  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const { 
     setScenes, 
     setSources, 
-    setAiFeatures 
+    setAiFeatures,
+    toggleSceneActive,
+    toggleSourceActive,
+    toggleAiFeature,
+    updateAiFeatureSlider
   } = useAppContext();
   
   useEffect(() => {
@@ -175,69 +178,62 @@ const Dashboard = () => {
   }
   
   return (
-    <div className="min-h-screen bg-meta-slate">
-      <ErrorBoundary>
-        <Sidebar collapsed={sidebarCollapsed} toggleSidebar={() => setSidebarCollapsed(!sidebarCollapsed)} />
-        <Header sidebarCollapsed={sidebarCollapsed} />
-      </ErrorBoundary>
-      
-      <main className={`pt-20 px-4 pb-4 transition-all duration-300 ${sidebarCollapsed ? 'ml-16' : 'ml-64'}`}>
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-4">
-          {/* Main content - 3 cols */}
-          <div className="lg:col-span-3 space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div className="md:col-span-2">
-                <ErrorBoundary>
-                  <Suspense fallback={<div className="p-4 border border-gray-600 rounded bg-gray-800 text-white">Loading preview...</div>}>
-                    <LazyStreamPreview />
-                  </Suspense>
-                </ErrorBoundary>
-              </div>
-              <div>
-                <ErrorBoundary>
-                  <Suspense fallback={<div className="p-4 border border-gray-600 rounded bg-gray-800 text-white">Loading scenes...</div>}>
-                    <LazySceneSelector />
-                  </Suspense>
-                </ErrorBoundary>
-              </div>
+    <DashboardLayout>
+      <div className="grid grid-cols-1 lg:grid-cols-4 gap-4">
+        {/* Main content - 3 cols */}
+        <div className="lg:col-span-3 space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="md:col-span-2">
+              <ErrorBoundary>
+                <Suspense fallback={<div className="p-4 border border-gray-600 rounded bg-gray-800 text-white">Loading preview...</div>}>
+                  <LazyStreamPreview />
+                </Suspense>
+              </ErrorBoundary>
             </div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <ErrorBoundary>
-                  <Suspense fallback={<div className="p-4 border border-gray-600 rounded bg-gray-800 text-white">Loading sources...</div>}>
-                    <LazySourcesList />
-                  </Suspense>
-                </ErrorBoundary>
-              </div>
-              <div>
-                <div className="grid grid-cols-1 gap-4">
-                  <ErrorBoundary>
-                    <Suspense fallback={<div className="p-4 border border-gray-600 rounded bg-gray-800 text-white">Loading stats...</div>}>
-                      <LazyStatsPanel />
-                    </Suspense>
-                  </ErrorBoundary>
-                  <ErrorBoundary>
-                    <Suspense fallback={<div className="p-4 border border-gray-600 rounded bg-gray-800 text-white">Loading VR integration...</div>}>
-                      <LazyVRIntegrationPanel />
-                    </Suspense>
-                  </ErrorBoundary>
-                </div>
-              </div>
+            <div>
+              <ErrorBoundary>
+                <Suspense fallback={<div className="p-4 border border-gray-600 rounded bg-gray-800 text-white">Loading scenes...</div>}>
+                  <LazySceneSelector />
+                </Suspense>
+              </ErrorBoundary>
             </div>
           </div>
           
-          {/* Sidebar - 1 col */}
-          <div className="lg:col-span-1">
-            <ErrorBoundary>
-              <Suspense fallback={<div className="p-4 border border-gray-600 rounded bg-gray-800 text-white">Loading AI features...</div>}>
-                <LazyAiFeatures />
-              </Suspense>
-            </ErrorBoundary>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <ErrorBoundary>
+                <Suspense fallback={<div className="p-4 border border-gray-600 rounded bg-gray-800 text-white">Loading sources...</div>}>
+                  <LazySourcesList />
+                </Suspense>
+              </ErrorBoundary>
+            </div>
+            <div>
+              <div className="grid grid-cols-1 gap-4">
+                <ErrorBoundary>
+                  <Suspense fallback={<div className="p-4 border border-gray-600 rounded bg-gray-800 text-white">Loading stats...</div>}>
+                    <LazyStatsPanel />
+                  </Suspense>
+                </ErrorBoundary>
+                <ErrorBoundary>
+                  <Suspense fallback={<div className="p-4 border border-gray-600 rounded bg-gray-800 text-white">Loading VR integration...</div>}>
+                    <LazyVRIntegrationPanel />
+                  </Suspense>
+                </ErrorBoundary>
+              </div>
+            </div>
           </div>
         </div>
-      </main>
-    </div>
+        
+        {/* Sidebar - 1 col */}
+        <div className="lg:col-span-1">
+          <ErrorBoundary>
+            <Suspense fallback={<div className="p-4 border border-gray-600 rounded bg-gray-800 text-white">Loading AI features...</div>}>
+              <LazyAiFeatures />
+            </Suspense>
+          </ErrorBoundary>
+        </div>
+      </div>
+    </DashboardLayout>
   );
 };
 

@@ -146,16 +146,16 @@ const SidebarItem = ({ icon, label, to, collapsed, active }: SidebarItemProps) =
   return (
     <Link 
       to={to} 
-      className={`flex items-center p-2 rounded-md transition-colors group
+      className={`flex items-center p-2 rounded-md transition-colors group relative
         ${active 
           ? 'bg-sidebar-accent text-meta-teal' 
           : 'text-sidebar-foreground hover:bg-sidebar-accent hover:text-meta-teal'
         }`}
     >
       <span className="flex items-center justify-center w-6 h-6">{icon}</span>
-      {!collapsed && <span className="ml-3 whitespace-nowrap">{label}</span>}
+      {!collapsed && <span className="ml-3 truncate">{label}</span>}
       {collapsed && (
-        <div className="absolute left-full rounded-md px-2 py-1 ml-6 bg-meta-dark-blue text-white text-sm invisible opacity-0 -translate-x-3 transition-all group-hover:visible group-hover:opacity-100 group-hover:translate-x-0">
+        <div className="absolute left-full rounded-md px-2 py-1 ml-6 bg-meta-dark-blue text-white text-sm invisible opacity-0 -translate-x-3 transition-all group-hover:visible group-hover:opacity-100 group-hover:translate-x-0 z-50">
           {label}
         </div>
       )}
