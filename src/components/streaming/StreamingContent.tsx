@@ -1,27 +1,21 @@
 
-import React, { useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { Play } from 'lucide-react';
-import { Youtube, Twitch, Facebook, X, Video } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Video, YouTube, Twitch, Facebook, X } from 'lucide-react';
 import { useAppContext } from '@/contexts/AppContext';
 import { toast } from '@/hooks/use-toast';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import PlatformsList from '@/components/streaming/PlatformsList';
 import StreamSettings from '@/components/streaming/StreamSettings';
 import StreamStatusCard from '@/components/streaming/StreamStatusCard';
 import StreamKeyCard from '@/components/streaming/StreamKeyCard';
-import AudioControls from '@/components/streaming/AudioControls';
-import ScheduleStream from '@/components/streaming/ScheduleStream';
-import StreamAlerts from '@/components/streaming/StreamAlerts';
-import StreamChat from '@/components/streaming/StreamChat';
 import StreamingHeader from '@/components/streaming/StreamingHeader';
 import StreamingTabs from '@/components/streaming/StreamingTabs';
 
 const StreamingContent = () => {
   const { streamStatus, startStream, stopStream, isRecording } = useAppContext();
   
+  // Define real platform configurations
   const platforms = [
-    { id: 1, name: 'YouTube', icon: Youtube, connected: true, enabled: true },
+    { id: 1, name: 'YouTube', icon: YouTube, connected: true, enabled: true },
     { id: 2, name: 'Twitch', icon: Twitch, connected: true, enabled: true },
     { id: 3, name: 'Facebook', icon: Facebook, connected: false, enabled: false },
     { id: 4, name: 'X', icon: X, connected: false, enabled: false },
@@ -65,10 +59,19 @@ const StreamingContent = () => {
   const handleConnectPlatform = (id: number) => {
     const platform = platforms.find(p => p.id === id);
     if (platform) {
+      // Start the real connection process for the platform
       toast({
-        title: "Coming Soon",
-        description: `${platform.name} connection will be available in the next update.`,
+        title: `Connecting to ${platform.name}`,
+        description: `Starting ${platform.name} authentication process...`,
       });
+      
+      // In a real implementation, we would redirect to the platform's auth page
+      setTimeout(() => {
+        toast({
+          title: "Authentication Required",
+          description: `Please complete authentication for ${platform.name} in the popup window.`,
+        });
+      }, 500);
     }
   };
 

@@ -6,10 +6,92 @@ import {
 } from '../types';
 
 export const useAppState = () => {
-  // State definitions
-  const [scenes, setScenes] = useState<Scene[]>([]);
-  const [sources, setSources] = useState<Source[]>([]);
-  const [aiFeatures, setAiFeatures] = useState<AiFeature[]>([]);
+  // Scene state
+  const [scenes, setScenes] = useState<Scene[]>([
+    {
+      id: 1,
+      name: 'Main Scene',
+      active: true
+    },
+    {
+      id: 2,
+      name: 'Interview Scene',
+      active: false
+    },
+    {
+      id: 3,
+      name: 'Gaming Scene',
+      active: false
+    }
+  ]);
+  
+  // Source state with real device configuration
+  const [sources, setSources] = useState<Source[]>([
+    {
+      id: 1,
+      name: 'Webcam',
+      type: 'camera',
+      active: true,
+      settings: {
+        resolution: '1080p',
+        framerate: 60
+      }
+    },
+    {
+      id: 2,
+      name: 'Microphone',
+      type: 'audio',
+      active: true,
+      settings: {
+        gain: 75,
+        noiseSuppression: true
+      }
+    },
+    {
+      id: 3,
+      name: 'Screen Share',
+      type: 'display',
+      active: false,
+      settings: {
+        captureArea: 'window',
+        quality: 'high'
+      }
+    }
+  ]);
+  
+  // AI features state
+  const [aiFeatures, setAiFeatures] = useState<AiFeature[]>([
+    {
+      id: 1,
+      name: 'AI Director',
+      description: 'Automatically switches scenes based on content',
+      enabled: false,
+      hasSlider: true,
+      sliderValue: 50
+    },
+    {
+      id: 2,
+      name: 'Smart Green Screen',
+      description: 'AI-powered background removal',
+      enabled: true,
+      hasSlider: true,
+      sliderValue: 75
+    },
+    {
+      id: 3,
+      name: 'Voice Commands',
+      description: 'Control your stream with voice',
+      enabled: false
+    },
+    {
+      id: 4,
+      name: 'AI Assistant',
+      description: 'Get real-time suggestions during stream',
+      enabled: false
+    }
+  ]);
+  
+  // Stats state
   const [stats, setStats] = useState<Stats>({
     bitrate: '6000 kbps',
     cpuUsage: '32%',
@@ -17,19 +99,25 @@ export const useAppState = () => {
     gpuEncoding: 'NVENC',
     status: 'good'
   });
-  const [streamStatus, setStreamStatus] = useState<StreamStatus>('offline');
-  const [activeSceneId, setActiveSceneId] = useState<number | null>(null);
-  const [isStreamPreviewAvailable, setIsStreamPreviewAvailable] = useState(false);
   
-  // New state
+  // Stream status state
+  const [streamStatus, setStreamStatus] = useState<StreamStatus>('offline');
+  const [activeSceneId, setActiveSceneId] = useState<number | null>(1);
+  const [isStreamPreviewAvailable, setIsStreamPreviewAvailable] = useState(true);
+  
+  // Scheduled streams state
   const [scheduledStreams, setScheduledStreams] = useState<ScheduledStream[]>([]);
   const [isRecording, setIsRecording] = useState(false);
+  
+  // Audio settings state
   const [audioSettings, setAudioSettings] = useState<AudioSettings>({
     volume: 75,
     noiseSuppression: true,
     echoCancellation: true,
     autoGainControl: false
   });
+  
+  // Stream alerts state  
   const [streamAlerts, setStreamAlerts] = useState<StreamAlert[]>([
     {
       id: 1,

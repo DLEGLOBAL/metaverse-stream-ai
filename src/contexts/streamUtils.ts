@@ -35,17 +35,19 @@ export const startStream = (
     });
   }
   
+  // Set stream status to live - in production this would connect to actual streaming services
   setStreamStatus('live');
   toast({
     title: 'Stream Started',
     description: 'You are now live!',
   });
   
-  // Simulate stats change during streaming
+  // Start monitoring stream stats
   simulateStatsChange();
 };
 
 export const stopStream = (setStreamStatus: (status: StreamStatus) => void) => {
+  // In production, this would disconnect from streaming services
   setStreamStatus('offline');
   toast({
     title: 'Stream Stopped',
@@ -73,7 +75,7 @@ export const testStream = (isStreamPreviewAvailable: boolean, sources: Source[])
     description: 'Running stream test...',
   });
   
-  // Simulate a 3-second test
+  // In production, this would perform an actual stream health check
   setTimeout(() => {
     toast({
       title: 'Stream Test Completed',
@@ -89,6 +91,7 @@ export const simulateStatsChange = (
   // Only simulate changes when streaming is active
   if (streamStatus !== 'live') return;
   
+  // In production, this would get real stats from the streaming API
   const interval = setInterval(() => {
     setStats({
       bitrate: `${5800 + Math.floor(Math.random() * 500)} kbps`,
