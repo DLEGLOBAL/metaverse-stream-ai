@@ -22,8 +22,8 @@ const AnalyticsContent = ({ dateRange, activePlatform }: AnalyticsContentProps) 
   return (
     <div className="space-y-6">
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-        <div className="pb-2">
-          <ScrollArea className="w-full">
+        <div className="pb-2 overflow-hidden">
+          <ScrollArea className="w-full touch-auto" orientation="horizontal">
             <div className="min-w-[500px] pb-3">
               <TabsList className="grid grid-cols-5 w-full">
                 <TabsTrigger value="overview" className="py-3 text-base">Overview</TabsTrigger>

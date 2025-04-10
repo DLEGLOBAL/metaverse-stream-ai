@@ -5,6 +5,7 @@ import { Camera, Layers, Radio, Bot, Settings, Video, Users, Network, Headphones
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { useTheme } from '@/contexts/theme';
+import { ScrollArea } from '@/components/ui/scroll-area';
 
 interface SidebarProps {
   collapsed: boolean;
@@ -55,7 +56,7 @@ const Sidebar = ({ collapsed, toggleSidebar }: SidebarProps) => {
   return (
     <aside 
       className={cn(
-        "fixed inset-y-0 left-0 z-30 transition-all duration-300 ease-in-out",
+        "fixed inset-y-0 left-0 z-30 transition-all duration-300 ease-in-out overflow-hidden",
         collapsed ? "w-16" : "w-64",
         theme === 'dark' ? 
           'bg-meta-dark-blue border-r border-meta-slate/10' : 
@@ -93,35 +94,37 @@ const Sidebar = ({ collapsed, toggleSidebar }: SidebarProps) => {
           </Button>
         </div>
         
-        <nav className="flex-1 overflow-y-auto py-4">
-          <ul className="space-y-1 px-2">
-            {navigation.map((item) => (
-              <li key={item.path}>
-                <Link
-                  to={item.path}
-                  className={cn(
-                    "flex items-center px-3 py-2 rounded-lg transition-colors",
-                    isCurrentPath(item.path) 
-                      ? "bg-meta-teal text-meta-dark-blue" 
-                      : theme === 'dark'
-                        ? "text-gray-300 hover:bg-meta-slate/40 hover:text-white"
-                        : "text-gray-700 hover:bg-gray-100",
-                    collapsed ? "justify-center" : ""
-                  )}
-                >
-                  <span className="flex-shrink-0">{item.icon}</span>
-                  <span 
+        <nav className="flex-1 overflow-hidden py-4">
+          <ScrollArea className="h-full px-2 touch-auto">
+            <ul className="space-y-1">
+              {navigation.map((item) => (
+                <li key={item.path}>
+                  <Link
+                    to={item.path}
                     className={cn(
-                      "ml-3 transition-opacity duration-200",
-                      collapsed ? "hidden opacity-0" : "block opacity-100"
+                      "flex items-center px-3 py-2 rounded-lg transition-colors",
+                      isCurrentPath(item.path) 
+                        ? "bg-meta-teal text-meta-dark-blue" 
+                        : theme === 'dark'
+                          ? "text-gray-300 hover:bg-meta-slate/40 hover:text-white"
+                          : "text-gray-700 hover:bg-gray-100",
+                      collapsed ? "justify-center" : ""
                     )}
                   >
-                    {item.label}
-                  </span>
-                </Link>
-              </li>
-            ))}
-          </ul>
+                    <span className="flex-shrink-0">{item.icon}</span>
+                    <span 
+                      className={cn(
+                        "ml-3 transition-opacity duration-200",
+                        collapsed ? "hidden opacity-0" : "block opacity-100"
+                      )}
+                    >
+                      {item.label}
+                    </span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </ScrollArea>
         </nav>
         
         <div className="p-4">

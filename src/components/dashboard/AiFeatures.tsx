@@ -5,6 +5,7 @@ import { Bot, Camera, Mic, Wand2 } from 'lucide-react';
 import { Switch } from '@/components/ui/switch';
 import { Slider } from '@/components/ui/slider';
 import { useAppContext } from '@/contexts/AppContext';
+import { ScrollArea } from '@/components/ui/scroll-area';
 
 const AiFeatures = () => {
   const { aiFeatures, toggleAiFeature, updateAiFeatureSlider } = useAppContext();
@@ -14,22 +15,24 @@ const AiFeatures = () => {
       <CardHeader className="pb-2">
         <CardTitle className="text-white">AI Features</CardTitle>
       </CardHeader>
-      <CardContent className="pb-4">
-        <div className="space-y-4">
-          {aiFeatures.map((feature) => (
-            <AiFeatureItem 
-              key={feature.id}
-              icon={getFeatureIcon(feature.name)}
-              label={feature.name}
-              description={feature.description}
-              enabled={feature.enabled}
-              hasSlider={feature.hasSlider}
-              sliderValue={feature.sliderValue}
-              onToggle={() => toggleAiFeature(feature.id)}
-              onSliderChange={(value) => updateAiFeatureSlider(feature.id, value)}
-            />
-          ))}
-        </div>
+      <CardContent className="pb-4 overflow-hidden">
+        <ScrollArea className="h-[calc(100%-1rem)] touch-auto">
+          <div className="space-y-4 pr-4">
+            {aiFeatures.map((feature) => (
+              <AiFeatureItem 
+                key={feature.id}
+                icon={getFeatureIcon(feature.name)}
+                label={feature.name}
+                description={feature.description}
+                enabled={feature.enabled}
+                hasSlider={feature.hasSlider}
+                sliderValue={feature.sliderValue}
+                onToggle={() => toggleAiFeature(feature.id)}
+                onSliderChange={(value) => updateAiFeatureSlider(feature.id, value)}
+              />
+            ))}
+          </div>
+        </ScrollArea>
       </CardContent>
     </Card>
   );

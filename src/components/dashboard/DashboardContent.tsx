@@ -12,7 +12,7 @@ const LazyAiFeatures = React.lazy(() => import('@/components/dashboard/AiFeature
 
 const DashboardContent = () => {
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-4 gap-4">
+    <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 touch-auto">
       {/* Main content - 3 cols */}
       <div className="lg:col-span-3 space-y-4">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">

@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { useTheme } from '@/contexts/theme';
 import Sidebar from '@/components/dashboard/Sidebar';
 import Header from '@/components/dashboard/Header';
+import { ScrollArea } from '@/components/ui/scroll-area';
 
 type DashboardLayoutProps = {
   children: React.ReactNode;
@@ -74,8 +75,12 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
       />
       <Header sidebarCollapsed={sidebarCollapsed} />
       
-      <main className={`pt-20 pb-4 ${getContentClass()}`}>
-        {children}
+      <main className={`pt-20 pb-4 ${getContentClass()} h-[calc(100vh-2rem)] overflow-hidden`}>
+        <ScrollArea className="h-full touch-auto">
+          <div className="pr-4">
+            {children}
+          </div>
+        </ScrollArea>
       </main>
     </div>
   );
