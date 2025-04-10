@@ -1,4 +1,3 @@
-
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { toast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
@@ -117,10 +116,9 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     );
   };
 
-  const handleToggleSourceActive = (id: number) => {
-    setSources(prevSources => 
-      toggleSourceActive(prevSources, id, setIsStreamPreviewAvailable)
-    );
+  const handleToggleSourceActive = async (id: number) => {
+    const result = await toggleSourceActive(sources, id, setIsStreamPreviewAvailable, setSources);
+    setSources(result);
   };
 
   const handleToggleAiFeature = (id: number) => {
@@ -205,21 +203,4 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         startRecording: handleStartRecording,
         stopRecording: handleStopRecording,
         scheduleStream: handleScheduleStream,
-        deleteScheduledStream: handleDeleteScheduledStream,
-        updateAudioSettings: handleUpdateAudioSettings,
-        toggleStreamAlert: handleToggleStreamAlert,
-        updateStreamAlert: handleUpdateStreamAlert,
-      }}
-    >
-      {children}
-    </AppContext.Provider>
-  );
-};
-
-export const useAppContext = () => {
-  const context = useContext(AppContext);
-  if (context === undefined) {
-    throw new Error('useAppContext must be used within an AppProvider');
-  }
-  return context;
-};
+        deleteScheduledStream: handle

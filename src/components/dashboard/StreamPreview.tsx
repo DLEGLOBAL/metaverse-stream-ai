@@ -1,10 +1,10 @@
-
 import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Camera, LayoutPanelTop, Mic, Wand2, Computer, Video } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useAppContext } from '@/contexts/AppContext';
 import { toast } from '@/hooks/use-toast';
+import MediaPreview from '@/components/stream/MediaPreview';
 
 const StreamPreview = () => {
   const { 
@@ -107,36 +107,7 @@ const StreamPreview = () => {
         <div className="aspect-video bg-gray-900 rounded-md mb-4 flex items-center justify-center relative overflow-hidden border border-meta-teal/20">
           <div className="absolute inset-0 flex items-center justify-center">
             {isStreamPreviewAvailable ? (
-              <div className="text-center">
-                <div className="w-full h-full bg-gradient-to-tr from-meta-dark-blue/80 to-meta-slate/80 absolute inset-0 flex items-center justify-center">
-                  <div className="flex flex-col items-center">
-                    {isScreenShareActive ? (
-                      <div className="animate-pulse">
-                        <Computer className="h-12 w-12 text-meta-teal mb-2" />
-                        <p className="text-meta-teal">Screen Share Active</p>
-                      </div>
-                    ) : (
-                      <div className="animate-pulse">
-                        <Camera className="h-12 w-12 text-meta-teal mb-2" />
-                        <p className="text-meta-teal">Camera Active</p>
-                      </div>
-                    )}
-                    
-                    {isMicActive ? (
-                      <p className="text-xs text-green-400 mt-2">Microphone Active</p>
-                    ) : (
-                      <p className="text-xs text-red-400 mt-2">Microphone Inactive</p>
-                    )}
-                    
-                    {streamStatus === 'recording' && (
-                      <div className="mt-4 bg-red-500/20 px-3 py-1 rounded-full flex items-center">
-                        <div className="h-2 w-2 bg-red-500 rounded-full mr-2 animate-pulse"></div>
-                        <span className="text-xs text-red-400">Recording</span>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              </div>
+              <MediaPreview isStreamPreviewAvailable={isStreamPreviewAvailable} />
             ) : (
               <div className="text-center">
                 <Camera className="h-12 w-12 mx-auto text-meta-teal/40 mb-2" />
