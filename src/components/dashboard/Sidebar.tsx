@@ -7,6 +7,7 @@ import {
   ChevronLeft,
   ChevronRight,
   Cpu,
+  DollarSign,
   Headset,
   Home,
   Layers,
@@ -117,6 +118,13 @@ const Sidebar = ({ collapsed, toggleSidebar }: SidebarProps) => {
             to="/dashboard/creator-network" 
             collapsed={collapsed} 
             active={location.pathname === '/dashboard/creator-network'} 
+          />
+          <SidebarItem 
+            icon={<DollarSign size={iconSize} />} 
+            label="Pricing" 
+            to="/dashboard/pricing" 
+            collapsed={collapsed} 
+            active={location.pathname === '/dashboard/pricing'} 
           />
         </nav>
       </div>

@@ -20,6 +20,7 @@ import Audio from './pages/Audio';
 import NotFound from './pages/NotFound';
 import Index from './pages/Index';
 import Chat from './pages/Chat';
+import Pricing from './pages/Pricing';
 
 import './App.css';
 
@@ -44,6 +45,7 @@ function App() {
               <Route path="/dashboard/creator-network" element={<CreatorNetwork />} />
               <Route path="/dashboard/vr" element={<VRIntegration />} />
               <Route path="/dashboard/audio" element={<Audio />} />
+              <Route path="/dashboard/pricing" element={<Pricing />} />
               
               <Route path="/scenes" element={<Scenes />} />
               <Route path="/sources" element={<Sources />} />
@@ -56,6 +58,7 @@ function App() {
               <Route path="/vr-integration" element={<VRIntegration />} />
               <Route path="/audio" element={<Audio />} />
               <Route path="/chat" element={<Chat />} />
+              <Route path="/pricing" element={<Pricing />} />
               
               <Route path="*" element={<NotFound />} />
             </Routes>
