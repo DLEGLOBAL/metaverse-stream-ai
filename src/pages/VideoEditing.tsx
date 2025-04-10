@@ -4,7 +4,7 @@ import { Helmet } from 'react-helmet';
 import DashboardLayout from '@/components/layouts/DashboardLayout';
 import VideoEditor from '@/components/video/VideoEditor';
 import { Button } from '@/components/ui/button';
-import { SplitSquareVertical, HardDrive, Download } from 'lucide-react';
+import { SplitSquareVertical, HardDrive, Download, Layers } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
 
 const VideoEditing = () => {
@@ -25,16 +25,19 @@ const VideoEditing = () => {
   return (
     <>
       <Helmet>
-        <title>Advanced Video Editor | MetaStream</title>
+        <title>Multitrack Video Editor | MetaStream</title>
       </Helmet>
       <DashboardLayout>
         <div className="flex flex-col gap-6 p-6">
           <div className="rounded-lg bg-gradient-to-r from-meta-dark-blue to-meta-purple p-6 text-white">
             <div className="flex flex-col md:flex-row justify-between items-center gap-4">
               <div className="flex-1">
-                <h1 className="text-3xl font-bold">Advanced Video Editor</h1>
+                <div className="flex items-center gap-2">
+                  <h1 className="text-3xl font-bold">Multitrack Video Editor</h1>
+                  <Layers className="h-6 w-6 text-meta-teal" />
+                </div>
                 <p className="mt-2 text-lg opacity-90">
-                  Professional video editing suite with advanced features for livestream recordings.
+                  Professional multitrack video editing suite for livestream recordings with layered clips and audio.
                 </p>
               </div>
               
