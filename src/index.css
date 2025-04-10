@@ -73,6 +73,13 @@
     --border: 217.2 32.6% 17.5%;
     --input: 217.2 32.6% 17.5%;
     --ring: 184 100% 50%;
+
+    /* Enhanced dark mode variables */
+    --dark-surface: 222 47% 8%;
+    --dark-surface-foreground: 210 40% 95%;
+    --dark-subtle-accent: 184 80% 40%;
+    --dark-active-highlight: 184 100% 60%;
+    --dark-hover-state: 222 47% 15%;
   }
 
   .light {
@@ -112,6 +119,13 @@
     --sidebar-accent-foreground: 184 100% 25%;
     --sidebar-border: 240 5.9% 90%;
     --sidebar-ring: 184 100% 40%;
+
+    /* Enhanced light mode variables */
+    --light-surface: 0 0% 100%;
+    --light-surface-foreground: 240 10% 3.9%;
+    --light-subtle-accent: 184 80% 60%;
+    --light-active-highlight: 184 100% 35%;
+    --light-hover-state: 0 0% 95%;
   }
 }
 
@@ -139,6 +153,28 @@
 
   .neo-brutalism {
     @apply border-2 border-black dark:border-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] dark:shadow-[4px_4px_0px_0px_rgba(255,255,255,1)];
+  }
+
+  /* New theme-aware components */
+  .theme-card {
+    @apply bg-card text-card-foreground rounded-lg border border-border p-4 shadow-sm transition-all;
+  }
+
+  .theme-surface {
+    @apply dark:bg-[hsl(var(--dark-surface))] dark:text-[hsl(var(--dark-surface-foreground))]
+           light:bg-[hsl(var(--light-surface))] light:text-[hsl(var(--light-surface-foreground))];
+  }
+
+  .theme-button {
+    @apply bg-primary text-primary-foreground hover:bg-primary/90 
+           dark:hover:bg-[hsl(var(--dark-active-highlight))]
+           light:hover:bg-[hsl(var(--light-active-highlight))]
+           transition-colors;
+  }
+
+  .theme-subtle-accent {
+    @apply dark:text-[hsl(var(--dark-subtle-accent))]
+           light:text-[hsl(var(--light-subtle-accent))];
   }
 }
 

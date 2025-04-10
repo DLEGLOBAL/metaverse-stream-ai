@@ -1,13 +1,14 @@
 
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { useTheme } from '@/contexts/ThemeContext';
+import { useTheme } from '@/contexts/theme';
+import { ThemeToggle } from '@/contexts/theme';
 import { useEpilepsySafeMode } from '@/components/accessibility/EpilepsySafeMode';
 import { Switch } from '@/components/ui/switch';
 import { Sun, Moon, Eye } from 'lucide-react';
 
 const AccessibilitySettings = () => {
-  const { theme, toggleTheme } = useTheme();
+  const { theme } = useTheme();
   const { epilepsySafeMode, toggleEpilepsySafeMode } = useEpilepsySafeMode();
   
   return (
@@ -31,10 +32,7 @@ const AccessibilitySettings = () => {
                 Switch between light and dark themes for comfortable viewing.
               </p>
             </div>
-            <Switch 
-              checked={theme === 'dark'}
-              onCheckedChange={toggleTheme}
-            />
+            <ThemeToggle />
           </div>
           
           <div className="flex items-center justify-between">
