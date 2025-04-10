@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Camera, Layers, Radio, Bot, Settings, Video, Users, Network, Headphones, VrHeadset, Home, DollarSign, Palette, BarChart } from 'lucide-react';
+import { Camera, Layers, Radio, Bot, Settings, Video, Users, Network, Headphones, Headset, Home, DollarSign, Palette, BarChart } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { useTheme } from '@/contexts/theme';
@@ -35,7 +35,7 @@ const Sidebar = ({ collapsed, toggleSidebar }: SidebarProps) => {
     { icon: <Bot size={20} />, label: 'AI Tools', path: '/dashboard/ai-tools' },
     { icon: <Video size={20} />, label: 'Video Editing', path: '/dashboard/video-editing' },
     { icon: <Headphones size={20} />, label: 'Audio', path: '/dashboard/audio' },
-    { icon: <VrHeadset size={20} />, label: 'VR Integration', path: '/dashboard/vr' },
+    { icon: <Headset size={20} />, label: 'VR Integration', path: '/dashboard/vr' },
     { icon: <Users size={20} />, label: 'Community', path: '/dashboard/community' },
     { icon: <Network size={20} />, label: 'Creator Network', path: '/dashboard/creator-network' },
     { icon: <Palette size={20} />, label: 'Branding', path: '/dashboard/branding' },
