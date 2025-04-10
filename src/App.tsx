@@ -21,6 +21,7 @@ import NotFound from './pages/NotFound';
 import Index from './pages/Index';
 import Chat from './pages/Chat';
 import Pricing from './pages/Pricing';
+import VideoEditing from './pages/VideoEditing';
 
 import './App.css';
 
@@ -46,6 +47,7 @@ function App() {
               <Route path="/dashboard/vr" element={<VRIntegration />} />
               <Route path="/dashboard/audio" element={<Audio />} />
               <Route path="/dashboard/pricing" element={<Pricing />} />
+              <Route path="/dashboard/video-editing" element={<VideoEditing />} />
               
               <Route path="/scenes" element={<Scenes />} />
               <Route path="/sources" element={<Sources />} />
@@ -59,6 +61,7 @@ function App() {
               <Route path="/audio" element={<Audio />} />
               <Route path="/chat" element={<Chat />} />
               <Route path="/pricing" element={<Pricing />} />
+              <Route path="/video-editing" element={<VideoEditing />} />
               
               <Route path="*" element={<NotFound />} />
             </Routes>
