@@ -1,10 +1,6 @@
 
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { toast } from '@/hooks/use-toast';
-import { 
-  Scene, Source, AiFeature, Stats, StreamStatus,
-  ScheduledStream, AudioSettings, StreamAlert
-} from './types';
 import { useAppState } from './hooks/useAppState';
 import { useSceneHandlers } from './hooks/useSceneHandlers';
 import { useSourceHandlers } from './hooks/useSourceHandlers';
@@ -17,7 +13,7 @@ import { useAlertHandlers } from './hooks/useAlertHandlers';
 import { AppContext } from './AppContext';
 import { ThemeProvider } from './theme/ThemeContext';
 import { CustomThemeProvider } from './theme/CustomThemeContext';
-import { activateRealDevice, deactivateRealDevice } from './mediaUtils';
+import { useAppInitializer } from './hooks/useAppInitializer';
 
 export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const {
@@ -34,87 +30,21 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     streamAlerts, setStreamAlerts
   } = useAppState();
 
-  // Implement actual toggle functionality
-  const toggleSceneActive = (sceneId: number) => {
-    setScenes(prev => prev.map(scene => ({
-      ...scene,
-      active: scene.id === sceneId
-    })));
-    setActiveSceneId(sceneId);
-    
-    toast({
-      title: "Scene Changed",
-      description: `Switched to ${scenes.find(s => s.id === sceneId)?.name || 'new scene'}`,
-    });
-  };
+  // Initialize handlers for different features
+  const { toggleSceneActive } = useSceneHandlers({ 
+    setScenes, 
+    setActiveSceneId 
+  });
 
-  const toggleSourceActive = async (sourceId: number) => {
-    const source = sources.find(s => s.id === sourceId);
-    if (!source) return;
-    
-    if (!source.active) {
-      // Activating the source
-      const success = await activateRealDevice(
-        source, 
-        setIsStreamPreviewAvailable,
-        setSources,
-        sources
-      );
-      
-      if (success) {
-        setSources(prev => prev.map(s => 
-          s.id === sourceId ? { ...s, active: true } : s
-        ));
-      }
-    } else {
-      // Deactivating the source
-      deactivateRealDevice(sourceId);
-      
-      setSources(prev => prev.map(s => 
-        s.id === sourceId ? { ...s, active: false } : s
-      ));
-      
-      toast({
-        title: "Source Deactivated",
-        description: `${source.name} has been turned off`,
-      });
-      
-      // Check if we still have any video source active
-      const hasActiveVideo = sources.some(s => 
-        s.id !== sourceId && s.active && (s.type === 'camera' || s.type === 'display')
-      );
-      
-      if (!hasActiveVideo && (source.type === 'camera' || source.type === 'display')) {
-        setIsStreamPreviewAvailable(false);
-      }
-    }
-  };
+  const { toggleSourceActive } = useSourceHandlers({ 
+    sources, 
+    setSources, 
+    setIsStreamPreviewAvailable 
+  });
 
-  const toggleAiFeature = (featureId: number) => {
-    setAiFeatures(prev => prev.map(feature => 
-      feature.id === featureId 
-        ? { ...feature, enabled: !feature.enabled } 
-        : feature
-    ));
-    
-    const feature = aiFeatures.find(f => f.id === featureId);
-    if (feature) {
-      toast({
-        title: feature.enabled ? `${feature.name} Disabled` : `${feature.name} Enabled`,
-        description: feature.enabled 
-          ? `${feature.name} has been turned off` 
-          : `${feature.name} is now active`,
-      });
-    }
-  };
-
-  const updateAiFeatureSlider = (featureId: number, value: number) => {
-    setAiFeatures(prev => prev.map(feature => 
-      feature.id === featureId 
-        ? { ...feature, sliderValue: value } 
-        : feature
-    ));
-  };
+  const { toggleAiFeature, updateAiFeatureSlider } = useAIFeatureHandlers({ 
+    setAiFeatures 
+  });
 
   const { startStream, stopStream, testStream } = useStreamHandlers({
     isStreamPreviewAvailable,
@@ -143,29 +73,13 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     setStreamAlerts
   });
 
-  useEffect(() => {
-    try {
-      console.log('Initializing app data');
-      
-      const activeScene = scenes.find(scene => scene.active);
-      if (activeScene) {
-        setActiveSceneId(activeScene.id);
-      }
-      
-      const hasActiveVideoSource = sources.some(
-        source => source.active && (source.type === 'camera' || source.type === 'display')
-      );
-      setIsStreamPreviewAvailable(hasActiveVideoSource);
-      
-    } catch (error) {
-      console.error('Error initializing app data:', error);
-      toast({
-        title: 'Error',
-        description: 'Failed to initialize application data',
-        variant: 'destructive',
-      });
-    }
-  }, [scenes, sources, setActiveSceneId, setIsStreamPreviewAvailable]);
+  // Initialize app data
+  useAppInitializer({
+    scenes,
+    sources,
+    setActiveSceneId,
+    setIsStreamPreviewAvailable
+  });
 
   return (
     <ThemeProvider>
