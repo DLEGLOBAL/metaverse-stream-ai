@@ -34,6 +34,10 @@ const ScheduleStreamForm: React.FC<ScheduleStreamFormProps> = ({ onSchedule }) =
   const [duration, setDuration] = useState(60); // Default 60 minutes
   const [selectedPlatforms, setSelectedPlatforms] = useState<number[]>([]);
   
+  // Calculate minimum date (today)
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  
   const handleSubmit = () => {
     if (!title || !date || !time) {
       toast({
@@ -65,6 +69,11 @@ const ScheduleStreamForm: React.FC<ScheduleStreamFormProps> = ({ onSchedule }) =
     setTime('');
     setDuration(60);
     setSelectedPlatforms([]);
+    
+    toast({
+      title: 'Stream Scheduled',
+      description: `Your stream "${title}" has been scheduled successfully.`,
+    });
   };
   
   const togglePlatform = (id: number) => {
@@ -107,17 +116,20 @@ const ScheduleStreamForm: React.FC<ScheduleStreamFormProps> = ({ onSchedule }) =
             onDateChange={setDate}
             className="border-gray-700 bg-meta-slate text-white"
             placeholder="Pick a date"
+            minDate={today}
           />
         </div>
         
         <div>
           <label className="block text-sm font-medium text-gray-300 mb-1">Time</label>
-          <Input
-            type="time"
-            className="w-full bg-meta-slate border border-gray-700 text-white"
-            value={time}
-            onChange={(e) => setTime(e.target.value)}
-          />
+          <div className="flex items-center bg-meta-slate border border-gray-700 rounded-md overflow-hidden">
+            <Input
+              type="time"
+              className="w-full bg-transparent border-none text-white focus:ring-0"
+              value={time}
+              onChange={(e) => setTime(e.target.value)}
+            />
+          </div>
         </div>
       </div>
       
