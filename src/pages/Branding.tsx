@@ -12,6 +12,8 @@ import { toast } from '@/hooks/use-toast';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
+import BrandingAIPreview from '@/components/branding/BrandingAIPreview';
+import ThemePreview from '@/components/branding/ThemePreview';
 
 // Define the form schema
 const formSchema = z.object({
@@ -27,7 +29,7 @@ const Branding = () => {
   const [activeTab, setActiveTab] = useState('logo');
   const [generatedItems, setGeneratedItems] = useState<{
     logos: string[];
-    themes: {id: string, name: string, colors: {[key: string]: string}}[];
+    themes: {id: string, name: string, colors: {name: string, value: string}[]}[];
     images: string[];
   }>({
     logos: [],
@@ -64,36 +66,36 @@ const Branding = () => {
           {
             id: 'theme1',
             name: 'Neon Future',
-            colors: {
-              primary: '#0CFFE1',
-              secondary: '#8B5CF6',
-              accent: '#F97316',
-              background: '#1a2b4b',
-              text: '#FFFFFF',
-            }
+            colors: [
+              { name: 'primary', value: '#0CFFE1' },
+              { name: 'secondary', value: '#8B5CF6' },
+              { name: 'accent', value: '#F97316' },
+              { name: 'background', value: '#1a2b4b' },
+              { name: 'text', value: '#FFFFFF' }
+            ]
           },
           {
             id: 'theme2',
             name: 'Retro Wave',
-            colors: {
-              primary: '#FF2E63',
-              secondary: '#252A34',
-              accent: '#08D9D6',
-              background: '#221F26',
-              text: '#EAEAEA',
-            }
+            colors: [
+              { name: 'primary', value: '#FF2E63' },
+              { name: 'secondary', value: '#252A34' },
+              { name: 'accent', value: '#08D9D6' },
+              { name: 'background', value: '#221F26' },
+              { name: 'text', value: '#EAEAEA' }
+            ]
           },
           {
             id: 'theme3',
             name: 'Forest Gaming',
-            colors: {
-              primary: '#3EC70B',
-              secondary: '#2D4263',
-              accent: '#FFDD93',
-              background: '#0F3460',
-              text: '#E6E6E6',
-            }
-          },
+            colors: [
+              { name: 'primary', value: '#3EC70B' },
+              { name: 'secondary', value: '#2D4263' },
+              { name: 'accent', value: '#FFDD93' },
+              { name: 'background', value: '#0F3460' },
+              { name: 'text', value: '#E6E6E6' }
+            ]
+          }
         ];
         setGeneratedItems(prev => ({ ...prev, themes: mockThemes }));
       } else if (activeTab === 'images') {
@@ -128,10 +130,17 @@ const Branding = () => {
     });
   };
 
-  const handleDownload = (type: string, url?: string) => {
+  const handleDownload = (type: string) => {
     toast({
       title: `${type} Downloaded`,
       description: `Your ${type.toLowerCase()} has been downloaded successfully.`,
+    });
+  };
+
+  const handleDeleteItem = (type: string) => {
+    toast({
+      title: `${type} Removed`,
+      description: `The ${type.toLowerCase()} has been removed.`,
     });
   };
 
@@ -211,7 +220,7 @@ const Branding = () => {
                       )}
                     />
 
-                    <Tabs defaultValue="logo" value={activeTab} onValueChange={setActiveTab}>
+                    <Tabs value={activeTab} onValueChange={setActiveTab}>
                       <TabsList className="grid grid-cols-3 mb-4">
                         <TabsTrigger value="logo">Logos</TabsTrigger>
                         <TabsTrigger value="theme">Themes</TabsTrigger>
@@ -252,112 +261,75 @@ const Branding = () => {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <TabsContent value="logo" className="mt-0">
-                  {generatedItems.logos.length > 0 ? (
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                      {generatedItems.logos.map((logo, index) => (
-                        <div key={index} className="relative group">
-                          <img 
-                            src={logo} 
-                            alt={`Generated Logo ${index + 1}`} 
-                            className="w-full aspect-square object-cover rounded-md border border-border"
+                <Tabs value={activeTab}>
+                  <TabsContent value="logo" className="mt-0">
+                    {generatedItems.logos.length > 0 ? (
+                      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                        {generatedItems.logos.map((logo, index) => (
+                          <BrandingAIPreview
+                            key={index}
+                            type="logo"
+                            imageUrl={logo}
+                            onDownload={() => handleDownload('Logo')}
+                            onDelete={() => handleDeleteItem('Logo')}
                           />
-                          <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity rounded-md flex items-center justify-center">
-                            <Button 
-                              variant="secondary" 
-                              size="sm"
-                              onClick={() => handleDownload('Logo', logo)}
-                            >
-                              <Download className="h-4 w-4 mr-1" />
-                              Download
-                            </Button>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  ) : (
-                    <div className="text-center p-8 border border-dashed rounded-md">
-                      <Image className="h-12 w-12 mx-auto text-muted-foreground" />
-                      <p className="mt-2 text-muted-foreground">
-                        Your generated logos will appear here
-                      </p>
-                    </div>
-                  )}
-                </TabsContent>
+                        ))}
+                      </div>
+                    ) : (
+                      <div className="text-center p-8 border border-dashed rounded-md">
+                        <Image className="h-12 w-12 mx-auto text-muted-foreground" />
+                        <p className="mt-2 text-muted-foreground">
+                          Your generated logos will appear here
+                        </p>
+                      </div>
+                    )}
+                  </TabsContent>
 
-                <TabsContent value="theme" className="mt-0">
-                  {generatedItems.themes.length > 0 ? (
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                      {generatedItems.themes.map((theme) => (
-                        <div 
-                          key={theme.id} 
-                          className="border rounded-md p-4 hover:border-meta-teal transition-colors"
-                        >
-                          <h3 className="font-medium mb-2">{theme.name}</h3>
-                          <div className="flex space-x-2 my-3">
-                            {Object.entries(theme.colors).map(([key, color]) => (
-                              <div 
-                                key={key}
-                                className="w-6 h-6 rounded-full border"
-                                style={{ backgroundColor: color }}
-                                title={`${key}: ${color}`}
-                              />
-                            ))}
-                          </div>
-                          <Button 
-                            variant="outline" 
-                            size="sm" 
-                            className="w-full"
-                            onClick={() => handleApplyTheme(theme.id)}
-                          >
-                            <Palette className="h-4 w-4 mr-1" />
-                            Apply Theme
-                          </Button>
-                        </div>
-                      ))}
-                    </div>
-                  ) : (
-                    <div className="text-center p-8 border border-dashed rounded-md">
-                      <Palette className="h-12 w-12 mx-auto text-muted-foreground" />
-                      <p className="mt-2 text-muted-foreground">
-                        Your generated themes will appear here
-                      </p>
-                    </div>
-                  )}
-                </TabsContent>
-
-                <TabsContent value="images" className="mt-0">
-                  {generatedItems.images.length > 0 ? (
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      {generatedItems.images.map((image, index) => (
-                        <div key={index} className="relative group">
-                          <img 
-                            src={image} 
-                            alt={`Generated Image ${index + 1}`} 
-                            className="w-full aspect-video object-cover rounded-md border border-border"
+                  <TabsContent value="theme" className="mt-0">
+                    {generatedItems.themes.length > 0 ? (
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        {generatedItems.themes.map((theme) => (
+                          <ThemePreview
+                            key={theme.id}
+                            name={theme.name}
+                            colors={theme.colors}
+                            onApply={() => handleApplyTheme(theme.id)}
                           />
-                          <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity rounded-md flex items-center justify-center">
-                            <Button 
-                              variant="secondary" 
-                              size="sm"
-                              onClick={() => handleDownload('Image', image)}
-                            >
-                              <Download className="h-4 w-4 mr-1" />
-                              Download
-                            </Button>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  ) : (
-                    <div className="text-center p-8 border border-dashed rounded-md">
-                      <Image className="h-12 w-12 mx-auto text-muted-foreground" />
-                      <p className="mt-2 text-muted-foreground">
-                        Your generated images will appear here
-                      </p>
-                    </div>
-                  )}
-                </TabsContent>
+                        ))}
+                      </div>
+                    ) : (
+                      <div className="text-center p-8 border border-dashed rounded-md">
+                        <Palette className="h-12 w-12 mx-auto text-muted-foreground" />
+                        <p className="mt-2 text-muted-foreground">
+                          Your generated themes will appear here
+                        </p>
+                      </div>
+                    )}
+                  </TabsContent>
+
+                  <TabsContent value="images" className="mt-0">
+                    {generatedItems.images.length > 0 ? (
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        {generatedItems.images.map((image, index) => (
+                          <BrandingAIPreview
+                            key={index}
+                            type={index < 2 ? "banner" : "profile"}
+                            imageUrl={image}
+                            onDownload={() => handleDownload('Image')}
+                            onDelete={() => handleDeleteItem('Image')}
+                          />
+                        ))}
+                      </div>
+                    ) : (
+                      <div className="text-center p-8 border border-dashed rounded-md">
+                        <Image className="h-12 w-12 mx-auto text-muted-foreground" />
+                        <p className="mt-2 text-muted-foreground">
+                          Your generated images will appear here
+                        </p>
+                      </div>
+                    )}
+                  </TabsContent>
+                </Tabs>
               </CardContent>
             </Card>
           </div>
