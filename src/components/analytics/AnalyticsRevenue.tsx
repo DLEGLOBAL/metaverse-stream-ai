@@ -6,6 +6,7 @@ import { BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, L
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { getRevenueData } from '@/services/analyticsService';
 import { ArrowUpRight, ArrowDownRight, DollarSign } from 'lucide-react';
+import { ScrollArea } from '@/components/ui/scroll-area';
 
 interface AnalyticsRevenueProps {
   dateRange: {
@@ -68,41 +69,43 @@ const AnalyticsRevenue = ({ dateRange, activePlatform }: AnalyticsRevenueProps) 
             <CardTitle>Revenue Over Time</CardTitle>
             <CardDescription>Total earnings by date</CardDescription>
           </CardHeader>
-          <CardContent>
-            <div className="h-80">
-              <ChartContainer
-                config={{
-                  revenue: {
-                    label: 'Revenue',
-                    theme: {
-                      light: '#10B981',
-                      dark: '#10B981'
+          <CardContent className="px-0 pb-1 pt-0">
+            <ScrollArea className="w-full pb-4">
+              <div className="h-80 min-w-[500px] px-6">
+                <ChartContainer
+                  config={{
+                    revenue: {
+                      label: 'Revenue',
+                      theme: {
+                        light: '#10B981',
+                        dark: '#10B981'
+                      }
                     }
-                  }
-                }}
-              >
-                <ResponsiveContainer width="100%" height="100%">
-                  <LineChart
-                    data={revenueOverTime}
-                    margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
-                  >
-                    <CartesianGrid strokeDasharray="3 3" opacity={0.2} />
-                    <XAxis dataKey="date" />
-                    <YAxis />
-                    <Tooltip formatter={(value) => [`$${value}`, 'Revenue']} />
-                    <Legend />
-                    <Line 
-                      type="monotone" 
-                      dataKey="amount" 
-                      name="Revenue" 
-                      stroke="#10B981" 
-                      strokeWidth={2}
-                      dot={{ r: 4 }}
-                    />
-                  </LineChart>
-                </ResponsiveContainer>
-              </ChartContainer>
-            </div>
+                  }}
+                >
+                  <ResponsiveContainer width="100%" height="100%">
+                    <LineChart
+                      data={revenueOverTime}
+                      margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
+                    >
+                      <CartesianGrid strokeDasharray="3 3" opacity={0.2} />
+                      <XAxis dataKey="date" />
+                      <YAxis />
+                      <Tooltip formatter={(value) => [`$${value}`, 'Revenue']} />
+                      <Legend />
+                      <Line 
+                        type="monotone" 
+                        dataKey="amount" 
+                        name="Revenue" 
+                        stroke="#10B981" 
+                        strokeWidth={2}
+                        dot={{ r: 4 }}
+                      />
+                    </LineChart>
+                  </ResponsiveContainer>
+                </ChartContainer>
+              </div>
+            </ScrollArea>
           </CardContent>
         </Card>
 
@@ -158,42 +161,44 @@ const AnalyticsRevenue = ({ dateRange, activePlatform }: AnalyticsRevenueProps) 
             <CardTitle>Monthly Comparison</CardTitle>
             <CardDescription>Revenue changes month over month</CardDescription>
           </CardHeader>
-          <CardContent>
-            <div className="h-80">
-              <ChartContainer
-                config={{
-                  current: {
-                    label: 'Current',
-                    theme: {
-                      light: '#10B981',
-                      dark: '#10B981'
+          <CardContent className="px-0 pb-1 pt-0">
+            <ScrollArea className="w-full pb-4">
+              <div className="h-80 min-w-[500px] px-6">
+                <ChartContainer
+                  config={{
+                    current: {
+                      label: 'Current',
+                      theme: {
+                        light: '#10B981',
+                        dark: '#10B981'
+                      }
+                    },
+                    previous: {
+                      label: 'Previous',
+                      theme: {
+                        light: '#6366F1',
+                        dark: '#6366F1'
+                      }
                     }
-                  },
-                  previous: {
-                    label: 'Previous',
-                    theme: {
-                      light: '#6366F1',
-                      dark: '#6366F1'
-                    }
-                  }
-                }}
-              >
-                <ResponsiveContainer width="100%" height="100%">
-                  <BarChart
-                    data={monthlyComparison}
-                    margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
-                  >
-                    <CartesianGrid strokeDasharray="3 3" opacity={0.2} />
-                    <XAxis dataKey="source" />
-                    <YAxis />
-                    <Tooltip formatter={(value) => [`$${value}`, 'Amount']} />
-                    <Legend />
-                    <Bar dataKey="current" name="Current Month" fill="#10B981" />
-                    <Bar dataKey="previous" name="Previous Month" fill="#6366F1" />
-                  </BarChart>
-                </ResponsiveContainer>
-              </ChartContainer>
-            </div>
+                  }}
+                >
+                  <ResponsiveContainer width="100%" height="100%">
+                    <BarChart
+                      data={monthlyComparison}
+                      margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
+                    >
+                      <CartesianGrid strokeDasharray="3 3" opacity={0.2} />
+                      <XAxis dataKey="source" />
+                      <YAxis />
+                      <Tooltip formatter={(value) => [`$${value}`, 'Amount']} />
+                      <Legend />
+                      <Bar dataKey="current" name="Current Month" fill="#10B981" />
+                      <Bar dataKey="previous" name="Previous Month" fill="#6366F1" />
+                    </BarChart>
+                  </ResponsiveContainer>
+                </ChartContainer>
+              </div>
+            </ScrollArea>
           </CardContent>
         </Card>
 
@@ -204,28 +209,30 @@ const AnalyticsRevenue = ({ dateRange, activePlatform }: AnalyticsRevenueProps) 
             <CardDescription>Highest donations in the period</CardDescription>
           </CardHeader>
           <CardContent>
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Username</TableHead>
-                  <TableHead>Platform</TableHead>
-                  <TableHead>Date</TableHead>
-                  <TableHead className="text-right">Amount</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {topDonations.map((donation, index) => (
-                  <TableRow key={index}>
-                    <TableCell className="font-medium">{donation.username}</TableCell>
-                    <TableCell>{donation.platform}</TableCell>
-                    <TableCell>{donation.date}</TableCell>
-                    <TableCell className="text-right font-mono text-green-500">
-                      ${donation.amount.toFixed(2)}
-                    </TableCell>
+            <ScrollArea className="max-h-[320px] touch-auto">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Username</TableHead>
+                    <TableHead>Platform</TableHead>
+                    <TableHead>Date</TableHead>
+                    <TableHead className="text-right">Amount</TableHead>
                   </TableRow>
-                ))}
-              </TableBody>
-            </Table>
+                </TableHeader>
+                <TableBody>
+                  {topDonations.map((donation, index) => (
+                    <TableRow key={index}>
+                      <TableCell className="font-medium">{donation.username}</TableCell>
+                      <TableCell>{donation.platform}</TableCell>
+                      <TableCell>{donation.date}</TableCell>
+                      <TableCell className="text-right font-mono text-green-500">
+                        ${donation.amount.toFixed(2)}
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </ScrollArea>
           </CardContent>
         </Card>
       </div>

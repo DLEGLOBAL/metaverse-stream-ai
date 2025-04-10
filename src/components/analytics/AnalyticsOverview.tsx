@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { ArrowUpRight, ArrowDownRight, TrendingUp, Users, Play, Clock, DollarSign } from 'lucide-react';
@@ -60,7 +59,7 @@ const AnalyticsOverview = ({ dateRange, activePlatform }: AnalyticsOverviewProps
           <CardDescription>Average viewers over time across all platforms</CardDescription>
         </CardHeader>
         <CardContent className="px-0 pb-1 pt-0">
-          <ScrollArea orientation="horizontal" className="w-full pb-4">
+          <ScrollArea className="w-full pb-4">
             <div className="h-80 min-w-[700px] px-6">
               <ChartContainer
                 config={{
