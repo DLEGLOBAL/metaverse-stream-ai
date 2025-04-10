@@ -2,7 +2,7 @@
 import React from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Check, Palette } from 'lucide-react';
+import { Check, Palette, Trash2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 interface ThemeColor {
@@ -14,9 +14,10 @@ interface ThemePreviewProps {
   name: string;
   colors: ThemeColor[];
   onApply: () => void;
+  onDelete?: () => void;
 }
 
-const ThemePreview = ({ name, colors, onApply }: ThemePreviewProps) => {
+const ThemePreview = ({ name, colors, onApply, onDelete }: ThemePreviewProps) => {
   // Helper to find a color by name
   const getColor = (name: string): string => {
     const color = colors.find(c => c.name === name);
@@ -112,21 +113,39 @@ const ThemePreview = ({ name, colors, onApply }: ThemePreviewProps) => {
           }}
         />
         
-        <Button 
-          variant="outline" 
-          size="sm" 
-          className="w-full group"
-          onClick={onApply}
-          style={{
-            borderColor: textColor,
-            color: textColor,
-            backgroundColor: 'transparent'
-          }}
-        >
-          <Palette className="h-4 w-4 mr-1 group-hover:hidden" />
-          <Check className="h-4 w-4 mr-1 hidden group-hover:block" />
-          <span>Apply Theme</span>
-        </Button>
+        <div className="flex gap-2">
+          <Button 
+            variant="outline" 
+            size="sm" 
+            className="w-full group"
+            onClick={onApply}
+            style={{
+              borderColor: textColor,
+              color: textColor,
+              backgroundColor: 'transparent'
+            }}
+          >
+            <Palette className="h-4 w-4 mr-1 group-hover:hidden" />
+            <Check className="h-4 w-4 mr-1 hidden group-hover:block" />
+            <span>Apply Theme</span>
+          </Button>
+          
+          {onDelete && (
+            <Button
+              variant="outline"
+              size="sm"
+              className="aspect-square p-0"
+              onClick={onDelete}
+              style={{
+                borderColor: textColor,
+                color: textColor,
+                backgroundColor: 'transparent'
+              }}
+            >
+              <Trash2 className="h-4 w-4" />
+            </Button>
+          )}
+        </div>
       </div>
     </Card>
   );

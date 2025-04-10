@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Helmet } from 'react-helmet';
 import { useForm } from 'react-hook-form';
@@ -106,7 +107,7 @@ const Branding = () => {
   };
 
   return (
-    <>
+    <React.Fragment>
       <Helmet>
         <title>AI Branding Generator | MetaStream</title>
       </Helmet>
@@ -126,38 +127,39 @@ const Branding = () => {
             </div>
           </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Prompt Input Section */}
-          <Card className="lg:col-span-1">
-            <CardHeader>
-              <CardTitle>Generate Your Brand</CardTitle>
-              <CardDescription>
-                Describe what you want and our AI will create options for you.
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <BrandingPromptForm 
-                form={form}
-                onSubmit={onSubmit}
-                isGenerating={isGenerating}
-                activeTab={activeTab}
-                setActiveTab={setActiveTab}
-                generatePromptSuggestion={generatePromptSuggestion}
-              />
-            </CardContent>
-          </Card>
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            {/* Prompt Input Section */}
+            <Card className="lg:col-span-1">
+              <CardHeader>
+                <CardTitle>Generate Your Brand</CardTitle>
+                <CardDescription>
+                  Describe what you want and our AI will create options for you.
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <BrandingPromptForm 
+                  form={form}
+                  onSubmit={onSubmit}
+                  isGenerating={isGenerating}
+                  activeTab={activeTab}
+                  setActiveTab={setActiveTab}
+                  generatePromptSuggestion={generatePromptSuggestion}
+                />
+              </CardContent>
+            </Card>
 
-          {/* Generated Content Display */}
-          <BrandingContentDisplay 
-            activeTab={activeTab}
-            generatedItems={generatedItems}
-            onDownload={handleDownload}
-            onDelete={handleDeleteItem}
-            onApplyTheme={handleApplyTheme}
-          />
+            {/* Generated Content Display */}
+            <BrandingContentDisplay 
+              activeTab={activeTab}
+              generatedItems={generatedItems}
+              onDownload={handleDownload}
+              onDelete={handleDeleteItem}
+              onApplyTheme={handleApplyTheme}
+            />
+          </div>
         </div>
       </DashboardLayout>
-    </>
+    </React.Fragment>
   );
 };
 

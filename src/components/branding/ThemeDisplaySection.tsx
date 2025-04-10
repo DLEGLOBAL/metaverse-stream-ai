@@ -31,6 +31,7 @@ const ThemeDisplaySection = ({ themes, onApply, onDelete }: ThemeDisplaySectionP
               name={theme.name}
               colors={theme.colors}
               onApply={() => onApply(theme.id)}
+              onDelete={onDelete ? () => onDelete(theme.id) : undefined}
             />
           ))}
         </div>
