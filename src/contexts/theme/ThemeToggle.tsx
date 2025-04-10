@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Switch } from '@/components/ui/switch';
-import { Moon, Sun } from 'lucide-react';
+import { Sun, Moon } from 'lucide-react';
 import { useTheme } from './ThemeContext';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 
@@ -24,12 +24,17 @@ export const ThemeToggle: React.FC<ThemeToggleProps> = ({
     lg: 'h-5 w-5'
   }[size];
   
+  const iconClasses = {
+    light: `${iconSize} text-yellow-400`,
+    dark: `${iconSize} text-meta-teal`
+  };
+  
   return (
     <TooltipProvider>
       <div className={`flex items-center space-x-2 ${className}`}>
         <Tooltip>
           <TooltipTrigger asChild>
-            <Sun className={`${iconSize} text-meta-teal`} />
+            <Sun className={theme === 'light' ? iconClasses.light : `${iconSize} text-gray-500`} />
           </TooltipTrigger>
           <TooltipContent>
             <p>Light mode</p>
@@ -41,14 +46,18 @@ export const ThemeToggle: React.FC<ThemeToggleProps> = ({
         <Switch 
           checked={theme === 'dark'}
           onCheckedChange={toggleTheme}
-          className="data-[state=checked]:bg-meta-teal/80"
+          className={`${
+            theme === 'dark' 
+              ? 'bg-meta-teal/80' 
+              : 'bg-yellow-400/80'
+          }`}
         />
         
         {showLabels && <span className="text-sm">Dark</span>}
         
         <Tooltip>
           <TooltipTrigger asChild>
-            <Moon className={`${iconSize} text-meta-teal`} />
+            <Moon className={theme === 'dark' ? iconClasses.dark : `${iconSize} text-gray-500`} />
           </TooltipTrigger>
           <TooltipContent>
             <p>Dark mode</p>
