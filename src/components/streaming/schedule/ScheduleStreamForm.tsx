@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { DatePicker } from '@/components/ui/date-picker';
+import { DateTimePicker } from '@/components/ui/date-time-picker';
 import { toast } from '@/hooks/use-toast';
 
 interface PlatformOption {
@@ -29,8 +29,7 @@ const PLATFORMS: PlatformOption[] = [
 const ScheduleStreamForm: React.FC<ScheduleStreamFormProps> = ({ onSchedule }) => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
-  const [date, setDate] = useState<Date | undefined>(undefined);
-  const [time, setTime] = useState('');
+  const [scheduledDateTime, setScheduledDateTime] = useState<Date | undefined>(undefined);
   const [duration, setDuration] = useState(60); // Default 60 minutes
   const [selectedPlatforms, setSelectedPlatforms] = useState<number[]>([]);
   
@@ -39,25 +38,20 @@ const ScheduleStreamForm: React.FC<ScheduleStreamFormProps> = ({ onSchedule }) =
   today.setHours(0, 0, 0, 0);
   
   const handleSubmit = () => {
-    if (!title || !date || !time) {
+    if (!title || !scheduledDateTime) {
       toast({
         title: 'Missing Information',
-        description: 'Please fill in title, date, and time',
+        description: 'Please fill in title and schedule date/time',
         variant: 'destructive',
       });
       return;
     }
     
-    // Combine date and time
-    const dateTime = new Date(date);
-    const [hours, minutes] = time.split(':').map(Number);
-    dateTime.setHours(hours, minutes);
-    
     // Schedule the stream
     onSchedule({
       title,
       description,
-      scheduledDate: dateTime.toISOString(),
+      scheduledDate: scheduledDateTime.toISOString(),
       platforms: selectedPlatforms,
       duration
     });
@@ -65,8 +59,7 @@ const ScheduleStreamForm: React.FC<ScheduleStreamFormProps> = ({ onSchedule }) =
     // Reset form
     setTitle('');
     setDescription('');
-    setDate(undefined);
-    setTime('');
+    setScheduledDateTime(undefined);
     setDuration(60);
     setSelectedPlatforms([]);
     
@@ -108,29 +101,15 @@ const ScheduleStreamForm: React.FC<ScheduleStreamFormProps> = ({ onSchedule }) =
         />
       </div>
       
-      <div className="grid grid-cols-2 gap-4">
-        <div>
-          <label className="block text-sm font-medium text-gray-300 mb-1">Date</label>
-          <DatePicker 
-            date={date} 
-            onDateChange={setDate}
-            className="border-gray-700 bg-meta-slate text-white"
-            placeholder="Pick a date"
-            minDate={today}
-          />
-        </div>
-        
-        <div>
-          <label className="block text-sm font-medium text-gray-300 mb-1">Time</label>
-          <div className="flex items-center bg-meta-slate border border-gray-700 rounded-md overflow-hidden">
-            <Input
-              type="time"
-              className="w-full bg-transparent border-none text-white focus:ring-0"
-              value={time}
-              onChange={(e) => setTime(e.target.value)}
-            />
-          </div>
-        </div>
+      <div>
+        <label className="block text-sm font-medium text-gray-300 mb-1">Date & Time</label>
+        <DateTimePicker 
+          date={scheduledDateTime} 
+          onDateChange={setScheduledDateTime}
+          className="border-gray-700 bg-meta-slate text-white"
+          placeholder="Select stream date and time"
+          minDate={today}
+        />
       </div>
       
       <div>
