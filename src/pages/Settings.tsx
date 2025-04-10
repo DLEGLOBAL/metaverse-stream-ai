@@ -2,7 +2,6 @@
 import React, { useState } from 'react';
 import DashboardLayout from '@/components/layouts/DashboardLayout';
 import { Button } from '@/components/ui/button';
-import { Switch } from '@/components/ui/switch';
 import { Save } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
 
@@ -10,8 +9,13 @@ import SettingsTabs from '@/components/settings/SettingsTabs';
 import LayoutCustomization from '@/components/settings/LayoutCustomization';
 import GeneralSettings from '@/components/settings/GeneralSettings';
 import AccountSettings from '@/components/settings/AccountSettings';
-import PlaceholderSettings from '@/components/settings/PlaceholderSettings';
-import AccessibilitySettings from '@/components/settings/AccessibilitySettings';
+import PrivacySettings from '@/components/settings/PrivacySettings';
+import VideoSettings from '@/components/settings/VideoSettings';
+import AudioSettingsPanel from '@/components/settings/AudioSettingsPanel';
+import DisplaySettingsPanel from '@/components/settings/DisplaySettingsPanel';
+import StorageSettings from '@/components/settings/StorageSettings';
+import ApiKeysSettings from '@/components/settings/ApiKeysSettings';
+import AdvancedSettings from '@/components/settings/AdvancedSettings';
 
 const Settings = () => {
   const [activeTab, setActiveTab] = useState('layout');
@@ -46,12 +50,13 @@ const Settings = () => {
           {activeTab === 'layout' && <LayoutCustomization />}
           {activeTab === 'general' && <GeneralSettings />}
           {activeTab === 'account' && <AccountSettings />}
-          {activeTab === 'accessibility' && <AccessibilitySettings />}
-          
-          {/* Other tabs with placeholder content */}
-          {['privacy', 'video', 'audio', 'display', 'storage', 'api', 'advanced'].includes(activeTab) && (
-            <PlaceholderSettings tabId={activeTab} />
-          )}
+          {activeTab === 'privacy' && <PrivacySettings />}
+          {activeTab === 'video' && <VideoSettings />}
+          {activeTab === 'audio' && <AudioSettingsPanel />}
+          {activeTab === 'display' && <DisplaySettingsPanel />}
+          {activeTab === 'storage' && <StorageSettings />}
+          {activeTab === 'api' && <ApiKeysSettings />}
+          {activeTab === 'advanced' && <AdvancedSettings />}
         </div>
       </div>
     </DashboardLayout>
