@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { ThemeProvider } from './contexts/theme';
@@ -32,7 +31,19 @@ function App() {
             <Routes>
               <Route path="/" element={<Index />} />
               <Route path="/landing" element={<Landing />} />
+              
               <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/dashboard/scenes" element={<Scenes />} />
+              <Route path="/dashboard/sources" element={<Sources />} />
+              <Route path="/dashboard/streaming" element={<Streaming />} />
+              <Route path="/dashboard/ai-tools" element={<AiTools />} />
+              <Route path="/dashboard/settings" element={<Settings />} />
+              <Route path="/dashboard/studio" element={<Studio />} />
+              <Route path="/dashboard/community" element={<Community />} />
+              <Route path="/dashboard/creator-network" element={<CreatorNetwork />} />
+              <Route path="/dashboard/vr" element={<VRIntegration />} />
+              <Route path="/dashboard/audio" element={<Audio />} />
+              
               <Route path="/scenes" element={<Scenes />} />
               <Route path="/sources" element={<Sources />} />
               <Route path="/streaming" element={<Streaming />} />
@@ -44,6 +55,7 @@ function App() {
               <Route path="/vr-integration" element={<VRIntegration />} />
               <Route path="/audio" element={<Audio />} />
               <Route path="/chat" element={<Chat />} />
+              
               <Route path="*" element={<NotFound />} />
             </Routes>
           </Router>
