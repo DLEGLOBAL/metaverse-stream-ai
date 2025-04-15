@@ -1,7 +1,7 @@
 
 import { Source } from './types';
 import { toast } from '@/hooks/use-toast';
-import { activateRealDevice, deactivateRealDevice, getAllActiveStreams } from './mediaUtils';
+import { activateRealDevice, deactivateRealDevice, getAllActiveStreams, hasActiveVideoSource } from './mediaUtils';
 
 export const toggleSourceActive = async (
   sources: Source[], 
@@ -48,18 +48,11 @@ export const toggleSourceActive = async (
   });
   
   // Check if any video source is active after toggling
-  const hasActiveVideoSource = newSources.some(
-    source => source.active && (source.type === 'camera' || source.type === 'display')
-  );
-  
-  // Additionally check actual active streams (more reliable)
-  const streams = getAllActiveStreams();
-  const streamKeys = Object.keys(streams);
-  const hasActiveVideoStream = streamKeys.includes('camera') || streamKeys.includes('display');
+  const hasVideoSource = hasActiveVideoSource(newSources);
   
   // Set availability based on both checks
-  setIsStreamPreviewAvailable(hasActiveVideoSource || hasActiveVideoStream);
-  console.log('Stream preview availability updated:', { hasActiveVideoSource, hasActiveVideoStream });
+  setIsStreamPreviewAvailable(hasVideoSource);
+  console.log('Stream preview availability updated:', hasVideoSource);
   
   return newSources;
 };

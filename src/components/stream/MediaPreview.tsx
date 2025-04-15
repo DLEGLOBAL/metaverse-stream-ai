@@ -10,29 +10,50 @@ const MediaPreview: React.FC<MediaPreviewProps> = ({ isStreamPreviewAvailable })
   const videoRef = useRef<HTMLVideoElement>(null);
   
   useEffect(() => {
-    if (!isStreamPreviewAvailable || !videoRef.current) return;
+    if (!videoRef.current) return;
     
-    const streams = getAllActiveStreams();
-    const activeStreams = Object.values(streams);
-    
-    console.log('Available streams for preview:', activeStreams.length);
-    
-    if (activeStreams.length > 0) {
-      // If we have multiple active streams, we should technically combine them
-      // For simplicity, we'll just show the first video stream
-      const videoStream = activeStreams.find(stream => 
-        stream.getVideoTracks().length > 0
-      );
+    const setupStream = () => {
+      const streams = getAllActiveStreams();
+      const activeStreams = Object.values(streams);
       
-      if (videoStream && videoRef.current) {
-        console.log('Setting video stream to preview');
-        videoRef.current.srcObject = videoStream;
-        videoRef.current.onloadedmetadata = () => {
-          videoRef.current?.play().catch(e => console.error("Error playing video:", e));
-        };
+      console.log('Available streams for preview:', activeStreams.length);
+      
+      if (activeStreams.length > 0) {
+        // First try to find a video stream
+        const videoStream = activeStreams.find(stream => 
+          stream.getVideoTracks().length > 0
+        );
+        
+        if (videoStream && videoRef.current) {
+          console.log('Setting video stream to preview');
+          
+          try {
+            videoRef.current.srcObject = videoStream;
+            videoRef.current.onloadedmetadata = () => {
+              videoRef.current?.play().catch(e => console.error("Error playing video:", e));
+            };
+          } catch (error) {
+            console.error('Error setting video stream:', error);
+          }
+        } else {
+          console.log('No video tracks found in active streams');
+          if (videoRef.current) {
+            videoRef.current.srcObject = null;
+          }
+        }
       } else {
-        console.log('No video tracks found in active streams');
+        console.log('No active streams available');
+        if (videoRef.current) {
+          videoRef.current.srcObject = null;
+        }
       }
+    };
+    
+    // Setup stream immediately and when isStreamPreviewAvailable changes
+    if (isStreamPreviewAvailable) {
+      setupStream();
+    } else if (videoRef.current) {
+      videoRef.current.srcObject = null;
     }
     
     return () => {
@@ -44,19 +65,13 @@ const MediaPreview: React.FC<MediaPreviewProps> = ({ isStreamPreviewAvailable })
   
   return (
     <div className="w-full h-full">
-      {isStreamPreviewAvailable ? (
-        <video 
-          ref={videoRef} 
-          className="w-full h-full object-cover rounded-md"
-          autoPlay 
-          playsInline 
-          muted
-        />
-      ) : (
-        <div className="w-full h-full flex items-center justify-center bg-gray-900 rounded-md">
-          <p className="text-gray-400">No active video source</p>
-        </div>
-      )}
+      <video 
+        ref={videoRef} 
+        className="w-full h-full object-cover rounded-md"
+        autoPlay 
+        playsInline 
+        muted
+      />
     </div>
   );
 };

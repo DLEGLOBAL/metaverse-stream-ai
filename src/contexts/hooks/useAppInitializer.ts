@@ -2,6 +2,7 @@
 import { useEffect } from 'react';
 import { Scene, Source } from '../types';
 import { toast } from '@/hooks/use-toast';
+import { hasActiveVideoSource } from '../mediaUtils';
 
 type UseAppInitializerProps = {
   scenes: Scene[];
@@ -25,10 +26,10 @@ export const useAppInitializer = ({
         setActiveSceneId(activeScene.id);
       }
       
-      const hasActiveVideoSource = sources.some(
-        source => source.active && (source.type === 'camera' || source.type === 'display')
-      );
-      setIsStreamPreviewAvailable(hasActiveVideoSource);
+      // Use our helper function to check for video sources
+      const hasVideoSource = hasActiveVideoSource(sources);
+      setIsStreamPreviewAvailable(hasVideoSource);
+      console.log('Initial stream preview availability:', hasVideoSource);
       
     } catch (error) {
       console.error('Error initializing app data:', error);
