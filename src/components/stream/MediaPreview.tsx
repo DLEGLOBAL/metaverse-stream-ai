@@ -24,8 +24,6 @@ const MediaPreview: React.FC<MediaPreviewProps> = ({ isStreamPreviewAvailable })
           return;
         }
         
-        console.log('Active streams:', Object.keys(streams));
-        
         // First try to find a video stream
         const videoStreamKey = Object.keys(streams).find(key => 
           streams[key].getVideoTracks().length > 0

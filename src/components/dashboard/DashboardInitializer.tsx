@@ -16,6 +16,11 @@ const DashboardInitializer = ({ onInitialized }: DashboardInitializerProps) => {
   
   useEffect(() => {
     try {
+      // Check if browser supports getUserMedia
+      if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+        console.warn('Browser does not support camera/microphone access');
+      }
+      
       // Initialize scenes
       setScenes([
         {
@@ -37,7 +42,7 @@ const DashboardInitializer = ({ onInitialized }: DashboardInitializerProps) => {
           name: "Webcam",
           type: "camera",
           icon: <Camera className="h-4 w-4" />,
-          active: true,
+          active: false,
         },
         {
           id: 2,
@@ -51,7 +56,7 @@ const DashboardInitializer = ({ onInitialized }: DashboardInitializerProps) => {
           name: "Microphone",
           type: "audio",
           icon: <Mic className="h-4 w-4" />,
-          active: true,
+          active: false,
         }
       ]);
       
@@ -61,14 +66,14 @@ const DashboardInitializer = ({ onInitialized }: DashboardInitializerProps) => {
           id: 1,
           name: "AI Director",
           description: "Smart scene switching",
-          enabled: true,
+          enabled: false,
           hasSlider: false,
         },
         {
           id: 2,
           name: "Smart Green Screen",
           description: "Background removal",
-          enabled: true,
+          enabled: false,
           hasSlider: true,
           sliderValue: 75,
         }
