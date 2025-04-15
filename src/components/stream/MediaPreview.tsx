@@ -13,16 +13,28 @@ const MediaPreview: React.FC<MediaPreviewProps> = ({ isStreamPreviewAvailable })
     if (!videoRef.current) return;
     
     const setupStream = async () => {
-      const streams = getAllActiveStreams();
-      const activeStreams = Object.values(streams);
-      
-      if (activeStreams.length > 0) {
+      try {
+        const streams = getAllActiveStreams();
+        
+        if (Object.keys(streams).length === 0) {
+          console.log('No active streams available');
+          if (videoRef.current) {
+            videoRef.current.srcObject = null;
+          }
+          return;
+        }
+        
+        console.log('Active streams:', Object.keys(streams));
+        
         // First try to find a video stream
-        const videoStream = activeStreams.find(stream => 
-          stream.getVideoTracks().length > 0
+        const videoStreamKey = Object.keys(streams).find(key => 
+          streams[key].getVideoTracks().length > 0
         );
         
-        if (videoStream && videoRef.current) {
+        if (videoStreamKey && videoRef.current) {
+          const videoStream = streams[videoStreamKey];
+          console.log(`Found video stream: ${videoStreamKey} with ${videoStream.getVideoTracks().length} video tracks`);
+          
           try {
             videoRef.current.srcObject = videoStream;
             videoRef.current.onloadedmetadata = () => {
@@ -31,11 +43,14 @@ const MediaPreview: React.FC<MediaPreviewProps> = ({ isStreamPreviewAvailable })
           } catch (error) {
             console.error('Error setting video stream:', error);
           }
-        } else if (videoRef.current) {
-          videoRef.current.srcObject = null;
+        } else {
+          console.log('No video tracks found in active streams');
+          if (videoRef.current) {
+            videoRef.current.srcObject = null;
+          }
         }
-      } else if (videoRef.current) {
-        videoRef.current.srcObject = null;
+      } catch (error) {
+        console.error('Error in setupStream:', error);
       }
     };
     

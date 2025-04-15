@@ -4,6 +4,39 @@ import { toast } from '@/hooks/use-toast';
 // Mock streams for development
 const mockStreams: Record<string, MediaStream> = {};
 
+// Helper function to create a valid mock track
+const createMockTrack = (kind: 'video' | 'audio'): MediaStreamTrack => {
+  // Create a temporary canvas or audio element to generate a real track
+  if (kind === 'video') {
+    const canvas = document.createElement('canvas');
+    canvas.width = 640;
+    canvas.height = 480;
+    
+    // Draw something on the canvas to make it visible
+    const ctx = canvas.getContext('2d');
+    if (ctx) {
+      ctx.fillStyle = '#1f2937';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.font = '24px Arial';
+      ctx.fillStyle = '#14b8a6';
+      ctx.textAlign = 'center';
+      ctx.fillText('Mock Camera', canvas.width / 2, canvas.height / 2);
+    }
+    
+    // Get a real MediaStreamTrack from the canvas
+    const stream = canvas.captureStream(30); // 30fps
+    return stream.getVideoTracks()[0];
+  } else {
+    // For audio, create a silent audio track
+    const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
+    const oscillator = audioContext.createOscillator();
+    const destination = audioContext.createMediaStreamDestination();
+    oscillator.connect(destination);
+    oscillator.start();
+    return destination.stream.getAudioTracks()[0];
+  }
+};
+
 // In a real app, this would connect to actual camera/microphone
 export const activateRealDevice = async (
   source: Source,
@@ -18,36 +51,24 @@ export const activateRealDevice = async (
     // In a real app, we would use navigator.mediaDevices.getUserMedia
     
     if (source.type === 'camera') {
-      // In a real app: const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-      // For now, create a mock stream with empty video track
       const mockStream = new MediaStream();
-      // Add a mock video track to the stream
-      const mockTrack = {
-        kind: 'video',
-        enabled: true,
-        getSettings: () => ({}),
-        applyConstraints: () => Promise.resolve(),
-        getCapabilities: () => ({}),
-        getConstraints: () => ({}),
-        stop: () => {},
-        addEventListener: () => {},
-        removeEventListener: () => {},
-        dispatchEvent: () => true,
-        onended: null,
-        onmute: null,
-        onunmute: null,
-        id: 'mock-video-track',
-        label: 'Mock Video Track',
-        muted: false,
-        readyState: 'live',
-        contentHint: '',
-        clone: function() { return this as MediaStreamTrack; }
-      } as MediaStreamTrack;
       
-      mockStream.addTrack(mockTrack);
-      mockStreams['camera'] = mockStream;
-      console.log('Created mock camera stream with video track');
-      console.log('Tracks:', mockStream.getTracks().length, 'Video tracks:', mockStream.getVideoTracks().length);
+      try {
+        // Add a real video track to the stream from a canvas
+        const videoTrack = createMockTrack('video');
+        mockStream.addTrack(videoTrack);
+        
+        mockStreams['camera'] = mockStream;
+        console.log('Created mock camera stream with video track');
+      } catch (trackError) {
+        console.error('Error creating video track:', trackError);
+        toast({
+          title: 'Camera Error',
+          description: 'Could not create video source',
+          variant: 'destructive',
+        });
+        return false;
+      }
       
       toast({
         title: 'Camera Activated',
@@ -60,33 +81,19 @@ export const activateRealDevice = async (
     }
     
     if (source.type === 'audio') {
-      // In a real app: const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       const mockStream = new MediaStream();
-      // Add a mock audio track
-      const mockTrack = {
-        kind: 'audio',
-        enabled: true,
-        getSettings: () => ({}),
-        applyConstraints: () => Promise.resolve(),
-        getCapabilities: () => ({}),
-        getConstraints: () => ({}),
-        stop: () => {},
-        addEventListener: () => {},
-        removeEventListener: () => {},
-        dispatchEvent: () => true,
-        onended: null,
-        onmute: null,
-        onunmute: null,
-        id: 'mock-audio-track',
-        label: 'Mock Audio Track',
-        muted: false,
-        readyState: 'live',
-        contentHint: '',
-        clone: function() { return this as MediaStreamTrack; }
-      } as MediaStreamTrack;
-      mockStream.addTrack(mockTrack);
-      mockStreams['audio'] = mockStream;
-      console.log('Created mock audio stream with audio track');
+      
+      try {
+        // Add a real audio track to the stream
+        const audioTrack = createMockTrack('audio');
+        mockStream.addTrack(audioTrack);
+        
+        mockStreams['audio'] = mockStream;
+        console.log('Created mock audio stream with audio track');
+      } catch (trackError) {
+        console.error('Error creating audio track:', trackError);
+        return false;
+      }
       
       toast({
         title: 'Microphone Activated',
@@ -96,35 +103,24 @@ export const activateRealDevice = async (
     }
     
     if (source.type === 'display') {
-      // In a real app: const stream = await navigator.mediaDevices.getDisplayMedia();
       const mockStream = new MediaStream();
-      // Add a mock video track for display
-      const mockTrack = {
-        kind: 'video',
-        enabled: true,
-        getSettings: () => ({}),
-        applyConstraints: () => Promise.resolve(),
-        getCapabilities: () => ({}),
-        getConstraints: () => ({}),
-        stop: () => {},
-        addEventListener: () => {},
-        removeEventListener: () => {},
-        dispatchEvent: () => true,
-        onended: null,
-        onmute: null,
-        onunmute: null,
-        id: 'mock-display-track',
-        label: 'Mock Display Track',
-        muted: false,
-        readyState: 'live',
-        contentHint: '',
-        clone: function() { return this as MediaStreamTrack; }
-      } as MediaStreamTrack;
       
-      mockStream.addTrack(mockTrack);
-      mockStreams['display'] = mockStream;
-      console.log('Created mock display stream with video track');
-      console.log('Tracks:', mockStream.getTracks().length, 'Video tracks:', mockStream.getVideoTracks().length);
+      try {
+        // Add a real video track to the stream from a canvas
+        const videoTrack = createMockTrack('video');
+        mockStream.addTrack(videoTrack);
+        
+        mockStreams['display'] = mockStream;
+        console.log('Created mock display stream with video track');
+      } catch (trackError) {
+        console.error('Error creating video track:', trackError);
+        toast({
+          title: 'Screen Share Error',
+          description: 'Could not create display source',
+          variant: 'destructive',
+        });
+        return false;
+      }
       
       toast({
         title: 'Screen Share Activated',
