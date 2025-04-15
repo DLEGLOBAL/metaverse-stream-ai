@@ -1,4 +1,3 @@
-
 import { Source } from './types';
 import { toast } from '@/hooks/use-toast';
 
@@ -44,9 +43,11 @@ export const activateRealDevice = async (
         contentHint: '',
         clone: function() { return this as MediaStreamTrack; }
       } as MediaStreamTrack;
+      
       mockStream.addTrack(mockTrack);
       mockStreams['camera'] = mockStream;
       console.log('Created mock camera stream with video track');
+      console.log('Tracks:', mockStream.getTracks().length, 'Video tracks:', mockStream.getVideoTracks().length);
       
       toast({
         title: 'Camera Activated',
@@ -119,9 +120,11 @@ export const activateRealDevice = async (
         contentHint: '',
         clone: function() { return this as MediaStreamTrack; }
       } as MediaStreamTrack;
+      
       mockStream.addTrack(mockTrack);
       mockStreams['display'] = mockStream;
       console.log('Created mock display stream with video track');
+      console.log('Tracks:', mockStream.getTracks().length, 'Video tracks:', mockStream.getVideoTracks().length);
       
       toast({
         title: 'Screen Share Activated',
@@ -208,6 +211,15 @@ export const hasActiveVideoSource = (sources: Source[]): boolean => {
   );
   
   console.log(`Active video check: sources=${hasActiveVideoInSources}, streams=${hasVideoTracks}`);
+  console.log('Current streams:', Object.keys(streams));
   
-  return hasActiveVideoInSources || hasVideoTracks;
+  // Log details of available streams for debugging
+  Object.entries(streams).forEach(([key, stream]) => {
+    console.log(`Stream ${key}:`, stream.id);
+    console.log(`- All tracks: ${stream.getTracks().length}`);
+    console.log(`- Video tracks: ${stream.getVideoTracks().length}`);
+    console.log(`- Audio tracks: ${stream.getAudioTracks().length}`);
+  });
+  
+  return hasActiveVideoInSources && hasVideoTracks;
 };

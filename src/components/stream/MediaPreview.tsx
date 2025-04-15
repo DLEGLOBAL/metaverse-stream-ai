@@ -12,7 +12,7 @@ const MediaPreview: React.FC<MediaPreviewProps> = ({ isStreamPreviewAvailable })
   useEffect(() => {
     if (!videoRef.current) return;
     
-    const setupStream = () => {
+    const setupStream = async () => {
       const streams = getAllActiveStreams();
       const activeStreams = Object.values(streams);
       
@@ -25,7 +25,8 @@ const MediaPreview: React.FC<MediaPreviewProps> = ({ isStreamPreviewAvailable })
         );
         
         if (videoStream && videoRef.current) {
-          console.log('Setting video stream to preview');
+          console.log('Setting video stream to preview:', videoStream.id);
+          console.log('Video tracks:', videoStream.getVideoTracks().length);
           
           try {
             videoRef.current.srcObject = videoStream;
@@ -72,6 +73,10 @@ const MediaPreview: React.FC<MediaPreviewProps> = ({ isStreamPreviewAvailable })
         playsInline 
         muted
       />
+      {/* Debug overlay - will help us see if video is loaded but not visible */}
+      <div className="absolute bottom-2 left-2 text-xs bg-black/70 text-white px-2 py-1 rounded">
+        Stream: {isStreamPreviewAvailable ? 'Available' : 'Unavailable'}
+      </div>
     </div>
   );
 };

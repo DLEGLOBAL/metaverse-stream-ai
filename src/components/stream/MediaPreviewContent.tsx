@@ -8,6 +8,8 @@ interface MediaPreviewContentProps {
 }
 
 const MediaPreviewContent: React.FC<MediaPreviewContentProps> = ({ isStreamPreviewAvailable }) => {
+  console.log('MediaPreviewContent render, isStreamPreviewAvailable:', isStreamPreviewAvailable);
+  
   return (
     <div className="absolute inset-0 flex items-center justify-center">
       {isStreamPreviewAvailable ? (
