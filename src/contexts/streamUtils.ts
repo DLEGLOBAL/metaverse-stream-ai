@@ -1,6 +1,7 @@
 
 import { Stats, StreamStatus, Source } from './types';
 import { toast } from '@/hooks/use-toast';
+import { getAllActiveStreams } from './mediaUtils';
 
 export const startStream = (
   isStreamPreviewAvailable: boolean, 
@@ -13,12 +14,19 @@ export const startStream = (
     source => source.active && (source.type === 'camera' || source.type === 'display')
   );
   
+  // Double-check with actual streams (more reliable)
+  const streams = getAllActiveStreams();
+  const streamKeys = Object.keys(streams);
+  const hasActiveVideoStream = streamKeys.includes('camera') || streamKeys.includes('display');
+  
+  console.log('Active sources check:', { hasActiveVideoSource, hasActiveVideoStream, isStreamPreviewAvailable });
+  
   // Check for active audio
   const hasActiveAudio = sources.some(
     source => source.active && source.type === 'audio'
   );
   
-  if (!hasActiveVideoSource) {
+  if (!hasActiveVideoSource && !hasActiveVideoStream) {
     toast({
       title: 'Cannot Start Stream',
       description: 'No active video source available. Please enable a camera or display source.',

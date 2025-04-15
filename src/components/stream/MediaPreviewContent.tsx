@@ -16,7 +16,9 @@ const MediaPreviewContent: React.FC<MediaPreviewContentProps> = ({ isStreamPrevi
         <div className="text-center">
           <Camera className="h-12 w-12 mx-auto text-meta-teal/40 mb-2" />
           <p className="text-gray-400">No active video source</p>
-          <p className="text-xs text-gray-500 mt-1">Connect a camera or select a source to see a preview</p>
+          <p className="text-xs text-gray-500 mt-1">
+            Enable a camera or screen share from the Sources panel
+          </p>
         </div>
       )}
     </div>

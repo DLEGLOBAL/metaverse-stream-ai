@@ -15,6 +15,8 @@ const MediaPreview: React.FC<MediaPreviewProps> = ({ isStreamPreviewAvailable })
     const streams = getAllActiveStreams();
     const activeStreams = Object.values(streams);
     
+    console.log('Available streams for preview:', activeStreams.length);
+    
     if (activeStreams.length > 0) {
       // If we have multiple active streams, we should technically combine them
       // For simplicity, we'll just show the first video stream
@@ -23,10 +25,13 @@ const MediaPreview: React.FC<MediaPreviewProps> = ({ isStreamPreviewAvailable })
       );
       
       if (videoStream && videoRef.current) {
+        console.log('Setting video stream to preview');
         videoRef.current.srcObject = videoStream;
         videoRef.current.onloadedmetadata = () => {
           videoRef.current?.play().catch(e => console.error("Error playing video:", e));
         };
+      } else {
+        console.log('No video tracks found in active streams');
       }
     }
     
