@@ -46,6 +46,7 @@ export const activateRealDevice = async (
           clone: function() { return this as MediaStreamTrack; }
         } as MediaStreamTrack;
         mockStream.addTrack(mockTrack);
+        mockStreams['camera'] = mockStream;
         console.log('Created mock camera stream with video track');
       }
       
@@ -86,6 +87,7 @@ export const activateRealDevice = async (
           clone: function() { return this as MediaStreamTrack; }
         } as MediaStreamTrack;
         mockStream.addTrack(mockTrack);
+        mockStreams['audio'] = mockStream;
         console.log('Created mock audio stream with audio track');
       }
       
@@ -123,6 +125,7 @@ export const activateRealDevice = async (
           clone: function() { return this as MediaStreamTrack; }
         } as MediaStreamTrack;
         mockStream.addTrack(mockTrack);
+        mockStreams['display'] = mockStream;
         console.log('Created mock display stream with video track');
       }
       
