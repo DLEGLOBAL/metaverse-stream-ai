@@ -19,7 +19,7 @@ const ScrollableChart = ({
   return (
     <ChartContainer config={config}>
       <ScrollArea className="h-full w-full touch-auto" orientation="horizontal">
-        <div className={`min-w-[${minWidth}] h-${height}`}>
+        <div style={{ minWidth, height }}>
           {children}
         </div>
       </ScrollArea>
