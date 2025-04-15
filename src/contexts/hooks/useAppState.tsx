@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { 
   Scene, Source, AiFeature, Stats, StreamStatus,
@@ -17,15 +18,10 @@ export const useAppState = () => {
       id: 2,
       name: 'Interview Scene',
       active: false
-    },
-    {
-      id: 3,
-      name: 'Gaming Scene',
-      active: false
     }
   ]);
   
-  // Source state with real device configuration
+  // Source state
   const [sources, setSources] = useState<Source[]>([
     {
       id: 1,
@@ -67,26 +63,14 @@ export const useAppState = () => {
       enabled: true,
       hasSlider: true,
       sliderValue: 75
-    },
-    {
-      id: 3,
-      name: 'Voice Commands',
-      description: 'Control your stream with voice',
-      enabled: false
-    },
-    {
-      id: 4,
-      name: 'AI Assistant',
-      description: 'Get real-time suggestions during stream',
-      enabled: false
     }
   ]);
   
   // Stats state
   const [stats, setStats] = useState<Stats>({
     bitrate: '6000 kbps',
-    cpuUsage: '32%',
-    ramUsage: '3.2 GB',
+    cpuUsage: '0%',
+    ramUsage: '0 GB',
     gpuEncoding: 'NVENC',
     status: 'good'
   });
@@ -109,44 +93,7 @@ export const useAppState = () => {
   });
   
   // Stream alerts state  
-  const [streamAlerts, setStreamAlerts] = useState<StreamAlert[]>([
-    {
-      id: 1,
-      type: 'follower',
-      message: 'New follower: {username}',
-      enabled: true,
-      sound: true,
-      visual: true,
-      duration: 3
-    },
-    {
-      id: 2,
-      type: 'subscriber',
-      message: '{username} just subscribed!',
-      enabled: true,
-      sound: true,
-      visual: true,
-      duration: 5
-    },
-    {
-      id: 3,
-      type: 'donation',
-      message: '{username} donated {amount}!',
-      enabled: true,
-      sound: true,
-      visual: true,
-      duration: 5
-    },
-    {
-      id: 4,
-      type: 'raid',
-      message: '{username} is raiding with {count} viewers!',
-      enabled: true,
-      sound: true,
-      visual: true,
-      duration: 6
-    }
-  ]);
+  const [streamAlerts, setStreamAlerts] = useState<StreamAlert[]>([]);
 
   return {
     scenes, setScenes,

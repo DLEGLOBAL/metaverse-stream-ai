@@ -55,11 +55,8 @@ export const toggleSourceActive = async (
     source => source.active && (source.type === 'camera' || source.type === 'display')
   );
   
-  console.log('After toggle, active video source:', hasVideoSource);
-  
   // Set availability based on source check
   setIsStreamPreviewAvailable(hasVideoSource);
-  console.log('Stream preview availability updated:', hasVideoSource);
   
   return newSources;
 };

@@ -16,8 +16,6 @@ const MediaPreview: React.FC<MediaPreviewProps> = ({ isStreamPreviewAvailable })
       const streams = getAllActiveStreams();
       const activeStreams = Object.values(streams);
       
-      console.log('Available streams for preview:', activeStreams.length);
-      
       if (activeStreams.length > 0) {
         // First try to find a video stream
         const videoStream = activeStreams.find(stream => 
@@ -25,9 +23,6 @@ const MediaPreview: React.FC<MediaPreviewProps> = ({ isStreamPreviewAvailable })
         );
         
         if (videoStream && videoRef.current) {
-          console.log('Setting video stream to preview:', videoStream.id);
-          console.log('Video tracks:', videoStream.getVideoTracks().length);
-          
           try {
             videoRef.current.srcObject = videoStream;
             videoRef.current.onloadedmetadata = () => {
@@ -36,21 +31,14 @@ const MediaPreview: React.FC<MediaPreviewProps> = ({ isStreamPreviewAvailable })
           } catch (error) {
             console.error('Error setting video stream:', error);
           }
-        } else {
-          console.log('No video tracks found in active streams');
-          if (videoRef.current) {
-            videoRef.current.srcObject = null;
-          }
-        }
-      } else {
-        console.log('No active streams available');
-        if (videoRef.current) {
+        } else if (videoRef.current) {
           videoRef.current.srcObject = null;
         }
+      } else if (videoRef.current) {
+        videoRef.current.srcObject = null;
       }
     };
     
-    // Setup stream immediately and when isStreamPreviewAvailable changes
     if (isStreamPreviewAvailable) {
       setupStream();
     } else if (videoRef.current) {
@@ -73,10 +61,6 @@ const MediaPreview: React.FC<MediaPreviewProps> = ({ isStreamPreviewAvailable })
         playsInline 
         muted
       />
-      {/* Debug overlay - will help us see if video is loaded but not visible */}
-      <div className="absolute bottom-2 left-2 text-xs bg-black/70 text-white px-2 py-1 rounded">
-        Stream: {isStreamPreviewAvailable ? 'Available' : 'Unavailable'}
-      </div>
     </div>
   );
 };

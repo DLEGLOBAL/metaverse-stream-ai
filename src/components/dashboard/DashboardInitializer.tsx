@@ -1,7 +1,7 @@
 
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useAppContext } from '@/contexts/AppContext';
-import { Camera, Computer, Headset, Mic, Video } from 'lucide-react';
+import { Camera, Computer, Mic } from 'lucide-react';
 
 interface DashboardInitializerProps {
   onInitialized: () => void;
@@ -16,8 +16,6 @@ const DashboardInitializer = ({ onInitialized }: DashboardInitializerProps) => {
   
   useEffect(() => {
     try {
-      console.log('Dashboard component mounted');
-      
       // Initialize scenes
       setScenes([
         {
@@ -28,16 +26,6 @@ const DashboardInitializer = ({ onInitialized }: DashboardInitializerProps) => {
         {
           id: 2,
           name: "Screen Share",
-          active: false,
-        },
-        {
-          id: 3,
-          name: "Game Overlay",
-          active: false,
-        },
-        {
-          id: 4,
-          name: "VR Experience",
           active: false,
         }
       ]);
@@ -64,20 +52,6 @@ const DashboardInitializer = ({ onInitialized }: DashboardInitializerProps) => {
           type: "audio",
           icon: <Mic className="h-4 w-4" />,
           active: true,
-        },
-        {
-          id: 4,
-          name: "VR Headset",
-          type: "vr",
-          icon: <Headset className="h-4 w-4" />,
-          active: false,
-        },
-        {
-          id: 5,
-          name: "Media File",
-          type: "media",
-          icon: <Video className="h-4 w-4" />,
-          active: false,
         }
       ]);
       
@@ -97,24 +71,9 @@ const DashboardInitializer = ({ onInitialized }: DashboardInitializerProps) => {
           enabled: true,
           hasSlider: true,
           sliderValue: 75,
-        },
-        {
-          id: 3,
-          name: "Voice Commands",
-          description: "Hands-free control",
-          enabled: false,
-          hasSlider: false,
-        },
-        {
-          id: 4,
-          name: "AI Assistant",
-          description: "Stream helper",
-          enabled: true,
-          hasSlider: false,
         }
       ]);
 
-      console.log('Dashboard initialization complete');
       onInitialized();
     } catch (error) {
       console.error('Error initializing dashboard:', error);

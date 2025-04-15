@@ -19,8 +19,7 @@ export const useAppInitializer = ({
 }: UseAppInitializerProps) => {
   useEffect(() => {
     try {
-      console.log('Initializing app data');
-      
+      // Set active scene
       const activeScene = scenes.find(scene => scene.active);
       if (activeScene) {
         setActiveSceneId(activeScene.id);
@@ -31,12 +30,8 @@ export const useAppInitializer = ({
         source => source.active && (source.type === 'camera' || source.type === 'display')
       );
       
-      console.log('Initial source check for video:', hasVideoSource);
-      console.log('Active sources:', sources.filter(s => s.active).map(s => `${s.name} (${s.type})`));
-      
       // Set availability based on source check
       setIsStreamPreviewAvailable(hasVideoSource);
-      console.log('Initial stream preview availability set to:', hasVideoSource);
       
     } catch (error) {
       console.error('Error initializing app data:', error);

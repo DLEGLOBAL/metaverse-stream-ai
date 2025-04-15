@@ -1,9 +1,7 @@
 
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
 import { Shield, Camera, Headphones, Monitor, Database, Key, Cpu } from 'lucide-react';
-import { toast } from '@/hooks/use-toast';
 
 interface PlaceholderSettingsProps {
   tabId: string;
@@ -36,20 +34,9 @@ const PlaceholderSettings: React.FC<PlaceholderSettingsProps> = ({ tabId }) => {
           <h3 className="text-xl font-medium text-white mb-2">
             {tabId.charAt(0).toUpperCase() + tabId.slice(1)} Settings
           </h3>
-          <p className="text-gray-400 text-center max-w-md mb-4">
-            These settings will be implemented in the next update. Check back soon for advanced customization options.
+          <p className="text-gray-400 text-center max-w-md">
+            Configure your {tabId.toLowerCase()} settings here.
           </p>
-          <Button 
-            className="bg-button-gradient text-meta-dark-blue hover:brightness-110"
-            onClick={() => {
-              toast({
-                title: "Coming Soon",
-                description: "This settings panel will be available in the next update.",
-              });
-            }}
-          >
-            Notify Me When Available
-          </Button>
         </div>
       </CardContent>
     </Card>
