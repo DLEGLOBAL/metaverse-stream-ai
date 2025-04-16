@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import StreamingHeader from './StreamingHeader';
 import StreamingTabs from './StreamingTabs';
 import { useAppContext } from '@/contexts/AppContext';
-import OBSInstructions from './OBSInstructions';
+import ServerRelayInfo from './ServerRelayInfo';
 
 const StreamingContent = () => {
   const [activeTab, setActiveTab] = useState('stream-setup');
@@ -15,7 +15,8 @@ const StreamingContent = () => {
     platformStates,
     onPlatformToggle,
     onConnectPlatform,
-    getActivePlatformsCount
+    getActivePlatformsCount,
+    isRelayServerAvailable
   } = useAppContext();
   
   const activePlatformsCount = getActivePlatformsCount();
@@ -42,7 +43,7 @@ const StreamingContent = () => {
           />
         </div>
         <div>
-          <OBSInstructions />
+          <ServerRelayInfo />
         </div>
       </div>
     </div>

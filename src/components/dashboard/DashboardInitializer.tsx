@@ -28,7 +28,7 @@ const DashboardInitializer = ({ onInitialized }: DashboardInitializerProps) => {
           if (available) {
             toast({
               title: 'Streaming Relay Available',
-              description: 'Direct browser-to-Twitch streaming is available through our relay server.',
+              description: 'Direct browser-to-platform streaming is available through our relay server.',
             });
           }
         })

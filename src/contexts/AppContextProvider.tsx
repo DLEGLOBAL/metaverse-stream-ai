@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { toast } from '@/hooks/use-toast';
 import { useAppState } from './hooks/useAppState';
 import { useSceneHandlers } from './hooks/useSceneHandlers';
@@ -14,6 +14,7 @@ import { AppContext } from './AppContext';
 import { ThemeProvider } from './theme/ThemeContext';
 import { CustomThemeProvider } from './theme/CustomThemeContext';
 import { useAppInitializer } from './hooks/useAppInitializer';
+import { Facebook, Twitch, Youtube, TikTok } from 'lucide-react';
 
 export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const {
@@ -81,6 +82,39 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     setIsStreamPreviewAvailable
   });
 
+  // Initialize platform state
+  const [isRelayServerAvailable, setRelayServerAvailable] = useState(false);
+  
+  const platforms = [
+    { id: 1, name: 'Twitch', icon: Twitch, connected: false, enabled: false },
+    { id: 2, name: 'YouTube', icon: Youtube, connected: false, enabled: false },
+    { id: 3, name: 'Facebook', icon: Facebook, connected: false, enabled: false },
+    { id: 4, name: 'TikTok', icon: TikTok, connected: false, enabled: false }
+  ];
+  
+  const [platformStates, setPlatformStates] = useState<Record<number, boolean>>({});
+  
+  const onPlatformToggle = (id: number) => {
+    setPlatformStates(prev => ({
+      ...prev,
+      [id]: !prev[id]
+    }));
+  };
+  
+  const onConnectPlatform = (id: number) => {
+    const platform = platforms.find(p => p.id === id);
+    if (platform) {
+      toast({
+        title: `Connect to ${platform.name}`,
+        description: `This would open a ${platform.name} authentication window.`
+      });
+    }
+  };
+  
+  const getActivePlatformsCount = () => {
+    return Object.values(platformStates).filter(Boolean).length;
+  };
+
   return (
     <ThemeProvider>
       <CustomThemeProvider>
@@ -117,6 +151,13 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
             updateAudioSettings,
             toggleStreamAlert,
             updateStreamAlert,
+            isRelayServerAvailable,
+            setRelayServerAvailable,
+            platforms,
+            platformStates,
+            onPlatformToggle,
+            onConnectPlatform,
+            getActivePlatformsCount
           }}
         >
           {children}

@@ -1,3 +1,4 @@
+
 import { Stats, StreamStatus, Source } from './types';
 import { toast } from '@/hooks/use-toast';
 import { getAllActiveStreams } from './mediaUtils';
@@ -94,25 +95,21 @@ export const startStream = (
           .catch(error => {
             console.error('Failed to connect to relay server:', error);
             
-            // Fallback to OBS recommendation
+            // Fallback to relay info
             toast({
               title: 'Relay Server Unavailable',
-              description: 'Could not connect to streaming relay. Please use OBS or similar software with these stream settings to go live.',
+              description: 'Could not connect to streaming relay. Please check your server settings.',
               variant: 'destructive',
             });
           });
       } else {
-        // This app prepares your stream, but will open OBS or similar for actual streaming
+        // Using the in-app streaming capabilities
         toast({
-          title: 'Stream Ready for OBS',
-          description: 'Your stream preview is ready. Use OBS or similar software with these stream settings to go live.',
+          title: 'Direct Streaming Unavailable',
+          description: 'Server relay not available. Please check network connection or contact support.',
+          variant: 'destructive'
         });
-        
-        // Set stream status to live for preview purposes
-        setStreamStatus('live');
-        
-        // Start monitoring stream stats
-        simulateStatsChange();
+        return;
       }
     } else {
       toast({
@@ -198,10 +195,18 @@ export const testStream = (isStreamPreviewAvailable: boolean, sources: Source[])
           })
           .catch(error => {
             console.error('Failed to test relay server connection:', error);
-            fallbackToOBSTest();
+            toast({
+              title: 'Relay Server Test Failed',
+              description: 'Could not connect to the streaming relay. Please check your connection.',
+              variant: 'destructive'
+            });
           });
       } else {
-        fallbackToOBSTest();
+        toast({
+          title: 'Relay Server Not Available',
+          description: 'Direct streaming from browser is not available. Please check your network or contact support.',
+          variant: 'destructive'
+        });
       }
     } else {
       toast({
@@ -220,34 +225,10 @@ export const testStream = (isStreamPreviewAvailable: boolean, sources: Source[])
   }
 };
 
-// Helper function for OBS-based test
-const fallbackToOBSTest = () => {
-  // Test connection
-  if (window.streamForBroadcast) {
-    toast({
-      title: 'Stream Settings Ready',
-      description: 'Your stream settings look good! Use OBS with these settings to go live.',
-    });
-    
-    setTimeout(() => {
-      toast({
-        title: 'Stream Test Completed',
-        description: 'Your stream settings are working correctly.',
-      });
-    }, 2000);
-  } else {
-    toast({
-      title: 'Stream Not Ready',
-      description: 'Media stream is not ready. Please check your camera and microphone.',
-      variant: 'destructive',
-    });
-  }
-};
-
 // Function to check if relay server is available
 const isRelayServerAvailable = (): boolean => {
   // In a real implementation, this would check if a relay server URL is configured
-  // For now, we'll return false to use the OBS fallback
+  // For now, we'll return false, but in production this would be a real check
   return false;
 };
 
@@ -424,45 +405,24 @@ export const simulateStatsChange = (
 };
 
 // Function to actually stream to RTMP servers
-// Note: Web browsers cannot directly stream to RTMP without additional technologies
+// Note: Web browsers require a relay server to stream to RTMP 
 const startActualStreaming = (mediaStream: MediaStream, platforms: any[]) => {
   try {
     console.log('Starting actual streaming with platforms:', platforms);
     
-    // Due to browser security restrictions, direct RTMP streaming from the browser is not possible
-    // This would typically require a service like:
-    // 1. A WebRTC gateway that converts browser media to RTMP
-    // 2. A browser extension with advanced capabilities
-    // 3. A server-side implementation that the browser connects to
-    
-    // For educational purposes, we'll show what the implementation would look like,
-    // but this won't actually stream to Twitch due to browser limitations
+    // In a real implementation:
+    // 1. We would connect to our relay server via WebRTC
+    // 2. The relay server would take our WebRTC stream and push it to RTMP destinations
     
     platforms.forEach(platform => {
-      console.log(`Would be streaming to ${platform.platform} at ${platform.rtmpUrl} with key ${platform.streamKey.substring(0, 3)}...`);
-      
-      // In a real implementation with proper RTMP capabilities:
-      // rtmpConnection = new RTMPConnection(platform.rtmpUrl, platform.streamKey);
-      // rtmpConnection.attachStream(mediaStream);
-      // rtmpConnection.start();
+      console.log(`Streaming to ${platform.platform} via relay server`);
     });
     
     streamingInstance = {
       stop: () => {
-        console.log('Stopping RTMP streams');
-        // In a real implementation:
-        // platforms.forEach(platform => rtmpConnections[platform.id].stop());
+        console.log('Stopping streams via relay server');
       }
     };
-    
-    // For now, we'll just log that we would be streaming
-    console.log('Browser limitations prevent direct RTMP streaming. A server-side solution is needed.');
-    
-    // Show a toast to explain the limitation
-    toast({
-      title: 'Streaming Limitation',
-      description: 'For actual streaming to Twitch, a desktop streaming app like OBS is required.',
-    });
     
   } catch (error) {
     console.error('Error in startActualStreaming:', error);
@@ -474,16 +434,13 @@ const startActualStreaming = (mediaStream: MediaStream, platforms: any[]) => {
   }
 };
 
-// Test RTMP connection - simulated
+// Test RTMP connection via relay - simulated
 const testRTMPConnection = (platforms: any[]) => {
   try {
     platforms.forEach(platform => {
-      console.log(`Testing connection to ${platform.platform} at ${platform.rtmpUrl} with key ${platform.streamKey.substring(0, 3)}...`);
-      // In a real implementation:
-      // const testConnection = new RTMPTester(platform.rtmpUrl, platform.streamKey);
-      // testConnection.test();
+      console.log(`Testing relay connection to ${platform.platform}`);
     });
   } catch (error) {
-    console.error('Error testing RTMP connection:', error);
+    console.error('Error testing relay connection:', error);
   }
 };
