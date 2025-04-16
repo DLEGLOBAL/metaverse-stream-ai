@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import StreamingHeader from './StreamingHeader';
 import StreamingTabs from './StreamingTabs';
+import StreamKeyManager from './StreamKeyManager';
 import { useAppContext } from '@/contexts/AppContext';
 import ServerRelayInfo from './ServerRelayInfo';
 
@@ -31,6 +32,8 @@ const StreamingContent = () => {
       
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
         <div className="lg:col-span-2">
+          <StreamKeyManager />
+          
           <StreamingTabs 
             streamStatus={streamStatus}
             platforms={platforms}

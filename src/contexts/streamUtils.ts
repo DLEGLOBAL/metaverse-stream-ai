@@ -1,13 +1,16 @@
-
 import { Stats, StreamStatus, Source } from './types';
 import { toast } from '@/hooks/use-toast';
 import { getAllActiveStreams } from './mediaUtils';
+import { 
+  startRelayStream, 
+  stopRelayStream, 
+  checkRelayServerAvailability 
+} from '@/utils/relayServerUtils';
 
 // Variables for stream management
 let streamingStatsInterval: number | null = null;
 let activeDestinations: string[] = [];
-let streamingInstance: any = null;
-const RELAY_SERVER_URL = 'https://your-relay-server.com'; // This would be your actual server URL
+let streamingSessionId: string | null = null;
 
 export const startStream = (
   isStreamPreviewAvailable: boolean, 
@@ -77,40 +80,47 @@ export const startStream = (
         return;
       }
       
-      // Attempt to connect to server relay if available
-      if (isRelayServerAvailable()) {
-        connectToRelayServer(window.streamForBroadcast, enabledPlatforms)
-          .then(() => {
-            toast({
-              title: 'Connected to Streaming Relay',
-              description: 'Successfully connected to the streaming relay server.',
+      // Start streaming via the relay server
+      checkRelayServerAvailability().then(isAvailable => {
+        if (isAvailable) {
+          // Connect to relay server
+          startRelayStream(window.streamForBroadcast, enabledPlatforms)
+            .then(response => {
+              if (response.success) {
+                toast({
+                  title: 'Connected to Streaming Relay',
+                  description: 'Successfully connected to the streaming relay server.',
+                });
+                
+                // Store the session ID
+                streamingSessionId = response.sessionId || null;
+                
+                // Set stream status to live
+                setStreamStatus('live');
+                
+                // Start monitoring stream stats
+                simulateStatsChange();
+              } else {
+                throw new Error(response.error || 'Unknown error');
+              }
+            })
+            .catch(error => {
+              console.error('Failed to connect to relay server:', error);
+              
+              toast({
+                title: 'Relay Server Error',
+                description: 'Could not connect to streaming relay. Please check your connection.',
+                variant: 'destructive',
+              });
             });
-            
-            // Set stream status to live
-            setStreamStatus('live');
-            
-            // Start monitoring stream stats
-            simulateStatsChange();
-          })
-          .catch(error => {
-            console.error('Failed to connect to relay server:', error);
-            
-            // Fallback to relay info
-            toast({
-              title: 'Relay Server Unavailable',
-              description: 'Could not connect to streaming relay. Please check your server settings.',
-              variant: 'destructive',
-            });
+        } else {
+          toast({
+            title: 'Relay Server Unavailable',
+            description: 'Streaming relay server is not available. Please check network connection or contact support.',
+            variant: 'destructive'
           });
-      } else {
-        // Using the in-app streaming capabilities
-        toast({
-          title: 'Direct Streaming Unavailable',
-          description: 'Server relay not available. Please check network connection or contact support.',
-          variant: 'destructive'
-        });
-        return;
-      }
+        }
+      });
     } else {
       toast({
         title: 'No Stream Keys Found',
@@ -131,12 +141,11 @@ export const startStream = (
 };
 
 export const stopStream = (setStreamStatus: (status: StreamStatus) => void) => {
-  // If connected to relay server, disconnect
-  if (streamingInstance) {
-    disconnectFromRelayServer(streamingInstance)
-      .catch(error => console.error('Error disconnecting from relay server:', error));
-    streamingInstance = null;
-  }
+  // Stop the relay connection
+  stopRelayStream()
+    .catch(error => console.error('Error disconnecting from relay server:', error));
+  
+  streamingSessionId = null;
   
   // Stop simulation
   setStreamStatus('offline');
@@ -184,30 +193,30 @@ export const testStream = (isStreamPreviewAvailable: boolean, sources: Source[])
         return;
       }
       
-      // Test connection to relay server if available
-      if (isRelayServerAvailable()) {
-        testRelayServerConnection()
-          .then(() => {
+      // Test connection to relay server
+      checkRelayServerAvailability()
+        .then(isAvailable => {
+          if (isAvailable) {
             toast({
               title: 'Relay Server Available',
               description: 'Successfully connected to the streaming relay server. You can now go live directly from your browser!',
             });
-          })
-          .catch(error => {
-            console.error('Failed to test relay server connection:', error);
+          } else {
             toast({
               title: 'Relay Server Test Failed',
               description: 'Could not connect to the streaming relay. Please check your connection.',
               variant: 'destructive'
             });
+          }
+        })
+        .catch(error => {
+          console.error('Failed to test relay server connection:', error);
+          toast({
+            title: 'Relay Server Test Failed',
+            description: 'Error connecting to streaming relay server.',
+            variant: 'destructive'
           });
-      } else {
-        toast({
-          title: 'Relay Server Not Available',
-          description: 'Direct streaming from browser is not available. Please check your network or contact support.',
-          variant: 'destructive'
         });
-      }
     } else {
       toast({
         title: 'No Stream Keys Found',
@@ -225,85 +234,7 @@ export const testStream = (isStreamPreviewAvailable: boolean, sources: Source[])
   }
 };
 
-// Function to check if relay server is available
-const isRelayServerAvailable = (): boolean => {
-  // In a real implementation, this would check if a relay server URL is configured
-  // For now, we'll return false, but in production this would be a real check
-  return false;
-};
-
-// Connect to relay server
-const connectToRelayServer = async (stream: MediaStream, platforms: any[]): Promise<void> => {
-  try {
-    // This would be the actual implementation to connect to a WebRTC-to-RTMP relay
-    console.log('Connecting to relay server at', RELAY_SERVER_URL);
-    console.log('With platforms:', platforms);
-    
-    // Create a WebRTC connection to the relay server
-    // This is a simplified example - actual implementation would be more complex
-    
-    // In a real implementation:
-    // 1. Create a WebRTC connection to the relay server
-    // 2. Add the stream tracks to the connection
-    // 3. Exchange ICE candidates and SDP offers
-    // 4. Establish the connection
-    
-    // For now, we'll simulate a connection
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    
-    // Store the streaming instance for later cleanup
-    streamingInstance = {
-      id: Date.now(),
-      platforms,
-      disconnect: () => console.log('Disconnected from relay server')
-    };
-    
-    return Promise.resolve();
-  } catch (error) {
-    console.error('Error connecting to relay server:', error);
-    return Promise.reject(error);
-  }
-};
-
-// Disconnect from relay server
-const disconnectFromRelayServer = async (instance: any): Promise<void> => {
-  try {
-    // In a real implementation, this would close the WebRTC connection
-    console.log('Disconnecting from relay server...');
-    
-    if (instance && typeof instance.disconnect === 'function') {
-      instance.disconnect();
-    }
-    
-    return Promise.resolve();
-  } catch (error) {
-    console.error('Error disconnecting from relay server:', error);
-    return Promise.reject(error);
-  }
-};
-
-// Test connection to relay server
-const testRelayServerConnection = async (): Promise<void> => {
-  try {
-    // In a real implementation, this would ping the relay server
-    console.log('Testing connection to relay server...');
-    
-    // Simulate network request
-    await fetch(`${RELAY_SERVER_URL}/health-check`)
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Relay server health check failed');
-        }
-        return response.json();
-      });
-    
-    return Promise.resolve();
-  } catch (error) {
-    console.error('Error testing relay server connection:', error);
-    return Promise.reject(error);
-  }
-};
-
+// Function to simulate stream stats
 export const simulateStatsChange = (
   streamStatus: StreamStatus,
   setStats: (stats: Stats) => void

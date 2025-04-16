@@ -1,13 +1,15 @@
 
 import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { ExternalLink, Server, ChevronDown, ChevronUp } from 'lucide-react';
+import { ExternalLink, Server, ChevronDown, ChevronUp, Code } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Separator } from '@/components/ui/separator';
+import { useAppContext } from '@/contexts/AppContext';
 
 const ServerRelayInfo = () => {
   const [showAdvanced, setShowAdvanced] = useState(false);
+  const { isRelayServerAvailable } = useAppContext();
   
   return (
     <Card className="glass-card">
@@ -15,13 +17,23 @@ const ServerRelayInfo = () => {
         <CardTitle className="text-white flex items-center">
           <Server className="h-5 w-5 mr-2 text-meta-teal" />
           Streaming Relay
+          {isRelayServerAvailable && (
+            <div className="ml-2 px-2 py-0.5 bg-green-500/20 text-green-400 text-xs rounded-full">
+              Available
+            </div>
+          )}
+          {!isRelayServerAvailable && (
+            <div className="ml-2 px-2 py-0.5 bg-yellow-500/20 text-yellow-400 text-xs rounded-full">
+              Not Connected
+            </div>
+          )}
         </CardTitle>
       </CardHeader>
       <CardContent>
         <Tabs defaultValue="direct" className="w-full">
           <TabsList className="bg-meta-dark-blue border border-gray-700 mb-4">
-            <TabsTrigger value="direct" className="data-[state=active]:bg-meta-teal/10 data-[state=active]:text-meta-teal">Direct Streaming</TabsTrigger>
-            <TabsTrigger value="advanced" className="data-[state=active]:bg-meta-teal/10 data-[state=active]:text-meta-teal">Advanced Options</TabsTrigger>
+            <TabsTrigger value="direct" className="data-[state=active]:bg-meta-teal/10 data-[state=active]:text-meta-teal">Browser Streaming</TabsTrigger>
+            <TabsTrigger value="advanced" className="data-[state=active]:bg-meta-teal/10 data-[state=active]:text-meta-teal">Tech Details</TabsTrigger>
           </TabsList>
           
           <TabsContent value="direct">
@@ -63,51 +75,52 @@ const ServerRelayInfo = () => {
           <TabsContent value="advanced">
             <div className="space-y-4">
               <p className="text-sm text-gray-300">
-                For advanced users: Our streaming solution uses a server-side relay that handles 
-                the WebRTC to RTMP protocol conversion, allowing you to stream directly from your browser.
+                Our streaming solution uses a WebSocket relay architecture to convert your browser stream to RTMP format
+                suitable for platforms like Twitch, YouTube, and Facebook.
               </p>
               
               <Separator className="bg-gray-700" />
               
               <div className="space-y-2">
-                <h3 className="text-white font-medium">Self-Hosted Relay Option</h3>
+                <h3 className="text-white font-medium">How It Works</h3>
                 <p className="text-sm text-gray-300">
-                  You can set up your own Node.js server using libraries like node-media-server to create 
-                  a WebRTC to RTMP relay.
+                  1. Your browser captures webcam/microphone/screen using MediaStream API
                 </p>
-                <Button
-                  variant="outline"
-                  className="border-meta-teal/30 hover:bg-meta-teal/10 text-white flex items-center"
-                  onClick={() => window.open('https://github.com/illuspas/Node-Media-Server', '_blank')}
-                >
-                  Node Media Server <ExternalLink className="h-4 w-4 ml-2" />
-                </Button>
+                <p className="text-sm text-gray-300">
+                  2. MediaRecorder converts this to WebM format and sends to our relay server via WebSocket
+                </p>
+                <p className="text-sm text-gray-300">
+                  3. Server uses FFmpeg to transcode to H.264/AAC format needed for RTMP
+                </p>
+                <p className="text-sm text-gray-300">
+                  4. Server pushes the stream to your configured streaming platforms
+                </p>
               </div>
               
               <div className="space-y-2">
-                <h3 className="text-white font-medium">Streaming Service Option</h3>
+                <h3 className="text-white font-medium">Self-Hosted Option</h3>
                 <p className="text-sm text-gray-300">
-                  Use a third-party service that offers browser-to-RTMP conversion capabilities:
+                  You can run your own Node.js relay server with this stack:
                 </p>
-                <ul className="list-disc pl-5 text-sm text-gray-300 space-y-1">
-                  <li>Mux Video</li>
-                  <li>Agora.io</li>
-                  <li>LiveKit</li>
-                </ul>
+                <div className="flex flex-wrap gap-2 mt-2">
+                  <div className="bg-meta-dark-blue/70 px-3 py-1 rounded text-xs text-white">node-media-server</div>
+                  <div className="bg-meta-dark-blue/70 px-3 py-1 rounded text-xs text-white">ffmpeg</div>
+                  <div className="bg-meta-dark-blue/70 px-3 py-1 rounded text-xs text-white">express</div>
+                  <div className="bg-meta-dark-blue/70 px-3 py-1 rounded text-xs text-white">ws</div>
+                </div>
                 <Button
                   variant="outline"
                   className="border-meta-teal/30 hover:bg-meta-teal/10 text-white flex items-center mt-2"
-                  onClick={() => window.open('https://www.mux.com/', '_blank')}
+                  onClick={() => window.open('https://github.com/illuspas/Node-Media-Server', '_blank')}
                 >
-                  Mux Video <ExternalLink className="h-4 w-4 ml-2" />
+                  <Code className="h-4 w-4 mr-2" /> Node Media Server <ExternalLink className="h-4 w-4 ml-2" />
                 </Button>
               </div>
               
               <div className="bg-meta-dark-blue/50 p-3 rounded-md border border-meta-teal/30">
                 <p className="text-sm text-gray-300">
-                  <strong className="text-white">Note:</strong> Setting up a streaming relay requires 
-                  server infrastructure and technical knowledge. Our embedded relay service handles this 
-                  for you automatically.
+                  <strong className="text-white">Note:</strong> Our relay server automatically handles stream formatting 
+                  and distribution to multiple platforms simultaneously based on your configured stream keys.
                 </p>
               </div>
             </div>
