@@ -44,7 +44,7 @@ const StreamingContent = () => {
             activePlatformsCount={activePlatformsCount}
             startStream={startStream}
             stopStream={stopStream}
-            testStream={testStream}
+            // Removing testStream prop as it doesn't exist in StreamingTabs props
           />
         </div>
         <div>
