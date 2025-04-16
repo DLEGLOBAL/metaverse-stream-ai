@@ -19,6 +19,21 @@ const StreamStatusCard: React.FC<StreamStatusCardProps> = ({
 }) => {
   const [elapsedTime, setElapsedTime] = useState<number>(0);
   const [startTime, setStartTime] = useState<number>(Date.now());
+  const [platforms, setPlatforms] = useState<string[]>([]);
+  
+  // Load saved platforms
+  useEffect(() => {
+    try {
+      const savedKeys = localStorage.getItem('streamKeys');
+      if (savedKeys) {
+        const parsed = JSON.parse(savedKeys);
+        const withKeys = parsed.filter((p: any) => p.streamKey.trim() !== '');
+        setPlatforms(withKeys.map((p: any) => p.platform));
+      }
+    } catch (e) {
+      console.error('Error parsing stream keys:', e);
+    }
+  }, []);
   
   // Reset and start timer when stream status changes
   useEffect(() => {
@@ -51,6 +66,8 @@ const StreamStatusCard: React.FC<StreamStatusCardProps> = ({
       seconds.toString().padStart(2, '0')
     ].join(':');
   };
+  
+  const availablePlatforms = platforms.length;
   
   return (
     <Card className="glass-card">
@@ -91,15 +108,23 @@ const StreamStatusCard: React.FC<StreamStatusCardProps> = ({
               )}
             </div>
             <div className="flex justify-between">
-              <span className="text-gray-400">Active Platforms:</span>
+              <span className="text-gray-400">Configured Platforms:</span>
               <span className="text-white">
-                {activeStreamPlatforms}
+                {availablePlatforms}
               </span>
             </div>
-            <div className="flex justify-between">
-              <span className="text-gray-400">Total Viewers:</span>
-              <span className="text-white">0</span>
-            </div>
+            {platforms.length > 0 && (
+              <div>
+                <span className="text-gray-400 block mb-1">Platforms:</span>
+                <div className="flex flex-wrap gap-1">
+                  {platforms.map(platform => (
+                    <span key={platform} className="text-xs px-2 py-0.5 bg-meta-teal/20 text-meta-teal rounded-full">
+                      {platform}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
           
           <div className="mt-4">
@@ -115,9 +140,16 @@ const StreamStatusCard: React.FC<StreamStatusCardProps> = ({
               <Button 
                 className="w-full bg-button-gradient text-meta-dark-blue hover:brightness-110"
                 onClick={onStartStream}
+                disabled={availablePlatforms === 0}
               >
                 <Play className="h-4 w-4 mr-2" /> Start Streaming
               </Button>
+            )}
+            
+            {availablePlatforms === 0 && streamStatus === 'offline' && (
+              <p className="text-xs text-yellow-500 mt-2 text-center">
+                Add stream keys in the Stream Setup tab first
+              </p>
             )}
           </div>
         </div>

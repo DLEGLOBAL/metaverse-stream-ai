@@ -60,24 +60,32 @@ const DashboardInitializer = ({ onInitialized }: DashboardInitializerProps) => {
         }
       ]);
       
-      // Initialize AI features
-      setAiFeatures([
-        {
-          id: 1,
-          name: "AI Director",
-          description: "Smart scene switching",
-          enabled: false,
-          hasSlider: false,
-        },
-        {
-          id: 2,
-          name: "Smart Green Screen",
-          description: "Background removal",
-          enabled: false,
-          hasSlider: true,
-          sliderValue: 75,
-        }
-      ]);
+      // Initialize stream keys if not already set
+      if (!localStorage.getItem('streamKeys')) {
+        const defaultPlatforms = [
+          {
+            platform: 'Twitch',
+            rtmpUrl: 'rtmp://live.twitch.tv/app',
+            streamKey: ''
+          },
+          {
+            platform: 'YouTube',
+            rtmpUrl: 'rtmp://a.rtmp.youtube.com/live2',
+            streamKey: ''
+          },
+          {
+            platform: 'Facebook',
+            rtmpUrl: 'rtmp://live-api-s.facebook.com:80/rtmp',
+            streamKey: ''
+          },
+          {
+            platform: 'TikTok',
+            rtmpUrl: 'rtmp://rtmp-push.tiktok.com/live',
+            streamKey: ''
+          }
+        ];
+        localStorage.setItem('streamKeys', JSON.stringify(defaultPlatforms));
+      }
 
       onInitialized();
     } catch (error) {

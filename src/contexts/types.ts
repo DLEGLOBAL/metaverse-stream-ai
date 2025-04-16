@@ -1,3 +1,4 @@
+
 export type Scene = {
   id: number;
   name: string;
@@ -27,6 +28,10 @@ export type Stats = {
   ramUsage: string;
   gpuEncoding: string;
   status: 'good' | 'warning' | 'error';
+  resolution?: string;
+  frameRate?: string;
+  viewers?: string;
+  activeDestinations?: string[];
 };
 
 export type StreamStatus = 'live' | 'offline' | 'recording';

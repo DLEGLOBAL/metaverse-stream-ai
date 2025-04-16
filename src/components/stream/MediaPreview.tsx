@@ -66,14 +66,17 @@ const MediaPreview: React.FC<MediaPreviewProps> = ({ isStreamPreviewAvailable })
   }, [isStreamPreviewAvailable]);
   
   return (
-    <div className="w-full h-full">
+    <div className="relative w-full h-full overflow-hidden">
       <video 
         ref={videoRef} 
-        className="w-full h-full object-cover rounded-md"
+        className="w-full h-full object-cover rounded-md bg-black"
         autoPlay 
         playsInline 
         muted
       />
+      <div className="absolute top-2 right-2 bg-black/50 px-2 py-1 rounded text-xs text-white">
+        Preview
+      </div>
     </div>
   );
 };

@@ -19,9 +19,20 @@ export const activateRealDevice = async (
     let constraints: MediaStreamConstraints = {};
     
     if (source.type === 'camera') {
-      constraints = { video: true };
+      constraints = { 
+        video: {
+          width: { ideal: 1920 },
+          height: { ideal: 1080 }
+        } 
+      };
     } else if (source.type === 'audio') {
-      constraints = { audio: true };
+      constraints = { 
+        audio: {
+          echoCancellation: true,
+          noiseSuppression: true,
+          autoGainControl: true
+        } 
+      };
     } else if (source.type === 'display') {
       try {
         // For screen sharing, we use a different API
