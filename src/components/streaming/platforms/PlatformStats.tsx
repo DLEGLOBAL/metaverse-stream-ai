@@ -30,6 +30,13 @@ const PlatformStats: React.FC<PlatformStatsProps> = ({
     return null;
   }
 
+  // Determine the health status color
+  const getHealthColor = (health: number) => {
+    if (health > 80) return 'bg-green-500';
+    if (health > 50) return 'bg-yellow-500';
+    return 'bg-red-500';
+  };
+
   return (
     <div className="mt-3 pt-3 border-t border-gray-700 space-y-2">
       <div className="grid grid-cols-2 gap-2">
@@ -62,7 +69,10 @@ const PlatformStats: React.FC<PlatformStatsProps> = ({
         <Progress 
           value={stats.health} 
           className="h-1.5 bg-gray-700" 
-          indicatorClassName={`${stats.health > 80 ? 'bg-green-500' : stats.health > 50 ? 'bg-yellow-500' : 'bg-red-500'}`}
+          // Use a custom styled indicator via className
+          style={{ 
+            '--progress-indicator-color': getHealthColor(stats.health || 0)
+          } as React.CSSProperties}
         />
       </div>
     </div>

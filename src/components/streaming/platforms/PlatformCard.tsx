@@ -27,8 +27,15 @@ const PlatformCard: React.FC<PlatformProps> = ({
   return (
     <div className="p-4 rounded-md border border-gray-700 bg-meta-dark-blue/50">
       <div className="flex items-center">
-        <PlatformIcon icon={platform.icon} connected={platform.connected} />
-        <PlatformInfo name={platform.name} connected={platform.connected} />
+        <PlatformIcon 
+          icon={platform.icon} 
+          connected={platform.connected} 
+          name={platform.name} 
+        />
+        <PlatformInfo 
+          name={platform.name} 
+          connected={platform.connected} 
+        />
         <PlatformActions 
           platformId={platform.id}
           connected={platform.connected}

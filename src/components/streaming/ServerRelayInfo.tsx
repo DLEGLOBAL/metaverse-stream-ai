@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Cpu, HardDrive, Memory, Zap, Info } from 'lucide-react';
+import { Cpu, HardDrive, MemoryStick, Zap, Info } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Separator } from '@/components/ui/separator';
@@ -103,7 +103,7 @@ const DesktopAppInfo = () => {
                   </div>
                   
                   <div className="bg-meta-dark-blue/50 p-3 rounded-md border border-gray-700 flex items-center">
-                    <Memory className="h-5 w-5 text-meta-teal mr-3" />
+                    <MemoryStick className="h-5 w-5 text-meta-teal mr-3" />
                     <div>
                       <p className="text-sm text-gray-300">Memory</p>
                       <p className="text-sm font-medium text-white">
