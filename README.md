@@ -1,4 +1,8 @@
 
+<p align="center">
+  <img src="public/lovable-uploads/d9e95c26-442b-4d04-b224-4cf3e84ae483.png" alt="MetaStream Logo" width="400"/>
+</p>
+
 # MetaStream: Advanced Streaming Studio
 
 MetaStream is a powerful, cross-platform desktop application designed to revolutionize content creation and streaming. Built as a robust alternative to traditional streaming software like OBS, MetaStream offers creators a seamless, feature-rich experience.

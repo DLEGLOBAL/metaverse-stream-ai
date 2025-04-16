@@ -19,12 +19,15 @@ const Hero = () => {
           <span className="mr-2 text-meta-teal font-semibold">Introducing</span>
           <span className="text-white">The future of broadcasting</span>
         </div>
-
-        <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-6 animate-fade-in text-glow">
-          <span className="bg-clip-text text-transparent bg-gradient-to-r from-meta-teal to-meta-cyan">
-            MetaStream.AI
-          </span>
-        </h1>
+        
+        {/* Logo Image */}
+        <div className="mb-6 animate-fade-in">
+          <img 
+            src="/lovable-uploads/d9e95c26-442b-4d04-b224-4cf3e84ae483.png" 
+            alt="MetaStream Logo" 
+            className="h-24 md:h-32 w-auto mx-auto"
+          />
+        </div>
 
         <p className="text-xl md:text-2xl max-w-3xl text-gray-300 mb-10 animate-fade-in [animation-delay:200ms]">
           The next-gen broadcast software powered by AI and virtual reality. Stream from any device to any platform with unparalleled quality and features.

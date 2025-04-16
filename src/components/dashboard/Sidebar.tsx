@@ -70,9 +70,9 @@ const Sidebar = ({ collapsed, toggleSidebar }: SidebarProps) => {
             collapsed ? "w-8" : "w-full"
           )}>
             <img 
-              src="/placeholder.svg" 
+              src="/lovable-uploads/d9e95c26-442b-4d04-b224-4cf3e84ae483.png" 
               alt="MetaStream Logo" 
-              className="h-8 w-8"
+              className="h-8 w-auto"
             />
             <span className={cn(
               "ml-2 font-bold text-lg whitespace-nowrap transition-opacity duration-200",
