@@ -11,6 +11,7 @@ import {
 let streamingStatsInterval: number | null = null;
 let activeDestinations: string[] = [];
 let streamingSessionId: string | null = null;
+let streamingInstance: { stop: () => void } | null = null;
 
 export const startStream = (
   isStreamPreviewAvailable: boolean, 
