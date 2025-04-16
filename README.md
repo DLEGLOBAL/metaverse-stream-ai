@@ -1,12 +1,12 @@
 
 # MetaStream: Advanced Streaming Studio
 
-MetaStream is a powerful, cross-platform desktop application designed to revolutionize content creation and streaming. Built as a robust alternative to traditional streaming software, MetaStream offers creators a seamless, feature-rich experience.
+MetaStream is a powerful, cross-platform desktop application designed to revolutionize content creation and streaming. Built as a robust alternative to traditional streaming software like OBS, MetaStream offers creators a seamless, feature-rich experience.
 
 ## Key Features
 
 - 🖥️ Cross-platform Support (Windows, macOS)
-- 🎥 Multi-platform Streaming
+- 🎥 Multi-platform Simultaneous Streaming
 - 🤖 AI-Powered Streaming Tools
 - 📊 Advanced Analytics
 - 🎨 Customizable Branding
@@ -44,10 +44,17 @@ MetaStream is a powerful, cross-platform desktop application designed to revolut
 
 ## Supported Platforms
 
+Stream to multiple platforms simultaneously with our advanced relay technology:
+
 - Twitch
 - YouTube
 - Facebook Gaming
-- Custom RTMP
+- TikTok
+- Instagram
+- SuperLive
+- BIGO Live
+- Custom RTMP destinations
+- And many more!
 
 ## Contributing
 
