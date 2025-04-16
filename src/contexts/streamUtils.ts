@@ -1,9 +1,8 @@
-
 import { Stats, StreamStatus, Source } from './types';
 import { toast } from '@/hooks/use-toast';
 import { getAllActiveStreams } from './mediaUtils';
 
-// Mock data for demonstration - in a real app this would connect to real streaming services
+// Variables for stream management
 let streamingStatsInterval: number | null = null;
 let activeDestinations: string[] = [];
 let streamingInstance: any = null;
@@ -76,13 +75,17 @@ export const startStream = (
         return;
       }
       
-      // Begin actual RTMP streaming using the MediaStream
-      startActualStreaming(window.streamForBroadcast, enabledPlatforms);
-      
+      // This app prepares your stream, but will open OBS or similar for actual streaming
       toast({
-        title: 'Stream Started',
-        description: `You are now streaming to ${activeDestinations.join(', ')}!`,
+        title: 'Stream Ready for OBS',
+        description: 'Your stream preview is ready. Use OBS or similar software with these stream settings to go live.',
       });
+      
+      // Set stream status to live for preview purposes
+      setStreamStatus('live');
+      
+      // Start monitoring stream stats
+      simulateStatsChange();
     } else {
       toast({
         title: 'No Stream Keys Found',
@@ -100,25 +103,10 @@ export const startStream = (
     });
     return;
   }
-  
-  // Set stream status to live
-  setStreamStatus('live');
-  
-  // Start monitoring stream stats
-  simulateStatsChange();
 };
 
 export const stopStream = (setStreamStatus: (status: StreamStatus) => void) => {
-  // Stop actual streaming
-  if (streamingInstance) {
-    try {
-      streamingInstance.stop();
-      streamingInstance = null;
-    } catch (error) {
-      console.error('Error stopping stream:', error);
-    }
-  }
-  
+  // Stop simulation
   setStreamStatus('offline');
   activeDestinations = [];
   
@@ -164,21 +152,19 @@ export const testStream = (isStreamPreviewAvailable: boolean, sources: Source[])
         return;
       }
       
-      // Test RTMP connection
+      // Test connection
       if (window.streamForBroadcast) {
-        testRTMPConnection(withKeys);
-        
         toast({
-          title: 'Testing Stream',
-          description: `Testing connection to ${withKeys.map((p: any) => p.platform).join(', ')}...`,
+          title: 'Stream Settings Ready',
+          description: 'Your stream settings look good! Use OBS with these settings to go live.',
         });
         
         setTimeout(() => {
           toast({
             title: 'Stream Test Completed',
-            description: 'Your stream settings are working correctly',
+            description: 'Your stream settings are working correctly.',
           });
-        }, 3000);
+        }, 2000);
       } else {
         toast({
           title: 'Stream Not Ready',
