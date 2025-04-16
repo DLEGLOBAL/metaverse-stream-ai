@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import PlatformsList from '@/components/streaming/PlatformsList';
+import PlatformsList from '@/components/streaming/platforms/PlatformsList';
 import StreamSettings from '@/components/streaming/StreamSettings';
 import StreamStatusCard from '@/components/streaming/StreamStatusCard';
 import StreamKeyManager from '@/components/streaming/StreamKeyManager';
