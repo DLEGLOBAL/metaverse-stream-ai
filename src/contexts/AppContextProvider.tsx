@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { toast } from '@/hooks/use-toast';
 import { useAppState } from './hooks/useAppState';
@@ -14,7 +13,13 @@ import { AppContext } from './AppContext';
 import { ThemeProvider } from './theme/ThemeContext';
 import { CustomThemeProvider } from './theme/CustomThemeContext';
 import { useAppInitializer } from './hooks/useAppInitializer';
-import { Facebook, Twitch, Youtube, TikTok } from 'lucide-react';
+import { Facebook, Twitch, Youtube } from 'lucide-react';
+
+const TikTok = (props) => (
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" {...props}>
+    <path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.69 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.98-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.33 1.08-.3 1.64.02.53.11 1.04.29 1.54.38.97 1.15 1.73 2.1 2.11.1.04.21.07.32.1 1.36.36 2.84.01 3.94-1.1.44-.51.7-1.17.81-1.85.16-1.08.14-2.17.15-3.25.01-2.56 0-5.12.01-7.68-.01-.05 1.96 0 2.95.02z" />
+  </svg>
+);
 
 export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const {
@@ -31,7 +36,6 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     streamAlerts, setStreamAlerts
   } = useAppState();
 
-  // Initialize handlers for different features
   const { toggleSceneActive } = useSceneHandlers({ 
     setScenes, 
     setActiveSceneId 
@@ -74,7 +78,6 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     setStreamAlerts
   });
 
-  // Initialize app data
   useAppInitializer({
     scenes,
     sources,
@@ -82,7 +85,6 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     setIsStreamPreviewAvailable
   });
 
-  // Initialize platform state
   const [isRelayServerAvailable, setRelayServerAvailable] = useState(false);
   
   const platforms = [
