@@ -1,26 +1,57 @@
 
 import React, { useState } from 'react';
-import StreamingHeader from './StreamingHeader';
-import StreamingTabs from './StreamingTabs';
+import { Video, Youtube, Twitch } from 'lucide-react';
 import { useAppContext } from '@/contexts/AppContext';
-import OBSInstructions from './OBSInstructions';
+import StreamingHeader from '@/components/streaming/StreamingHeader';
+import StreamingTabs from '@/components/streaming/StreamingTabs';
 
 const StreamingContent = () => {
-  const [activeTab, setActiveTab] = useState('stream');
-  const { streamStatus } = useAppContext();
+  const { streamStatus, startStream, stopStream } = useAppContext();
   
+  // Define platform configurations
+  const platforms = [
+    { id: 1, name: 'YouTube', icon: Youtube, connected: true, enabled: true },
+    { id: 2, name: 'Twitch', icon: Twitch, connected: true, enabled: true },
+  ];
+  
+  const [platformStates, setPlatformStates] = useState(
+    platforms.reduce((acc, platform) => {
+      acc[platform.id] = platform.enabled;
+      return acc;
+    }, {} as Record<number, boolean>)
+  );
+  
+  const handlePlatformToggle = (id: number) => {
+    setPlatformStates(prev => ({ 
+      ...prev, 
+      [id]: !prev[id] 
+    }));
+  };
+  
+  const handleConnectPlatform = (id: number) => {
+    // This would connect to the actual streaming platform
+  };
+
+  const activePlatformsCount = Object.values(platformStates).filter(Boolean).length;
+
   return (
-    <div className="container mx-auto p-4 space-y-4">
-      <StreamingHeader />
+    <div className="flex flex-col gap-6">
+      <StreamingHeader 
+        streamStatus={streamStatus} 
+        startStream={startStream} 
+        stopStream={stopStream} 
+      />
       
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-        <div className="lg:col-span-2">
-          <StreamingTabs activeTab={activeTab} setActiveTab={setActiveTab} />
-        </div>
-        <div>
-          <OBSInstructions />
-        </div>
-      </div>
+      <StreamingTabs 
+        streamStatus={streamStatus}
+        platforms={platforms}
+        platformStates={platformStates}
+        onPlatformToggle={handlePlatformToggle}
+        onConnectPlatform={handleConnectPlatform}
+        activePlatformsCount={activePlatformsCount}
+        startStream={startStream}
+        stopStream={stopStream}
+      />
     </div>
   );
 };

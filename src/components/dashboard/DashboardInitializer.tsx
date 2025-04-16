@@ -2,6 +2,7 @@
 import { useEffect } from 'react';
 import { useAppContext } from '@/contexts/AppContext';
 import { Camera, Computer, Mic } from 'lucide-react';
+import { toast } from '@/hooks/use-toast';
 
 interface DashboardInitializerProps {
   onInitialized: () => void;
@@ -16,6 +17,23 @@ const DashboardInitializer = ({ onInitialized }: DashboardInitializerProps) => {
   
   useEffect(() => {
     try {
+      // Check if browser supports getUserMedia
+      if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+        console.warn('Browser does not support camera/microphone access');
+        toast({
+          title: 'Browser Compatibility Issue',
+          description: 'Your browser may not fully support camera/microphone access.',
+          variant: 'destructive',
+        });
+      }
+      
+      // Show streaming limitation notice
+      toast({
+        title: 'Streaming Information',
+        description: 'Due to browser limitations, direct streaming to platforms like Twitch requires additional software like OBS Studio.',
+        duration: 8000,
+      });
+      
       // Initialize scenes
       setScenes([
         {
@@ -82,12 +100,28 @@ const DashboardInitializer = ({ onInitialized }: DashboardInitializerProps) => {
         localStorage.setItem('streamKeys', JSON.stringify(defaultPlatforms));
       }
 
-      onInitialized(); // Call onInitialized directly
+      onInitialize();
     } catch (error) {
       console.error('Error initializing dashboard:', error);
       onInitialized(); // Still call onInitialized to prevent permanent loading state
     }
   }, [setScenes, setSources, setAiFeatures, onInitialized]);
+  
+  const onInitialize = () => {
+    // Show streaming limitation modal on first load
+    if (!localStorage.getItem('streamLimitationShown')) {
+      setTimeout(() => {
+        toast({
+          title: 'Streaming Limitation Notice',
+          description: 'This web app can preview your camera and microphone, but cannot directly stream to Twitch due to browser security restrictions. For professional streaming, please use OBS Studio or similar software.',
+          duration: 10000,
+        });
+        localStorage.setItem('streamLimitationShown', 'true');
+      }, 2000);
+    }
+    
+    onInitialized();
+  };
   
   return null; // This is a utility component, it doesn't render anything
 };
