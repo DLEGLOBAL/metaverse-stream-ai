@@ -4,7 +4,7 @@ import {
   stopStream as stopStreamUtil, 
   testStream as testStreamUtil,
   simulateStatsChange as simulateStatsChangeUtil
-} from '../streamUtils';
+} from '../streaming';
 import { Source, Stats, StreamStatus } from '../types';
 
 type UseStreamHandlersProps = {

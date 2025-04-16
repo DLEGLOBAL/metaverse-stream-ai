@@ -12,6 +12,7 @@ const StreamingContent = () => {
     streamStatus, 
     startStream, 
     stopStream,
+    testStream,
     platforms,
     platformStates,
     onPlatformToggle,
@@ -43,6 +44,7 @@ const StreamingContent = () => {
             activePlatformsCount={activePlatformsCount}
             startStream={startStream}
             stopStream={stopStream}
+            testStream={testStream}
           />
         </div>
         <div>

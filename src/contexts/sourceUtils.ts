@@ -1,7 +1,7 @@
 
 import { Source } from './types';
 import { toast } from '@/hooks/use-toast';
-import { activateRealDevice, deactivateRealDevice, hasActiveVideoSource } from './mediaUtils';
+import { activateRealDevice, deactivateRealDevice, hasActiveVideoSource } from './streaming/mediaStreamUtils';
 
 export const toggleSourceActive = async (
   sources: Source[], 
