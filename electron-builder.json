@@ -1,7 +1,8 @@
 
 {
-  "appId": "com.stream.relay.app",
-  "productName": "Browser Streaming Relay",
+  "appId": "com.metastream.desktop",
+  "productName": "MetaStream Desktop",
+  "copyright": "Copyright © 2025",
   "directories": {
     "output": "release/"
   },
@@ -11,13 +12,51 @@
   ],
   "win": {
     "target": [
-      "nsis"
+      "nsis",
+      "portable"
     ],
+    "icon": "public/favicon.ico"
+  },
+  "mac": {
+    "target": [
+      "dmg",
+      "zip"
+    ],
+    "icon": "public/favicon.ico",
+    "category": "public.app-category.video",
+    "hardenedRuntime": true,
+    "gatekeeperAssess": false,
+    "entitlements": "build/entitlements.mac.plist",
+    "entitlementsInherit": "build/entitlements.mac.plist"
+  },
+  "linux": {
+    "target": [
+      "AppImage",
+      "deb"
+    ],
+    "category": "VideoEditor;AudioVideoEditing",
     "icon": "public/favicon.ico"
   },
   "nsis": {
     "oneClick": false,
     "allowToChangeInstallationDirectory": true,
-    "createDesktopShortcut": true
-  }
+    "createDesktopShortcut": true,
+    "createStartMenuShortcut": true,
+    "shortcutName": "MetaStream Desktop"
+  },
+  "dmg": {
+    "contents": [
+      {
+        "x": 130,
+        "y": 220
+      },
+      {
+        "x": 410,
+        "y": 220,
+        "type": "link",
+        "path": "/Applications"
+      }
+    ]
+  },
+  "publish": null
 }
