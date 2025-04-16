@@ -6,16 +6,40 @@ import { useAppContext } from '@/contexts/AppContext';
 import OBSInstructions from './OBSInstructions';
 
 const StreamingContent = () => {
-  const [activeTab, setActiveTab] = useState('stream');
-  const { streamStatus } = useAppContext();
+  const [activeTab, setActiveTab] = useState('stream-setup');
+  const { 
+    streamStatus, 
+    startStream, 
+    stopStream,
+    platforms,
+    platformStates,
+    onPlatformToggle,
+    onConnectPlatform,
+    getActivePlatformsCount
+  } = useAppContext();
+  
+  const activePlatformsCount = getActivePlatformsCount();
   
   return (
     <div className="container mx-auto p-4 space-y-4">
-      <StreamingHeader />
+      <StreamingHeader 
+        streamStatus={streamStatus}
+        startStream={startStream}
+        stopStream={stopStream}
+      />
       
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
         <div className="lg:col-span-2">
-          <StreamingTabs activeTab={activeTab} setActiveTab={setActiveTab} />
+          <StreamingTabs 
+            streamStatus={streamStatus}
+            platforms={platforms}
+            platformStates={platformStates}
+            onPlatformToggle={onPlatformToggle}
+            onConnectPlatform={onConnectPlatform}
+            activePlatformsCount={activePlatformsCount}
+            startStream={startStream}
+            stopStream={stopStream}
+          />
         </div>
         <div>
           <OBSInstructions />

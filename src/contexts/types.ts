@@ -1,4 +1,3 @@
-
 export type Scene = {
   id: number;
   name: string;
@@ -98,4 +97,19 @@ export interface AppContextType {
   scheduleStream: (stream: Omit<ScheduledStream, 'id' | 'notificationSent'>) => void;
   deleteScheduledStream: (id: number) => void;
   updateAudioSettings: (settings: Partial<AudioSettings>) => void;
+  
+  isRelayServerAvailable?: boolean;
+  setRelayServerAvailable?: (available: boolean) => void;
+  
+  platforms: {
+    id: number;
+    name: string;
+    icon: React.ElementType;
+    connected: boolean;
+    enabled: boolean;
+  }[];
+  platformStates: Record<number, boolean>;
+  onPlatformToggle: (id: number) => void;
+  onConnectPlatform: (id: number) => void;
+  getActivePlatformsCount: () => number;
 }

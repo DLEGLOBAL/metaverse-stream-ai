@@ -6,6 +6,7 @@ import { getAllActiveStreams } from './mediaUtils';
 let streamingStatsInterval: number | null = null;
 let activeDestinations: string[] = [];
 let streamingInstance: any = null;
+const RELAY_SERVER_URL = 'https://your-relay-server.com'; // This would be your actual server URL
 
 export const startStream = (
   isStreamPreviewAvailable: boolean, 
@@ -75,17 +76,44 @@ export const startStream = (
         return;
       }
       
-      // This app prepares your stream, but will open OBS or similar for actual streaming
-      toast({
-        title: 'Stream Ready for OBS',
-        description: 'Your stream preview is ready. Use OBS or similar software with these stream settings to go live.',
-      });
-      
-      // Set stream status to live for preview purposes
-      setStreamStatus('live');
-      
-      // Start monitoring stream stats
-      simulateStatsChange();
+      // Attempt to connect to server relay if available
+      if (isRelayServerAvailable()) {
+        connectToRelayServer(window.streamForBroadcast, enabledPlatforms)
+          .then(() => {
+            toast({
+              title: 'Connected to Streaming Relay',
+              description: 'Successfully connected to the streaming relay server.',
+            });
+            
+            // Set stream status to live
+            setStreamStatus('live');
+            
+            // Start monitoring stream stats
+            simulateStatsChange();
+          })
+          .catch(error => {
+            console.error('Failed to connect to relay server:', error);
+            
+            // Fallback to OBS recommendation
+            toast({
+              title: 'Relay Server Unavailable',
+              description: 'Could not connect to streaming relay. Please use OBS or similar software with these stream settings to go live.',
+              variant: 'destructive',
+            });
+          });
+      } else {
+        // This app prepares your stream, but will open OBS or similar for actual streaming
+        toast({
+          title: 'Stream Ready for OBS',
+          description: 'Your stream preview is ready. Use OBS or similar software with these stream settings to go live.',
+        });
+        
+        // Set stream status to live for preview purposes
+        setStreamStatus('live');
+        
+        // Start monitoring stream stats
+        simulateStatsChange();
+      }
     } else {
       toast({
         title: 'No Stream Keys Found',
@@ -106,6 +134,13 @@ export const startStream = (
 };
 
 export const stopStream = (setStreamStatus: (status: StreamStatus) => void) => {
+  // If connected to relay server, disconnect
+  if (streamingInstance) {
+    disconnectFromRelayServer(streamingInstance)
+      .catch(error => console.error('Error disconnecting from relay server:', error));
+    streamingInstance = null;
+  }
+  
   // Stop simulation
   setStreamStatus('offline');
   activeDestinations = [];
@@ -152,25 +187,21 @@ export const testStream = (isStreamPreviewAvailable: boolean, sources: Source[])
         return;
       }
       
-      // Test connection
-      if (window.streamForBroadcast) {
-        toast({
-          title: 'Stream Settings Ready',
-          description: 'Your stream settings look good! Use OBS with these settings to go live.',
-        });
-        
-        setTimeout(() => {
-          toast({
-            title: 'Stream Test Completed',
-            description: 'Your stream settings are working correctly.',
+      // Test connection to relay server if available
+      if (isRelayServerAvailable()) {
+        testRelayServerConnection()
+          .then(() => {
+            toast({
+              title: 'Relay Server Available',
+              description: 'Successfully connected to the streaming relay server. You can now go live directly from your browser!',
+            });
+          })
+          .catch(error => {
+            console.error('Failed to test relay server connection:', error);
+            fallbackToOBSTest();
           });
-        }, 2000);
       } else {
-        toast({
-          title: 'Stream Not Ready',
-          description: 'Media stream is not ready. Please check your camera and microphone.',
-          variant: 'destructive',
-        });
+        fallbackToOBSTest();
       }
     } else {
       toast({
@@ -186,6 +217,109 @@ export const testStream = (isStreamPreviewAvailable: boolean, sources: Source[])
       description: 'Could not read stream keys. Please check your settings.',
       variant: 'destructive',
     });
+  }
+};
+
+// Helper function for OBS-based test
+const fallbackToOBSTest = () => {
+  // Test connection
+  if (window.streamForBroadcast) {
+    toast({
+      title: 'Stream Settings Ready',
+      description: 'Your stream settings look good! Use OBS with these settings to go live.',
+    });
+    
+    setTimeout(() => {
+      toast({
+        title: 'Stream Test Completed',
+        description: 'Your stream settings are working correctly.',
+      });
+    }, 2000);
+  } else {
+    toast({
+      title: 'Stream Not Ready',
+      description: 'Media stream is not ready. Please check your camera and microphone.',
+      variant: 'destructive',
+    });
+  }
+};
+
+// Function to check if relay server is available
+const isRelayServerAvailable = (): boolean => {
+  // In a real implementation, this would check if a relay server URL is configured
+  // For now, we'll return false to use the OBS fallback
+  return false;
+};
+
+// Connect to relay server
+const connectToRelayServer = async (stream: MediaStream, platforms: any[]): Promise<void> => {
+  try {
+    // This would be the actual implementation to connect to a WebRTC-to-RTMP relay
+    console.log('Connecting to relay server at', RELAY_SERVER_URL);
+    console.log('With platforms:', platforms);
+    
+    // Create a WebRTC connection to the relay server
+    // This is a simplified example - actual implementation would be more complex
+    
+    // In a real implementation:
+    // 1. Create a WebRTC connection to the relay server
+    // 2. Add the stream tracks to the connection
+    // 3. Exchange ICE candidates and SDP offers
+    // 4. Establish the connection
+    
+    // For now, we'll simulate a connection
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    
+    // Store the streaming instance for later cleanup
+    streamingInstance = {
+      id: Date.now(),
+      platforms,
+      disconnect: () => console.log('Disconnected from relay server')
+    };
+    
+    return Promise.resolve();
+  } catch (error) {
+    console.error('Error connecting to relay server:', error);
+    return Promise.reject(error);
+  }
+};
+
+// Disconnect from relay server
+const disconnectFromRelayServer = async (instance: any): Promise<void> => {
+  try {
+    // In a real implementation, this would close the WebRTC connection
+    console.log('Disconnecting from relay server...');
+    
+    if (instance && typeof instance.disconnect === 'function') {
+      instance.disconnect();
+    }
+    
+    return Promise.resolve();
+  } catch (error) {
+    console.error('Error disconnecting from relay server:', error);
+    return Promise.reject(error);
+  }
+};
+
+// Test connection to relay server
+const testRelayServerConnection = async (): Promise<void> => {
+  try {
+    // In a real implementation, this would ping the relay server
+    console.log('Testing connection to relay server...');
+    
+    // Simulate network request
+    await fetch(`${RELAY_SERVER_URL}/health-check`)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Relay server health check failed');
+        }
+        return response.json();
+      });
+    
+    return Promise.resolve();
+  } catch (error) {
+    console.error('Error testing relay server connection:', error);
+    return Promise.reject(error);
   }
 };
 

@@ -2,6 +2,8 @@
 import { useEffect } from 'react';
 import { useAppContext } from '@/contexts/AppContext';
 import { Camera, Computer, Mic } from 'lucide-react';
+import { toast } from '@/hooks/use-toast';
+import { checkRelayServerAvailability } from '@/utils/relayServerUtils';
 
 interface DashboardInitializerProps {
   onInitialized: () => void;
@@ -11,11 +13,30 @@ const DashboardInitializer = ({ onInitialized }: DashboardInitializerProps) => {
   const { 
     setScenes, 
     setSources, 
-    setAiFeatures 
+    setAiFeatures,
+    setRelayServerAvailable
   } = useAppContext();
   
   useEffect(() => {
     try {
+      // Check for relay server availability
+      checkRelayServerAvailability()
+        .then(available => {
+          console.log('Relay server available:', available);
+          setRelayServerAvailable?.(available);
+          
+          if (available) {
+            toast({
+              title: 'Streaming Relay Available',
+              description: 'Direct browser-to-Twitch streaming is available through our relay server.',
+            });
+          }
+        })
+        .catch(error => {
+          console.error('Error checking relay server:', error);
+          setRelayServerAvailable?.(false);
+        });
+      
       // Initialize scenes
       setScenes([
         {
@@ -87,7 +108,7 @@ const DashboardInitializer = ({ onInitialized }: DashboardInitializerProps) => {
       console.error('Error initializing dashboard:', error);
       onInitialized(); // Still call onInitialized to prevent permanent loading state
     }
-  }, [setScenes, setSources, setAiFeatures, onInitialized]);
+  }, [setScenes, setSources, setAiFeatures, onInitialized, setRelayServerAvailable]);
   
   return null; // This is a utility component, it doesn't render anything
 };
