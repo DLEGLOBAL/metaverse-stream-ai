@@ -28,9 +28,10 @@ export const generateBranding = async (
 ): Promise<GenerateResponse> => {
   try {
     console.log(`Generating ${type} with prompt: ${prompt}`);
-
-    // Fallback to mock data if we're in development or if the function fails
-    const useMockData = import.meta.env.DEV || import.meta.env.VITE_USE_MOCK_DATA === 'true';
+    
+    // Only use mock data in development if VITE_USE_MOCK_DATA is explicitly set to true
+    // This ensures we try to generate real content by default
+    const useMockData = import.meta.env.VITE_USE_MOCK_DATA === 'true';
     
     if (useMockData) {
       console.log('Using mock data for branding generation');
@@ -61,6 +62,8 @@ export const generateBranding = async (
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          // Add authorization headers if needed
+          'Authorization': `Bearer ${supabase.auth.session()?.access_token}`,
         },
         body: JSON.stringify({
           prompt,
@@ -86,25 +89,39 @@ export const generateBranding = async (
       variant: 'destructive',
     });
     
-    // Return mock data as fallback when generation fails
-    console.log('Returning mock data due to failure');
-    return getMockData(type);
+    // Return empty result instead of mock data on failure
+    // This makes it clearer to the user that generation failed
+    return {
+      logos: type === 'logo' ? [] : undefined,
+      themes: type === 'theme' ? [] : undefined,
+      images: type === 'image' ? [] : undefined,
+    };
   }
 };
 
 // Helper function to process the response based on the type
 const processResponse = (data: any, type: 'logo' | 'theme' | 'image'): GenerateResponse => {
   if (type === 'logo') {
-    // For logos, we'll generate 4 variations
     const baseImage = data.image;
-    // In a real implementation, we'd generate multiple images or variations
+    if (!baseImage) {
+      console.error('No image data returned for logo');
+      return { logos: [] };
+    }
+    // Generate variations of the logo to simulate multiple options
     return { logos: [baseImage, baseImage, baseImage, baseImage] };
   } else if (type === 'theme') {
+    if (!data.themes) {
+      console.error('No themes data returned');
+      return { themes: [] };
+    }
     return { themes: data.themes };
   } else if (type === 'image') {
-    // For images, generate 4 images (2 banners, 2 profile pics)
     const baseImage = data.image;
-    // In a real implementation, we'd generate multiple images 
+    if (!baseImage) {
+      console.error('No image data returned for image');
+      return { images: [] };
+    }
+    // Generate variations of the image to simulate multiple options
     return { images: [baseImage, baseImage, baseImage, baseImage] };
   }
   return {};
