@@ -1,95 +1,12 @@
 
 import React, { useState } from 'react';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Check, Star, Crown, BadgeCheck, BarChart4, Shield, Users, Sparkles } from 'lucide-react';
 import { Switch } from '@/components/ui/switch';
+import { Star, Crown, BarChart4, Shield, Sparkles } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
-
-// Add the missing SubscriptionCard component
-interface SubscriptionCardProps {
-  title: string;
-  icon: React.ReactNode;
-  description: string;
-  price: number;
-  billingCycle: 'monthly' | 'yearly';
-  yearlyDiscount: number;
-  features: string[];
-  onSubscribe: () => void;
-  highlighted: boolean;
-}
-
-const SubscriptionCard: React.FC<SubscriptionCardProps> = ({
-  title,
-  icon,
-  description,
-  price,
-  billingCycle,
-  yearlyDiscount,
-  features,
-  onSubscribe,
-  highlighted
-}) => {
-  return (
-    <div className={`rounded-lg overflow-hidden border ${
-      highlighted 
-        ? 'border-meta-teal shadow-lg shadow-meta-teal/20 scale-105' 
-        : 'border-gray-700'
-    } transition-all`}>
-      <div className={`p-6 ${highlighted ? 'bg-gradient-to-b from-meta-teal/20 to-transparent' : ''}`}>
-        <div className="flex items-center gap-2 mb-3">
-          <div className={`p-2 rounded-full ${
-            highlighted ? 'bg-meta-teal/20 text-meta-teal' : 'bg-gray-800 text-gray-400'
-          }`}>
-            {icon}
-          </div>
-          <h3 className="text-xl font-semibold">{title}</h3>
-          {highlighted && (
-            <Badge className="ml-auto bg-meta-teal/20 text-meta-teal">Popular</Badge>
-          )}
-        </div>
-        
-        <p className="text-gray-400 mb-4">{description}</p>
-        
-        <div className="mb-6">
-          <div className="flex items-baseline">
-            <span className="text-3xl font-bold">${price.toFixed(2)}</span>
-            <span className="text-gray-400 ml-2">/{billingCycle === 'monthly' ? 'month' : 'year'}</span>
-          </div>
-          {billingCycle === 'yearly' && (
-            <p className="text-meta-teal text-sm mt-1">Save {yearlyDiscount}% with annual billing</p>
-          )}
-        </div>
-        
-        <Button 
-          className={`w-full ${
-            highlighted 
-              ? 'bg-meta-teal hover:bg-meta-teal/90 text-meta-dark-blue' 
-              : 'bg-gray-800 hover:bg-gray-700'
-          }`}
-          onClick={onSubscribe}
-        >
-          Subscribe Now
-        </Button>
-      </div>
-      
-      <div className="p-6 border-t border-gray-700">
-        <h4 className="font-medium mb-4">What's included:</h4>
-        <ul className="space-y-3">
-          {features.map((feature, index) => (
-            <li key={index} className="flex items-start">
-              <Check className={`h-4 w-4 mr-2 mt-1 ${
-                highlighted ? 'text-meta-teal' : 'text-gray-400'
-              }`} />
-              <span className="text-sm text-gray-300">{feature}</span>
-            </li>
-          ))}
-        </ul>
-      </div>
-    </div>
-  );
-};
+import SubscriptionCard from './cards/SubscriptionCard';
+import MetaStarsCard from './cards/MetaStarsCard';
 
 const SubscriptionTiers = () => {
   const [billingCycle, setBillingCycle] = useState<'monthly' | 'yearly'>('monthly');
@@ -211,98 +128,32 @@ const SubscriptionTiers = () => {
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {/* Annual Plan */}
-          <div className="rounded-lg overflow-hidden border border-yellow-500/30 bg-gradient-to-b from-yellow-950/20 to-transparent">
-            <div className="p-6">
-              <div className="flex items-center gap-2 mb-3">
-                <div className="p-2 rounded-full bg-yellow-500/10 text-yellow-400">
-                  <Star className="h-5 w-5" />
-                </div>
-                <h3 className="text-xl font-semibold">Annual Plan</h3>
-              </div>
-              
-              <p className="text-gray-400 mb-4">Best value annual payment</p>
-              
-              <div className="mb-6">
-                <div className="flex items-baseline">
-                  <span className="text-3xl font-bold">$1,500</span>
-                  <span className="text-gray-400 ml-2">/year</span>
-                </div>
-                <p className="text-yellow-400 text-sm mt-1">Save with one annual payment</p>
-              </div>
-              
-              <Button 
-                className="w-full bg-yellow-500/20 border border-yellow-500/30 hover:bg-yellow-500/30 text-yellow-400"
-                onClick={() => handleSubscribe("MetaStars Annual")}
-              >
-                Subscribe Annually
-              </Button>
-            </div>
-            
-            <MetaStarsFeatures />
-          </div>
+          <MetaStarsCard
+            title="Annual Plan"
+            description="Best value annual payment"
+            price="$1,500"
+            period="year"
+            additionalInfo="Save with one annual payment"
+            onSubscribe={() => handleSubscribe("MetaStars Annual")}
+          />
           
-          {/* Bi-Annual Plan */}
-          <div className="rounded-lg overflow-hidden border border-yellow-500/30 bg-gradient-to-b from-yellow-950/20 to-transparent">
-            <div className="p-6">
-              <div className="flex items-center gap-2 mb-3">
-                <div className="p-2 rounded-full bg-yellow-500/10 text-yellow-400">
-                  <Star className="h-5 w-5" />
-                </div>
-                <h3 className="text-xl font-semibold">Bi-Annual Plan</h3>
-              </div>
-              
-              <p className="text-gray-400 mb-4">Two convenient payments</p>
-              
-              <div className="mb-6">
-                <div className="flex items-baseline">
-                  <span className="text-3xl font-bold">$750</span>
-                  <span className="text-gray-400 ml-2">/6 months</span>
-                </div>
-                <p className="text-yellow-400 text-sm mt-1">Two payments of $750</p>
-              </div>
-              
-              <Button 
-                className="w-full bg-yellow-500/20 border border-yellow-500/30 hover:bg-yellow-500/30 text-yellow-400"
-                onClick={() => handleSubscribe("MetaStars Bi-Annual")}
-              >
-                Subscribe Bi-Annually
-              </Button>
-            </div>
-            
-            <MetaStarsFeatures />
-          </div>
+          <MetaStarsCard
+            title="Bi-Annual Plan"
+            description="Two convenient payments"
+            price="$750"
+            period="6 months"
+            additionalInfo="Two payments of $750"
+            onSubscribe={() => handleSubscribe("MetaStars Bi-Annual")}
+          />
           
-          {/* Monthly Plan */}
-          <div className="rounded-lg overflow-hidden border border-yellow-500/30 bg-gradient-to-b from-yellow-950/20 to-transparent">
-            <div className="p-6">
-              <div className="flex items-center gap-2 mb-3">
-                <div className="p-2 rounded-full bg-yellow-500/10 text-yellow-400">
-                  <Star className="h-5 w-5" />
-                </div>
-                <h3 className="text-xl font-semibold">Monthly Plan</h3>
-              </div>
-              
-              <p className="text-gray-400 mb-4">Flexible monthly payments</p>
-              
-              <div className="mb-6">
-                <div className="flex items-baseline">
-                  <span className="text-3xl font-bold">$125</span>
-                  <span className="text-gray-400 ml-2">/month</span>
-                </div>
-                <p className="text-yellow-400 text-sm mt-1">12 monthly payments</p>
-              </div>
-              
-              <Button 
-                className="w-full bg-yellow-500/20 border border-yellow-500/30 hover:bg-yellow-500/30 text-yellow-400"
-                onClick={() => handleSubscribe("MetaStars Monthly")}
-              >
-                Subscribe Monthly
-              </Button>
-            </div>
-            
-            <MetaStarsFeatures />
-          </div>
+          <MetaStarsCard
+            title="Monthly Plan"
+            description="Flexible monthly payments"
+            price="$125"
+            period="month"
+            additionalInfo="12 monthly payments"
+            onSubscribe={() => handleSubscribe("MetaStars Monthly")}
+          />
         </div>
         
         <div className="mt-8 text-center text-sm text-gray-500">
@@ -311,32 +162,6 @@ const SubscriptionTiers = () => {
         </div>
       </CardContent>
     </Card>
-  );
-};
-
-const MetaStarsFeatures = () => {
-  return (
-    <div className="p-6 border-t border-yellow-500/20 bg-yellow-950/10">
-      <h4 className="font-medium mb-4">Premium creator features:</h4>
-      <ul className="space-y-3">
-        {[
-          "Priority stream processing",
-          "Dedicated success manager",
-          "Custom branding options",
-          "Advanced analytics suite",
-          "Premium support SLA",
-          "Multi-platform streaming",
-          "VR content creation tools",
-          "AI-powered scene optimization",
-          "Exclusive creator community access"
-        ].map((feature, index) => (
-          <li key={index} className="flex items-start">
-            <Check className="h-4 w-4 mr-2 mt-1 text-yellow-400" />
-            <span className="text-sm text-gray-300">{feature}</span>
-          </li>
-        ))}
-      </ul>
-    </div>
   );
 };
 
