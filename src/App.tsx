@@ -1,8 +1,8 @@
-
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { ThemeProvider } from './contexts/theme';
 import { AppProvider } from './contexts/AppContext';
+import { AuthProvider } from './hooks/useAuth';
 import { VRProvider } from './contexts/VRContext';
 import { DesktopProvider } from './contexts/DesktopContext';
 import { Toaster } from './components/ui/toaster';
@@ -30,51 +30,54 @@ import './App.css';
 function App() {
   return (
     <ThemeProvider>
-      <AppProvider>
-        <VRProvider>
-          <DesktopProvider>
-            <Router>
-              <Routes>
-                <Route path="/" element={<Index />} />
-                <Route path="/landing" element={<Landing />} />
-                
-                <Route path="/dashboard" element={<Dashboard />} />
-                <Route path="/dashboard/scenes" element={<Scenes />} />
-                <Route path="/dashboard/sources" element={<Sources />} />
-                <Route path="/dashboard/streaming" element={<Streaming />} />
-                <Route path="/dashboard/ai-tools" element={<AiTools />} />
-                <Route path="/dashboard/settings" element={<Settings />} />
-                <Route path="/dashboard/studio" element={<Studio />} />
-                <Route path="/dashboard/community" element={<Community />} />
-                <Route path="/dashboard/creator-network" element={<CreatorNetwork />} />
-                <Route path="/dashboard/vr" element={<VRIntegration />} />
-                <Route path="/dashboard/audio" element={<Audio />} />
-                <Route path="/dashboard/pricing" element={<Pricing />} />
-                <Route path="/dashboard/video-editing" element={<VideoEditing />} />
-                <Route path="/dashboard/branding" element={<Branding />} />
-                
-                <Route path="/scenes" element={<Scenes />} />
-                <Route path="/sources" element={<Sources />} />
-                <Route path="/streaming" element={<Streaming />} />
-                <Route path="/ai-tools" element={<AiTools />} />
-                <Route path="/settings" element={<Settings />} />
-                <Route path="/studio" element={<Studio />} />
-                <Route path="/community" element={<Community />} />
-                <Route path="/creator-network" element={<CreatorNetwork />} />
-                <Route path="/vr-integration" element={<VRIntegration />} />
-                <Route path="/audio" element={<Audio />} />
-                <Route path="/chat" element={<Chat />} />
-                <Route path="/pricing" element={<Pricing />} />
-                <Route path="/video-editing" element={<VideoEditing />} />
-                <Route path="/branding" element={<Branding />} />
-                
-                <Route path="*" element={<NotFound />} />
-              </Routes>
-            </Router>
-            <Toaster />
-          </DesktopProvider>
-        </VRProvider>
-      </AppProvider>
+      <AuthProvider>
+        <AppProvider>
+          <VRProvider>
+            <DesktopProvider>
+              <Router>
+                <Routes>
+                  <Route path="/auth" element={<Auth />} />
+                  <Route path="/" element={<Index />} />
+                  <Route path="/landing" element={<Landing />} />
+                  
+                  <Route path="/dashboard" element={<Dashboard />} />
+                  <Route path="/dashboard/scenes" element={<Scenes />} />
+                  <Route path="/dashboard/sources" element={<Sources />} />
+                  <Route path="/dashboard/streaming" element={<Streaming />} />
+                  <Route path="/dashboard/ai-tools" element={<AiTools />} />
+                  <Route path="/dashboard/settings" element={<Settings />} />
+                  <Route path="/dashboard/studio" element={<Studio />} />
+                  <Route path="/dashboard/community" element={<Community />} />
+                  <Route path="/dashboard/creator-network" element={<CreatorNetwork />} />
+                  <Route path="/dashboard/vr" element={<VRIntegration />} />
+                  <Route path="/dashboard/audio" element={<Audio />} />
+                  <Route path="/dashboard/pricing" element={<Pricing />} />
+                  <Route path="/dashboard/video-editing" element={<VideoEditing />} />
+                  <Route path="/dashboard/branding" element={<Branding />} />
+                  
+                  <Route path="/scenes" element={<Scenes />} />
+                  <Route path="/sources" element={<Sources />} />
+                  <Route path="/streaming" element={<Streaming />} />
+                  <Route path="/ai-tools" element={<AiTools />} />
+                  <Route path="/settings" element={<Settings />} />
+                  <Route path="/studio" element={<Studio />} />
+                  <Route path="/community" element={<Community />} />
+                  <Route path="/creator-network" element={<CreatorNetwork />} />
+                  <Route path="/vr-integration" element={<VRIntegration />} />
+                  <Route path="/audio" element={<Audio />} />
+                  <Route path="/chat" element={<Chat />} />
+                  <Route path="/pricing" element={<Pricing />} />
+                  <Route path="/video-editing" element={<VideoEditing />} />
+                  <Route path="/branding" element={<Branding />} />
+                  
+                  <Route path="*" element={<NotFound />} />
+                </Routes>
+              </Router>
+              <Toaster />
+            </DesktopProvider>
+          </VRProvider>
+        </AppProvider>
+      </AuthProvider>
     </ThemeProvider>
   );
 }
