@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import { Button } from '@/components/ui/button';
@@ -35,11 +34,7 @@ const Header = () => {
   };
 
   const handleProfileClick = () => {
-    // For now, just show a toast. Later this can navigate to a profile page
-    toast({
-      title: 'Profile',
-      description: 'Viewing your profile',
-    });
+    navigate('/dashboard/profile');
   };
 
   const handleSettingsClick = () => {

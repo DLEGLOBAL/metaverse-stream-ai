@@ -1,10 +1,7 @@
-
 import { useState } from 'react';
-import { 
-  Scene, Source, AiFeature, Stats, StreamStatus,
-  ScheduledStream, AudioSettings, StreamAlert
-} from '../types';
-import { Camera, Computer, Mic, Bot } from 'lucide-react';
+import { Scene, Source, AiFeature, Stats, StreamStatus,
+  ScheduledStream, AudioSettings, StreamAlert } from '../types';
+import { Camera, Computer, Mic, Bot, Headset } from 'lucide-react';
 
 export const useAppState = () => {
   // Scene state
@@ -43,6 +40,13 @@ export const useAppState = () => {
       type: 'display',
       active: false,
       icon: <Computer className="h-4 w-4" />
+    },
+    {
+      id: 4,
+      name: 'VR Headset',
+      type: 'vr',
+      active: false,
+      icon: <Headset className="h-4 w-4" />
     }
   ]);
   

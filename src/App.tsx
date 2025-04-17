@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { ThemeProvider } from './contexts/theme';
@@ -25,6 +24,7 @@ import Pricing from './pages/Pricing';
 import VideoEditing from './pages/VideoEditing';
 import Branding from './pages/Branding';
 import Auth from './pages/Auth';
+import Profile from './pages/Profile';
 
 import './App.css';
 
@@ -56,6 +56,7 @@ function App() {
                   <Route path="/dashboard/pricing" element={<Pricing />} />
                   <Route path="/dashboard/video-editing" element={<VideoEditing />} />
                   <Route path="/dashboard/branding" element={<Branding />} />
+                  <Route path="/dashboard/profile" element={<Profile />} />
                   
                   <Route path="/scenes" element={<Scenes />} />
                   <Route path="/sources" element={<Sources />} />
