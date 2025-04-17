@@ -9,21 +9,22 @@ export interface NavigationItem {
   external?: boolean;
 }
 
+// We need to create the icons without JSX in a .ts file
 export const getNavigationItems = (): NavigationItem[] => [
-  { icon: <Home size={20} />, label: 'Dashboard', path: '/dashboard' },
-  { icon: <Layers size={20} />, label: 'Scenes', path: '/dashboard/scenes' },
-  { icon: <Camera size={20} />, label: 'Sources', path: '/dashboard/sources' },
-  { icon: <Radio size={20} />, label: 'Streaming', path: '/dashboard/streaming' },
-  { icon: <Bot size={20} />, label: 'AI Tools', path: '/dashboard/ai-tools' },
-  { icon: <Video size={20} />, label: 'Video Editing', path: '/dashboard/video-editing' },
-  { icon: <Headphones size={20} />, label: 'Audio', path: '/dashboard/audio' },
-  { icon: <Headset size={20} />, label: 'VR Integration', path: '/dashboard/vr' },
-  { icon: <Tv size={20} />, label: 'IPTV Platform', path: 'https://meta-stream.shop/', external: true },
-  { icon: <Globe size={20} />, label: 'Metaverse', path: 'https://web.meta-stadiums.com/', external: true },
-  { icon: <Users size={20} />, label: 'Community', path: '/dashboard/community' },
-  { icon: <Network size={20} />, label: 'Creator Network', path: '/dashboard/creator-network' },
-  { icon: <Palette size={20} />, label: 'Branding', path: '/dashboard/branding' },
-  { icon: <BarChart size={20} />, label: 'Analytics', path: '/dashboard/analytics' },
-  { icon: <DollarSign size={20} />, label: 'Pricing', path: '/dashboard/pricing' },
-  { icon: <Settings size={20} />, label: 'Settings', path: '/dashboard/settings' },
+  { icon: React.createElement(Home, { size: 20 }), label: 'Dashboard', path: '/dashboard' },
+  { icon: React.createElement(Layers, { size: 20 }), label: 'Scenes', path: '/dashboard/scenes' },
+  { icon: React.createElement(Camera, { size: 20 }), label: 'Sources', path: '/dashboard/sources' },
+  { icon: React.createElement(Radio, { size: 20 }), label: 'Streaming', path: '/dashboard/streaming' },
+  { icon: React.createElement(Bot, { size: 20 }), label: 'AI Tools', path: '/dashboard/ai-tools' },
+  { icon: React.createElement(Video, { size: 20 }), label: 'Video Editing', path: '/dashboard/video-editing' },
+  { icon: React.createElement(Headphones, { size: 20 }), label: 'Audio', path: '/dashboard/audio' },
+  { icon: React.createElement(Headset, { size: 20 }), label: 'VR Integration', path: '/dashboard/vr' },
+  { icon: React.createElement(Tv, { size: 20 }), label: 'IPTV Platform', path: 'https://meta-stream.shop/', external: true },
+  { icon: React.createElement(Globe, { size: 20 }), label: 'Metaverse', path: 'https://web.meta-stadiums.com/', external: true },
+  { icon: React.createElement(Users, { size: 20 }), label: 'Community', path: '/dashboard/community' },
+  { icon: React.createElement(Network, { size: 20 }), label: 'Creator Network', path: '/dashboard/creator-network' },
+  { icon: React.createElement(Palette, { size: 20 }), label: 'Branding', path: '/dashboard/branding' },
+  { icon: React.createElement(BarChart, { size: 20 }), label: 'Analytics', path: '/dashboard/analytics' },
+  { icon: React.createElement(DollarSign, { size: 20 }), label: 'Pricing', path: '/dashboard/pricing' },
+  { icon: React.createElement(Settings, { size: 20 }), label: 'Settings', path: '/dashboard/settings' },
 ];
