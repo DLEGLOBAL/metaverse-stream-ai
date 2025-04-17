@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Helmet } from 'react-helmet';
 import { useForm } from 'react-hook-form';
@@ -10,8 +9,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { BrandingPromptForm, formSchema } from '@/components/branding/BrandingPromptForm';
 import BrandingContentDisplay from '@/components/branding/BrandingContentDisplay';
 import type { BrandingFormValues } from '@/components/branding/BrandingPromptForm';
-import { generateBranding } from '@/services/brandingService';
-import type { Theme } from '@/services/brandingService';
+import { generateBranding, Theme } from '@/services/branding/brandingService';
 
 const Branding = () => {
   const [isGenerating, setIsGenerating] = useState(false);
@@ -26,7 +24,6 @@ const Branding = () => {
     images: []
   });
 
-  // Initialize the form
   const form = useForm<BrandingFormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -67,12 +64,9 @@ const Branding = () => {
   };
 
   const handleApplyTheme = (themeId: string) => {
-    // Find the theme
     const theme = generatedItems.themes.find(t => t.id === themeId);
     if (!theme) return;
 
-    // Here you would actually apply the theme to your application
-    // For now, we'll just show a toast
     toast({
       title: "Theme Applied",
       description: `The ${theme.name} theme has been applied to your dashboard.`,
@@ -127,7 +121,6 @@ const Branding = () => {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Prompt Input Section */}
           <Card className="lg:col-span-1">
             <CardHeader>
               <CardTitle>Generate Your Brand</CardTitle>
@@ -147,7 +140,6 @@ const Branding = () => {
             </CardContent>
           </Card>
 
-          {/* Generated Content Display */}
           <BrandingContentDisplay 
             activeTab={activeTab}
             generatedItems={generatedItems}
