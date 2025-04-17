@@ -30,6 +30,19 @@ export async function generateBrandingApi(
       }
 
       console.log(`Generated ${params.type} successfully via Supabase client:`, data);
+      
+      // Transform the response if needed to match our GenerateResponse type
+      if (params.type === 'image') {
+        // If the API returns a single image but our type expects an array
+        const responseData = data as any;
+        if (responseData.image && !responseData.images) {
+          return { 
+            ...responseData,
+            images: [responseData.image]
+          };
+        }
+      }
+      
       return data as GenerateResponse;
     } 
     catch (supabaseError) {
@@ -53,6 +66,17 @@ export async function generateBrandingApi(
       const result = await handleApiResponse<GenerateResponse>(response);
       if (result.error) {
         throw new Error(result.error);
+      }
+      
+      // Transform the response if needed to match our GenerateResponse type
+      if (params.type === 'image' && result.data) {
+        const responseData = result.data as any;
+        if (responseData.image && !responseData.images) {
+          return { 
+            ...responseData,
+            images: [responseData.image]
+          };
+        }
       }
       
       console.log(`Generated ${params.type} successfully via fetch:`, result.data);

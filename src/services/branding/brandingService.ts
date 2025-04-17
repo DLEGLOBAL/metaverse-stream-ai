@@ -46,7 +46,10 @@ export const generateBranding = async (
 // Helper function to process the response based on the type
 const processResponse = (data: GenerateResponse, type: BrandingType): GenerateResponse => {
   if (type === 'logo') {
-    const baseImage = data.image || '';
+    // Fix: Change data.image to data.images and check for the first image in the array
+    const images = data.images || [];
+    const baseImage = images.length > 0 ? images[0] : '';
+    
     if (!baseImage) {
       console.error('No image data returned for logo');
       return { logos: [] };
@@ -60,7 +63,10 @@ const processResponse = (data: GenerateResponse, type: BrandingType): GenerateRe
     }
     return { themes: data.themes };
   } else if (type === 'image') {
-    const baseImage = data.image || '';
+    // Fix: Change data.image to data.images and check for the first image in the array
+    const images = data.images || [];
+    const baseImage = images.length > 0 ? images[0] : '';
+    
     if (!baseImage) {
       console.error('No image data returned for image');
       return { images: [] };
