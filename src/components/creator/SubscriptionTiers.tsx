@@ -1,4 +1,6 @@
+
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Switch } from '@/components/ui/switch';
@@ -9,6 +11,7 @@ import MetaStarsCard from './cards/MetaStarsCard';
 
 const SubscriptionTiers = () => {
   const [billingCycle, setBillingCycle] = useState<'monthly' | 'yearly'>('monthly');
+  const navigate = useNavigate();
   
   const handleToggleBillingCycle = () => {
     setBillingCycle(prev => prev === 'monthly' ? 'yearly' : 'monthly');
@@ -16,6 +19,10 @@ const SubscriptionTiers = () => {
       title: `${billingCycle === 'monthly' ? 'Yearly' : 'Monthly'} billing selected`,
       description: `You'll now see ${billingCycle === 'monthly' ? 'yearly' : 'monthly'} subscription prices.`,
     });
+  };
+  
+  const handleSubscribe = (planName: string) => {
+    navigate(`/dashboard/checkout?plan=${planName}&cycle=${billingCycle}`);
   };
   
   return (
