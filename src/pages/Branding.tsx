@@ -71,6 +71,8 @@ const Branding = () => {
   const handleApplyTheme = (themeId: string) => {
     const theme = generatedItems.themes.find(t => t.id === themeId);
     if (!theme) return;
+    
+    console.log("Applying theme:", theme.name);
 
     // Convert the generated theme to a custom theme format and add it to custom themes
     const customThemeId = addCustomTheme({
@@ -90,6 +92,7 @@ const Branding = () => {
 
     // Apply the newly created custom theme
     if (customThemeId) {
+      console.log("Applying custom theme with ID:", customThemeId);
       applyCustomTheme(customThemeId);
       
       toast({

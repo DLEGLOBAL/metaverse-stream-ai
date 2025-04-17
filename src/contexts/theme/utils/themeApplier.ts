@@ -14,4 +14,19 @@ export const applyThemeToDOM = (theme: CustomTheme) => {
   root.style.setProperty('--accent', hexToHSL(colors.accent));
   root.style.setProperty('--muted', hexToHSL(colors.muted));
   root.style.setProperty('--border', hexToHSL(colors.border));
+  
+  // Add a data-theme attribute to detect that a custom theme is applied
+  root.setAttribute('data-custom-theme', theme.id);
+  
+  console.log('Theme applied:', theme.name, theme.id);
+};
+
+// Function to clear custom theme CSS variables
+export const clearCustomTheme = () => {
+  const root = document.documentElement;
+  
+  // Remove the data-theme attribute
+  root.removeAttribute('data-custom-theme');
+  
+  console.log('Custom theme cleared');
 };

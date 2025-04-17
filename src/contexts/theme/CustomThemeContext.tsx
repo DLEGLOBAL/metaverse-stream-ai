@@ -3,7 +3,7 @@ import React, { createContext, useContext, useEffect } from 'react';
 import { CustomTheme, CustomThemeContextType } from './customTheme.types';
 import { useTheme } from './ThemeContext';
 import { useCustomThemeState } from './hooks/useCustomThemeState';
-import { applyThemeToDOM } from './utils/themeApplier';
+import { applyThemeToDOM, clearCustomTheme } from './utils/themeApplier';
 import { toast } from "@/hooks/use-toast";
 
 const CustomThemeContext = createContext<CustomThemeContextType | undefined>(undefined);
@@ -28,6 +28,9 @@ export const CustomThemeProvider: React.FC<{ children: React.ReactNode }> = ({ c
         // Also update the theme context to match dark/light mode
         setTheme(activeTheme.isDark ? 'dark' : 'light');
       }
+    } else {
+      // Clear custom theme when none is active
+      clearCustomTheme();
     }
   }, [activeCustomThemeId, customThemes, setTheme]);
 
