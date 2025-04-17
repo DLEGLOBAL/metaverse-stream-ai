@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { ThemeProvider } from './contexts/theme';
@@ -24,6 +25,7 @@ import Chat from './pages/Chat';
 import Pricing from './pages/Pricing';
 import VideoEditing from './pages/VideoEditing';
 import Branding from './pages/Branding';
+import Auth from './pages/Auth';
 
 import './App.css';
 

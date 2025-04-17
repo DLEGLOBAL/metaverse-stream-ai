@@ -1,4 +1,5 @@
-import React from 'react';
+
+import React, { useState } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import { PrivateRoute } from '@/components/auth/PrivateRoute';
 import Sidebar from './Sidebar';
