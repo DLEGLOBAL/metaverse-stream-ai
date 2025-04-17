@@ -1,8 +1,8 @@
-
 import React from 'react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Check } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 export interface SubscriptionCardProps {
   title: string;
@@ -12,7 +12,6 @@ export interface SubscriptionCardProps {
   billingCycle: 'monthly' | 'yearly';
   yearlyDiscount: number;
   features: string[];
-  onSubscribe: () => void;
   highlighted: boolean;
 }
 
@@ -24,9 +23,14 @@ const SubscriptionCard: React.FC<SubscriptionCardProps> = ({
   billingCycle,
   yearlyDiscount,
   features,
-  onSubscribe,
   highlighted
 }) => {
+  const navigate = useNavigate();
+
+  const handleSubscribe = () => {
+    navigate(`/dashboard/checkout?plan=${title}&cycle=${billingCycle}`);
+  };
+
   return (
     <div className={`rounded-lg overflow-hidden border ${
       highlighted 
@@ -64,7 +68,7 @@ const SubscriptionCard: React.FC<SubscriptionCardProps> = ({
               ? 'bg-meta-teal hover:bg-meta-teal/90 text-meta-dark-blue' 
               : 'bg-gray-800 hover:bg-gray-700'
           }`}
-          onClick={onSubscribe}
+          onClick={handleSubscribe}
         >
           Subscribe Now
         </Button>

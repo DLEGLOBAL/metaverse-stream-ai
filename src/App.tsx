@@ -25,6 +25,7 @@ import VideoEditing from './pages/VideoEditing';
 import Branding from './pages/Branding';
 import Auth from './pages/Auth';
 import Profile from './pages/Profile';
+import Checkout from './pages/Checkout';
 
 import './App.css';
 
@@ -37,7 +38,6 @@ function App() {
             <DesktopProvider>
               <Router>
                 <Routes>
-                  {/* Landing should be the default route */}
                   <Route path="/" element={<Landing />} />
                   <Route path="/landing" element={<Landing />} />
                   <Route path="/auth" element={<Auth />} />
@@ -57,6 +57,7 @@ function App() {
                   <Route path="/dashboard/video-editing" element={<VideoEditing />} />
                   <Route path="/dashboard/branding" element={<Branding />} />
                   <Route path="/dashboard/profile" element={<Profile />} />
+                  <Route path="/dashboard/checkout" element={<Checkout />} />
                   
                   <Route path="/scenes" element={<Scenes />} />
                   <Route path="/sources" element={<Sources />} />

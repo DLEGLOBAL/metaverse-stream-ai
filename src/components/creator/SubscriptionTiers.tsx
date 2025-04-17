@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -16,13 +15,6 @@ const SubscriptionTiers = () => {
     toast({
       title: `${billingCycle === 'monthly' ? 'Yearly' : 'Monthly'} billing selected`,
       description: `You'll now see ${billingCycle === 'monthly' ? 'yearly' : 'monthly'} subscription prices.`,
-    });
-  };
-  
-  const handleSubscribe = (tier: string) => {
-    toast({
-      title: "Subscription processing",
-      description: `You are subscribing to the ${tier} plan. This feature will be fully implemented soon.`,
     });
   };
   
@@ -53,7 +45,6 @@ const SubscriptionTiers = () => {
       </CardHeader>
       <CardContent>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          {/* Starter Plan */}
           <SubscriptionCard
             title="Starter"
             icon={<Star className="h-5 w-5" />}
@@ -68,11 +59,9 @@ const SubscriptionTiers = () => {
               "Community support",
               "Basic analytics"
             ]}
-            onSubscribe={() => handleSubscribe("Starter")}
             highlighted={false}
           />
           
-          {/* Professional Plan */}
           <SubscriptionCard
             title="Professional"
             icon={<BarChart4 className="h-5 w-5" />}
@@ -89,11 +78,9 @@ const SubscriptionTiers = () => {
               "Multi-platform streaming",
               "VR content creation tools"
             ]}
-            onSubscribe={() => handleSubscribe("Professional")}
             highlighted={true}
           />
           
-          {/* Enterprise Plan */}
           <SubscriptionCard
             title="Enterprise"
             icon={<Shield className="h-5 w-5" />}
@@ -112,7 +99,6 @@ const SubscriptionTiers = () => {
               "Exclusive early feature access",
               "API access for extensions"
             ]}
-            onSubscribe={() => handleSubscribe("Enterprise")}
             highlighted={false}
           />
         </div>
