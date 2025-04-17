@@ -117,7 +117,7 @@ const ThemePreview = ({ name, colors, onApply, onDelete }: ThemePreviewProps) =>
           <Button 
             variant="outline" 
             size="sm" 
-            className="w-full group"
+            className="w-full group transition-all"
             onClick={onApply}
             style={{
               borderColor: textColor,
@@ -127,7 +127,7 @@ const ThemePreview = ({ name, colors, onApply, onDelete }: ThemePreviewProps) =>
           >
             <Palette className="h-4 w-4 mr-1 group-hover:hidden" />
             <Check className="h-4 w-4 mr-1 hidden group-hover:block" />
-            <span>Apply Theme</span>
+            <span>Apply This Theme</span>
           </Button>
           
           {onDelete && (

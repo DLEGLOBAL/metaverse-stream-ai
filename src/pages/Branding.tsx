@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Helmet } from 'react-helmet';
 import { useForm } from 'react-hook-form';
@@ -10,6 +11,7 @@ import { BrandingPromptForm, formSchema } from '@/components/branding/BrandingPr
 import BrandingContentDisplay from '@/components/branding/BrandingContentDisplay';
 import type { BrandingFormValues } from '@/components/branding/BrandingPromptForm';
 import { generateBranding, Theme } from '@/services/branding/brandingService';
+import { useCustomTheme } from '@/contexts/theme/CustomThemeContext';
 
 const Branding = () => {
   const [isGenerating, setIsGenerating] = useState(false);
@@ -23,6 +25,9 @@ const Branding = () => {
     themes: [],
     images: []
   });
+
+  // Import the CustomTheme context to properly apply themes
+  const { addCustomTheme, applyCustomTheme } = useCustomTheme();
 
   const form = useForm<BrandingFormValues>({
     resolver: zodResolver(formSchema),
@@ -67,9 +72,28 @@ const Branding = () => {
     const theme = generatedItems.themes.find(t => t.id === themeId);
     if (!theme) return;
 
+    // Convert the generated theme to a custom theme format and add it to custom themes
+    const customThemeId = addCustomTheme({
+      name: theme.name,
+      description: `Generated from prompt: "${form.getValues().prompt}"`,
+      isDark: true, // Default to dark theme for generated themes
+      colors: {
+        background: theme.colors.find(c => c.name === 'background')?.value || '#1a2b4b',
+        foreground: theme.colors.find(c => c.name === 'text')?.value || '#f8fafc',
+        primary: theme.colors.find(c => c.name === 'primary')?.value || '#0CFFE1',
+        secondary: theme.colors.find(c => c.name === 'secondary')?.value || '#2d3748',
+        accent: theme.colors.find(c => c.name === 'accent')?.value || '#0CFFE1',
+        muted: '#4a5568', // Default value
+        border: '#2d3748', // Default value
+      }
+    });
+
+    // Apply the newly created custom theme
+    applyCustomTheme(customThemeId);
+    
     toast({
       title: "Theme Applied",
-      description: `The ${theme.name} theme has been applied to your dashboard.`,
+      description: `The ${theme.name} theme has been added to your custom themes and applied.`,
     });
   };
 
