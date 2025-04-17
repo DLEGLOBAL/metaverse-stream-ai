@@ -9,7 +9,7 @@ const CreatorHeader = () => {
         <div className="flex-1">
           <h1 className="text-3xl font-bold flex items-center gap-2">
             <Star className="h-8 w-8 text-meta-cyan" /> 
-            Meta Stars Creator Network
+            MetaStars Creator Network
           </h1>
           <p className="mt-2 text-lg opacity-90">
             Join our exclusive network of content creators and get access to special features, training programs, and monetization opportunities.
