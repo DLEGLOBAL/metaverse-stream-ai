@@ -5,9 +5,11 @@ import { Button } from '@/components/ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { Bell, Search, User } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
+import { Link, useNavigate } from 'react-router-dom';
 
 const Header = () => {
   const { user, signOut } = useAuth();
+  const navigate = useNavigate();
 
   const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -30,6 +32,18 @@ const Header = () => {
       title: 'Signed out',
       description: 'You have been successfully signed out',
     });
+  };
+
+  const handleProfileClick = () => {
+    // For now, just show a toast. Later this can navigate to a profile page
+    toast({
+      title: 'Profile',
+      description: 'Viewing your profile',
+    });
+  };
+
+  const handleSettingsClick = () => {
+    navigate('/dashboard/settings');
   };
 
   return (
@@ -61,10 +75,10 @@ const Header = () => {
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>My Account</DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
+            <DropdownMenuItem onClick={handleProfileClick}>
               Profile
             </DropdownMenuItem>
-            <DropdownMenuItem>
+            <DropdownMenuItem onClick={handleSettingsClick}>
               Settings
             </DropdownMenuItem>
             <DropdownMenuSeparator />
