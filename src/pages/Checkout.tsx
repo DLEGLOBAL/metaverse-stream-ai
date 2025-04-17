@@ -187,14 +187,14 @@ const Checkout = () => {
                 ) : (
                   <>
                     Complete Purchase
-                    {!process.env.SQUARE_ACCESS_TOKEN && (
+                    {!import.meta.env.VITE_SQUARE_ACCESS_TOKEN && (
                       <small className="ml-2 text-meta-dark-blue/70">(Demo Mode)</small>
                     )}
                   </>
                 )}
               </Button>
               
-              {!process.env.SQUARE_ACCESS_TOKEN && (
+              {!import.meta.env.VITE_SQUARE_ACCESS_TOKEN && (
                 <p className="text-sm text-center text-gray-400 mt-2">
                   Note: This is a demo checkout. Add your Square API key for full functionality.
                 </p>

@@ -7,7 +7,7 @@ export const createPaymentLink = async (planName: string, cycle: string, amount:
     console.log(`Creating payment for ${planName} plan, ${cycle} billing at $${amount}`);
     
     // Check if Square API key is available
-    if (process.env.SQUARE_ACCESS_TOKEN) {
+    if (import.meta.env.VITE_SQUARE_ACCESS_TOKEN) {
       // In a real production environment, this would make a call to Square Checkout API
       // This would typically be done through a secure backend/edge function
       const requestBody = {
@@ -50,7 +50,7 @@ export const initiateCheckout = async (planName: string, cycle: string, amount: 
   
   if (result.success && result.checkoutUrl) {
     // For real Square integration, redirect to the Square checkout URL
-    if (process.env.SQUARE_ACCESS_TOKEN) {
+    if (import.meta.env.VITE_SQUARE_ACCESS_TOKEN) {
       window.location.href = result.checkoutUrl;
       return true;
     } else {
@@ -83,7 +83,7 @@ export const initiateCheckout = async (planName: string, cycle: string, amount: 
 // Function to validate a completed payment (would be used after Square redirect)
 export const validatePayment = async (paymentId: string) => {
   try {
-    if (process.env.SQUARE_ACCESS_TOKEN) {
+    if (import.meta.env.VITE_SQUARE_ACCESS_TOKEN) {
       // In production, this would verify the payment status with Square API
       console.log(`Validating payment: ${paymentId}`);
       
