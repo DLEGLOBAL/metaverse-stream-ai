@@ -24,12 +24,13 @@ export const CustomThemeProvider: React.FC<{ children: React.ReactNode }> = ({ c
     if (activeCustomThemeId) {
       const activeTheme = customThemes.find(t => t.id === activeCustomThemeId);
       if (activeTheme) {
+        console.log('Applying theme:', activeTheme.name);
         applyThemeToDOM(activeTheme);
-        // Also update the theme context to match dark/light mode
+        // Update the theme context to match dark/light mode
         setTheme(activeTheme.isDark ? 'dark' : 'light');
       }
     } else {
-      // Clear custom theme when none is active
+      console.log('Clearing custom theme');
       clearCustomTheme();
     }
   }, [activeCustomThemeId, customThemes, setTheme]);
@@ -37,6 +38,7 @@ export const CustomThemeProvider: React.FC<{ children: React.ReactNode }> = ({ c
   const applyCustomTheme = (id: string) => {
     const themeToApply = customThemes.find(t => t.id === id);
     if (themeToApply) {
+      console.log('User requested theme:', themeToApply.name);
       setActiveCustomThemeId(id);
       
       toast({
@@ -47,6 +49,7 @@ export const CustomThemeProvider: React.FC<{ children: React.ReactNode }> = ({ c
   };
 
   const resetToDefaultTheme = () => {
+    console.log('Resetting to default theme');
     setActiveCustomThemeId(null);
     
     // Apply default theme through the theme context

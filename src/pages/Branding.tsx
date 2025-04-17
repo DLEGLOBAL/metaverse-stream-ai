@@ -74,7 +74,7 @@ const Branding = () => {
     
     console.log("Applying theme:", theme.name);
 
-    // Convert the generated theme to a custom theme format and add it to custom themes
+    // Convert the generated theme to a custom theme format
     const customThemeId = addCustomTheme({
       name: theme.name,
       description: `Generated from prompt: "${form.getValues().prompt}"`,
@@ -85,8 +85,8 @@ const Branding = () => {
         primary: theme.colors.find(c => c.name === 'primary')?.value || '#0CFFE1',
         secondary: theme.colors.find(c => c.name === 'secondary')?.value || '#2d3748',
         accent: theme.colors.find(c => c.name === 'accent')?.value || '#0CFFE1',
-        muted: '#4a5568', // Default value
-        border: '#2d3748', // Default value
+        muted: '#4a5568',
+        border: '#2d3748',
       }
     });
 
