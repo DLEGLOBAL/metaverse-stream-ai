@@ -1,6 +1,5 @@
 
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
-import { HfInference } from "https://esm.sh/@huggingface/inference@2.3.2"
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -14,9 +13,9 @@ serve(async (req) => {
   }
 
   try {
-    const HUGGING_FACE_ACCESS_TOKEN = Deno.env.get("HUGGING_FACE_ACCESS_TOKEN")
-    if (!HUGGING_FACE_ACCESS_TOKEN) {
-      throw new Error("HUGGING_FACE_ACCESS_TOKEN is not set")
+    const OPENAI_API_KEY = Deno.env.get("OPENAI_API_KEY")
+    if (!OPENAI_API_KEY) {
+      throw new Error("OPENAI_API_KEY is not set")
     }
 
     const { prompt, type } = await req.json()
@@ -27,64 +26,114 @@ serve(async (req) => {
       )
     }
 
-    const hf = new HfInference(HUGGING_FACE_ACCESS_TOKEN)
-
     if (type === "image") {
-      // Generate images using FLUX model
-      const image = await hf.textToImage({
-        inputs: `${prompt}, high quality, detailed, 4k`,
-        model: "black-forest-labs/FLUX.1-schnell",
+      // Generate images using OpenAI DALL-E
+      const response = await fetch("https://api.openai.com/v1/images/generations", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${OPENAI_API_KEY}`
+        },
+        body: JSON.stringify({
+          model: "dall-e-3",
+          prompt: `${prompt}, high quality, detailed, 4k`,
+          n: 1,
+          size: "1024x1024",
+          response_format: "b64_json"
+        })
       })
 
-      // Convert blob to base64
-      const arrayBuffer = await image.arrayBuffer()
-      const base64 = btoa(String.fromCharCode(...new Uint8Array(arrayBuffer)))
-      const dataUrl = `data:image/jpeg;base64,${base64}`
+      if (!response.ok) {
+        const errorData = await response.json()
+        console.error("OpenAI API error:", errorData)
+        throw new Error(errorData.error?.message || "Failed to generate image with OpenAI")
+      }
+
+      const data = await response.json()
+      const imageBase64 = data.data[0].b64_json
+      const dataUrl = `data:image/png;base64,${imageBase64}`
 
       return new Response(
         JSON.stringify({ image: dataUrl }),
         { headers: { ...corsHeaders, "Content-Type": "application/json" } }
       )
     } else if (type === "theme") {
-      // For themes, we'll generate color palettes based on the prompt
-      const enhancedPrompt = `Generate a color palette for: ${prompt}. The palette should include 5 colors: primary, secondary, accent, background, and text.`
-      
-      const result = await hf.textGeneration({
-        model: "mistralai/Mixtral-8x7B-Instruct-v0.1",
-        inputs: enhancedPrompt,
-        parameters: {
-          max_new_tokens: 250,
-          temperature: 0.7,
-        }
+      // For themes, we'll use OpenAI GPT to generate color palettes
+      const response = await fetch("https://api.openai.com/v1/chat/completions", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${OPENAI_API_KEY}`
+        },
+        body: JSON.stringify({
+          model: "gpt-4o-mini",
+          messages: [
+            {
+              role: "system",
+              content: "You are a design assistant that creates color palettes. Output in JSON format only."
+            },
+            {
+              role: "user",
+              content: `Generate three different color palettes for: ${prompt}. Each palette should include: primary, secondary, accent, background, and text colors. Use HEX codes. Return ONLY JSON in this format: 
+              {
+                "themes": [
+                  {
+                    "id": "theme-1",
+                    "name": "Name for theme 1",
+                    "colors": [
+                      {"name": "primary", "value": "#HEXCODE"},
+                      {"name": "secondary", "value": "#HEXCODE"},
+                      {"name": "accent", "value": "#HEXCODE"},
+                      {"name": "background", "value": "#HEXCODE"},
+                      {"name": "text", "value": "#HEXCODE"}
+                    ]
+                  },
+                  {
+                    "id": "theme-2",
+                    "name": "Name for theme 2",
+                    "colors": [...]
+                  },
+                  {
+                    "id": "theme-3",
+                    "name": "Name for theme 3",
+                    "colors": [...]
+                  }
+                ]
+              }`
+            }
+          ],
+          temperature: 0.7
+        })
       })
 
-      // Parse the colors from the generated text
-      // This is a simple implementation - in production you'd want more robust parsing
-      const response = result.generated_text
-      
-      // Create 3 different themes with variations of the palette
-      const themes = [
-        {
-          id: "theme-" + Date.now() + "-1",
-          name: prompt.split(" ").slice(0, 3).join(" ") + " Primary",
-          colors: extractColorsFromText(response, 1)
-        },
-        {
-          id: "theme-" + Date.now() + "-2",
-          name: prompt.split(" ").slice(0, 3).join(" ") + " Vibrant",
-          colors: extractColorsFromText(response, 2)
-        },
-        {
-          id: "theme-" + Date.now() + "-3",
-          name: prompt.split(" ").slice(0, 3).join(" ") + " Subtle",
-          colors: extractColorsFromText(response, 3)
-        }
-      ]
+      if (!response.ok) {
+        const errorData = await response.json()
+        console.error("OpenAI API error:", errorData)
+        throw new Error(errorData.error?.message || "Failed to generate themes with OpenAI")
+      }
 
-      return new Response(
-        JSON.stringify({ themes }),
-        { headers: { ...corsHeaders, "Content-Type": "application/json" } }
-      )
+      const data = await response.json()
+      const content = data.choices[0].message.content
+      
+      try {
+        // Parse the JSON response from GPT
+        const parsedThemes = JSON.parse(content)
+        
+        // Add unique IDs based on timestamp
+        const themesWithUniqueIds = parsedThemes.themes.map((theme, index) => ({
+          ...theme,
+          id: `theme-${Date.now()}-${index + 1}`
+        }))
+        
+        return new Response(
+          JSON.stringify({ themes: themesWithUniqueIds }),
+          { headers: { ...corsHeaders, "Content-Type": "application/json" } }
+        )
+      } catch (error) {
+        console.error("Error parsing OpenAI response:", error)
+        console.log("Raw response:", content)
+        throw new Error("Failed to parse theme data from OpenAI")
+      }
     }
 
     return new Response(
@@ -99,41 +148,3 @@ serve(async (req) => {
     )
   }
 })
-
-// Helper function to extract colors from text and create variations
-function extractColorsFromText(text: string, variation: number): { name: string; value: string }[] {
-  // Default colors in case we can't extract from the text
-  const defaultColors = [
-    { name: "primary", value: variation === 1 ? "#3B82F6" : variation === 2 ? "#8B5CF6" : "#10B981" },
-    { name: "secondary", value: variation === 1 ? "#1D4ED8" : variation === 2 ? "#7C3AED" : "#059669" },
-    { name: "accent", value: variation === 1 ? "#F59E0B" : variation === 2 ? "#EC4899" : "#6366F1" },
-    { name: "background", value: variation === 1 ? "#1E293B" : variation === 2 ? "#18181B" : "#F8FAFC" },
-    { name: "text", value: variation === 1 ? "#F8FAFC" : variation === 2 ? "#F9FAFB" : "#1E293B" }
-  ]
-
-  try {
-    // Try to extract hex codes - this is a simple regex and might need improvement
-    const hexCodes = text.match(/#[a-fA-F0-9]{6}/g) || []
-    
-    if (hexCodes.length >= 5) {
-      return [
-        { name: "primary", value: hexCodes[0] },
-        { name: "secondary", value: hexCodes[1] },
-        { name: "accent", value: hexCodes[2] },
-        { name: "background", value: hexCodes[3] },
-        { name: "text", value: hexCodes[4] }
-      ]
-    }
-    
-    // If we couldn't extract enough hex codes, use the defaults with slight variations
-    return defaultColors.map(color => {
-      return { 
-        name: color.name, 
-        value: color.value
-      }
-    })
-  } catch (e) {
-    console.error("Error extracting colors:", e)
-    return defaultColors
-  }
-}

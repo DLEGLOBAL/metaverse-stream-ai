@@ -51,13 +51,13 @@ export const generateBranding = async (
         console.error('Supabase function error:', error);
         
         // Check for specific error messages
-        if (error.message && error.message.includes('HUGGING_FACE_ACCESS_TOKEN is not set')) {
+        if (error.message && error.message.includes('OPENAI_API_KEY is not set')) {
           toast({
             title: 'Missing API Key',
-            description: 'The Hugging Face Access Token is required for image generation. Please configure it in your Supabase edge function secrets.',
+            description: 'The OpenAI API Key is required for image and theme generation. Please configure it in your Supabase edge function secrets.',
             variant: 'destructive',
           });
-          throw new Error('Hugging Face Access Token not configured');
+          throw new Error('OpenAI API Key not configured');
         }
         
         throw new Error(error.message);
@@ -91,13 +91,13 @@ export const generateBranding = async (
         console.error('Error response from generate-branding:', errorData);
         
         // Check for specific error messages in the response
-        if (errorData.error && errorData.error.includes('HUGGING_FACE_ACCESS_TOKEN is not set')) {
+        if (errorData.error && errorData.error.includes('OPENAI_API_KEY is not set')) {
           toast({
             title: 'Missing API Key',
-            description: 'The Hugging Face Access Token is required for image generation. Please configure it in your Supabase edge function secrets.',
+            description: 'The OpenAI API Key is required for image and theme generation. Please configure it in your Supabase edge function secrets.',
             variant: 'destructive',
           });
-          throw new Error('Hugging Face Access Token not configured');
+          throw new Error('OpenAI API Key not configured');
         }
         
         throw new Error(errorData.error || `Failed to generate ${type}`);
@@ -111,7 +111,7 @@ export const generateBranding = async (
     console.error('Error generating branding:', error);
     
     // Don't show duplicate toast if we've already shown a specific one
-    if (!error.message?.includes('Hugging Face Access Token not configured')) {
+    if (!error.message?.includes('OpenAI API Key not configured')) {
       toast({
         title: 'Generation Failed',
         description: error instanceof Error ? error.message : 'Failed to generate content. Please try again later.',
