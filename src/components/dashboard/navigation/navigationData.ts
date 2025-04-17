@@ -1,4 +1,3 @@
-
 import { Camera, Layers, Radio, Bot, Settings, Video, Users, Network, Headphones, Headset, Home, DollarSign, Palette, BarChart, Tv, Globe } from 'lucide-react';
 import React from 'react';
 
@@ -9,7 +8,6 @@ export interface NavigationItem {
   external?: boolean;
 }
 
-// We need to create the icons without JSX in a .ts file
 export const getNavigationItems = (): NavigationItem[] => [
   { icon: React.createElement(Home, { size: 20 }), label: 'Dashboard', path: '/dashboard' },
   { icon: React.createElement(Layers, { size: 20 }), label: 'Scenes', path: '/dashboard/scenes' },
@@ -20,7 +18,7 @@ export const getNavigationItems = (): NavigationItem[] => [
   { icon: React.createElement(Headphones, { size: 20 }), label: 'Audio', path: '/dashboard/audio' },
   { icon: React.createElement(Headset, { size: 20 }), label: 'VR Integration', path: '/dashboard/vr' },
   { icon: React.createElement(Tv, { size: 20 }), label: 'IPTV Platform', path: 'https://meta-stream.shop/', external: true },
-  { icon: React.createElement(Globe, { size: 20 }), label: 'Metaverse', path: 'https://web.meta-stadiums.com/', external: true },
+  { icon: React.createElement(Globe, { size: 20 }), label: 'Meta-Stadiums', path: 'https://web.meta-stadiums.com/', external: true },
   { icon: React.createElement(Users, { size: 20 }), label: 'Community', path: '/dashboard/community' },
   { icon: React.createElement(Network, { size: 20 }), label: 'Creator Network', path: '/dashboard/creator-network' },
   { icon: React.createElement(Palette, { size: 20 }), label: 'Branding', path: '/dashboard/branding' },
