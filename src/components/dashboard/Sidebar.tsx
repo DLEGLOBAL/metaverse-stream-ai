@@ -29,7 +29,10 @@ const Sidebar = ({ collapsed, toggleSidebar }: SidebarProps) => {
   }
   
   const isCurrentPath = (path: string) => {
-    return location.pathname === path;
+    // Check if the current path starts with the navigation item path
+    // This ensures that sub-routes also highlight the parent menu item
+    return location.pathname === path || 
+           (path !== '/dashboard' && location.pathname.startsWith(path));
   };
   
   const navigationItems = getNavigationItems();

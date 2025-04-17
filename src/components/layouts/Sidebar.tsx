@@ -1,5 +1,6 @@
+
 import React, { useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import { useTheme } from '@/contexts/theme';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -56,12 +57,13 @@ const Sidebar = () => {
         <ScrollArea className="flex-1 py-4">
           <nav className="px-2 space-y-1">
             {navigationItems.map((item) => {
-              const isActive = location.pathname === item.path;
+              const isActive = location.pathname === item.path || 
+                              (item.path !== '/dashboard' && location.pathname.startsWith(item.path));
               
               return (
-                <a
+                <Link
                   key={item.path}
-                  href={item.path}
+                  to={item.path}
                   className={`flex items-center px-3 py-2 rounded-md transition-colors ${
                     isActive 
                       ? 'bg-meta-teal/20 text-meta-teal' 
@@ -70,7 +72,7 @@ const Sidebar = () => {
                 >
                   <item.icon size={collapsed ? 20 : 18} />
                   {!collapsed && <span className="ml-3">{item.name}</span>}
-                </a>
+                </Link>
               );
             })}
           </nav>
