@@ -49,6 +49,17 @@ export const generateBranding = async (
 
       if (error) {
         console.error('Supabase function error:', error);
+        
+        // Check for specific error messages
+        if (error.message && error.message.includes('HUGGING_FACE_ACCESS_TOKEN is not set')) {
+          toast({
+            title: 'Missing API Key',
+            description: 'The Hugging Face Access Token is required for image generation. Please configure it in your Supabase edge function secrets.',
+            variant: 'destructive',
+          });
+          throw new Error('Hugging Face Access Token not configured');
+        }
+        
         throw new Error(error.message);
       }
 
@@ -78,6 +89,17 @@ export const generateBranding = async (
       if (!response.ok) {
         const errorData = await response.json();
         console.error('Error response from generate-branding:', errorData);
+        
+        // Check for specific error messages in the response
+        if (errorData.error && errorData.error.includes('HUGGING_FACE_ACCESS_TOKEN is not set')) {
+          toast({
+            title: 'Missing API Key',
+            description: 'The Hugging Face Access Token is required for image generation. Please configure it in your Supabase edge function secrets.',
+            variant: 'destructive',
+          });
+          throw new Error('Hugging Face Access Token not configured');
+        }
+        
         throw new Error(errorData.error || `Failed to generate ${type}`);
       }
 
@@ -87,11 +109,15 @@ export const generateBranding = async (
     }
   } catch (error) {
     console.error('Error generating branding:', error);
-    toast({
-      title: 'Generation Failed',
-      description: error instanceof Error ? error.message : 'Failed to generate content. Please try again later.',
-      variant: 'destructive',
-    });
+    
+    // Don't show duplicate toast if we've already shown a specific one
+    if (!error.message?.includes('Hugging Face Access Token not configured')) {
+      toast({
+        title: 'Generation Failed',
+        description: error instanceof Error ? error.message : 'Failed to generate content. Please try again later.',
+        variant: 'destructive',
+      });
+    }
     
     // Return empty result instead of mock data on failure
     // This makes it clearer to the user that generation failed
