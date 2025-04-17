@@ -10,6 +10,7 @@ export interface NavigationItem {
 }
 
 export const getNavigationItems = (): NavigationItem[] => {
+  // Create items array and then sort alphabetically by label
   const items = [
     { icon: React.createElement(Bot, { size: 20 }), label: 'AI Tools', path: '/dashboard/ai-tools' },
     { icon: React.createElement(Headphones, { size: 20 }), label: 'Audio', path: '/dashboard/audio' },
@@ -24,10 +25,10 @@ export const getNavigationItems = (): NavigationItem[] => {
     { icon: React.createElement(Settings, { size: 20 }), label: 'Settings', path: '/dashboard/settings' },
     { icon: React.createElement(Camera, { size: 20 }), label: 'Sources', path: '/dashboard/sources' },
     { icon: React.createElement(Radio, { size: 20 }), label: 'Streaming', path: '/dashboard/streaming' },
-    { icon: React.createElement(Video, { size: 20 }), label: 'Video Editing', path: '/dashboard/video-editing' },
+    { icon: React.createElement(Video, { size: 20 }), label: 'Studio', path: '/dashboard/studio' },
     { icon: React.createElement(Headset, { size: 20 }), label: 'VR Integration', path: '/dashboard/vr' },
   ];
 
-  return items;
+  // Sort items alphabetically by label
+  return items.sort((a, b) => a.label.localeCompare(b.label));
 };
-

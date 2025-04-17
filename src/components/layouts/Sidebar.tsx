@@ -7,21 +7,26 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Button } from '@/components/ui/button';
 import { ChevronLeft, ChevronRight, Home, Settings, Video, Mic, Radio, Paintbrush, Users, GitBranch, Glasses, LineChart } from 'lucide-react';
 
-const navigationItems = [
-  { name: 'Dashboard', path: '/dashboard', icon: Home },
-  { name: 'Scenes', path: '/dashboard/scenes', icon: LineChart },
-  { name: 'Sources', path: '/dashboard/sources', icon: Video },
-  { name: 'Streaming', path: '/dashboard/streaming', icon: Radio },
-  { name: 'AI Tools', path: '/dashboard/ai-tools', icon: GitBranch },
-  { name: 'Settings', path: '/dashboard/settings', icon: Settings },
-  { name: 'Studio', path: '/dashboard/studio', icon: Video },
-  { name: 'Community', path: '/dashboard/community', icon: Users },
-  { name: 'Creator Network', path: '/dashboard/creator-network', icon: Users },
-  { name: 'VR Integration', path: '/dashboard/vr', icon: Glasses },
-  { name: 'Audio', path: '/dashboard/audio', icon: Mic },
-  { name: 'Video Editing', path: '/dashboard/video-editing', icon: Video },
-  { name: 'Branding', path: '/dashboard/branding', icon: Paintbrush },
-];
+// Define navigation items and sort them alphabetically
+const getNavigationItems = () => {
+  const items = [
+    { name: 'AI Tools', path: '/dashboard/ai-tools', icon: GitBranch },
+    { name: 'Audio', path: '/dashboard/audio', icon: Mic },
+    { name: 'Branding', path: '/dashboard/branding', icon: Paintbrush },
+    { name: 'Community', path: '/dashboard/community', icon: Users },
+    { name: 'Creator Network', path: '/dashboard/creator-network', icon: Users },
+    { name: 'Dashboard', path: '/dashboard', icon: Home },
+    { name: 'Scenes', path: '/dashboard/scenes', icon: LineChart },
+    { name: 'Settings', path: '/dashboard/settings', icon: Settings },
+    { name: 'Sources', path: '/dashboard/sources', icon: Video },
+    { name: 'Streaming', path: '/dashboard/streaming', icon: Radio },
+    { name: 'Studio', path: '/dashboard/studio', icon: Video },
+    { name: 'VR Integration', path: '/dashboard/vr', icon: Glasses },
+  ];
+  
+  // Sort alphabetically by name
+  return items.sort((a, b) => a.name.localeCompare(b.name));
+};
 
 const Sidebar = () => {
   const [collapsed, setCollapsed] = useState(false);
@@ -32,6 +37,9 @@ const Sidebar = () => {
   const toggleSidebar = () => {
     setCollapsed(!collapsed);
   };
+
+  // Get sorted navigation items
+  const navigationItems = getNavigationItems();
 
   return (
     <aside className={`fixed inset-y-0 left-0 z-30 transition-all duration-300 ease-in-out ${collapsed ? 'w-16' : 'w-64'} bg-meta-dark-blue border-r border-meta-slate/10`}>
