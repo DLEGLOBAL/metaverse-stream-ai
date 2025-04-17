@@ -1,9 +1,8 @@
-
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
-import { Bell, HelpCircle, Search, Minimize2, Maximize2, X } from 'lucide-react';
+import { Bell, HelpCircle, Search, Minimize2, Maximize2, X, ShoppingCart } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useAppContext } from '@/contexts/AppContext';
 import { toast } from '@/hooks/use-toast';
@@ -27,7 +26,6 @@ const Header = ({ sidebarCollapsed }: HeaderProps) => {
         title: 'Search',
         description: `Searching for "${searchQuery}"`,
       });
-      // Reset form
       e.currentTarget.reset();
     }
   };
@@ -46,7 +44,6 @@ const Header = ({ sidebarCollapsed }: HeaderProps) => {
     });
   };
   
-  // Desktop window control handlers (would interact with Electron in a real app)
   const handleMinimize = () => {
     console.log("Minimize window");
     toast({
@@ -68,6 +65,13 @@ const Header = ({ sidebarCollapsed }: HeaderProps) => {
     toast({
       title: 'Window Controls',
       description: 'Window will be minimized to system tray',
+    });
+  };
+
+  const handleCartClick = () => {
+    toast({
+      title: 'Shopping Cart',
+      description: 'Opening your shopping cart...',
     });
   };
 
@@ -101,10 +105,20 @@ const Header = ({ sidebarCollapsed }: HeaderProps) => {
           <Bell className="h-5 w-5" />
           <span className="absolute top-1 right-1 w-2 h-2 bg-meta-teal rounded-full"></span>
         </Button>
+
+        <Button 
+          variant="ghost" 
+          size="icon" 
+          className="relative"
+          onClick={handleCartClick}
+        >
+          <ShoppingCart className="h-5 w-5" />
+        </Button>
         
         <Button 
           variant="ghost" 
-          size="icon"
+          size="icon" 
+          className="relative"
           onClick={handleHelp}
         >
           <HelpCircle className="h-5 w-5" />
