@@ -4,6 +4,7 @@ import { useAppContext } from '@/contexts/AppContext';
 import { Camera, Computer, Mic } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
 import { checkRelayServerAvailability } from '@/utils/relayServerUtils';
+import { useDesktop } from '@/contexts/DesktopContext';
 
 interface DashboardInitializerProps {
   onInitialized: () => void;
@@ -17,8 +18,15 @@ const DashboardInitializer = ({ onInitialized }: DashboardInitializerProps) => {
     setRelayServerAvailable
   } = useAppContext();
   
+  const { isDesktop, platform } = useDesktop();
+  
   useEffect(() => {
     try {
+      // Log initialization in desktop environment
+      if (isDesktop) {
+        console.log(`Initializing dashboard in desktop environment on ${platform}`);
+      }
+      
       // Check for relay server availability
       checkRelayServerAvailability()
         .then(available => {
@@ -103,12 +111,18 @@ const DashboardInitializer = ({ onInitialized }: DashboardInitializerProps) => {
         localStorage.setItem('streamKeys', JSON.stringify(defaultPlatforms));
       }
 
+      // Desktop-specific initialization
+      if (isDesktop) {
+        // In a real app, we would initialize desktop-specific resources here
+        console.log("Desktop environment detected - initializing platform-specific features");
+      }
+
       onInitialized(); // Call onInitialized directly
     } catch (error) {
       console.error('Error initializing dashboard:', error);
       onInitialized(); // Still call onInitialized to prevent permanent loading state
     }
-  }, [setScenes, setSources, setAiFeatures, onInitialized, setRelayServerAvailable]);
+  }, [setScenes, setSources, setAiFeatures, onInitialized, setRelayServerAvailable, isDesktop, platform]);
   
   return null; // This is a utility component, it doesn't render anything
 };
