@@ -1,9 +1,9 @@
 
 import React from 'react';
-import Landing from './Landing';
+import { Navigate } from 'react-router-dom';
 
 const Index = () => {
-  return <Landing />;
+  return <Navigate to="/landing" replace />;
 };
 
 export default Index;

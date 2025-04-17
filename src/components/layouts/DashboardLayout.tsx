@@ -1,9 +1,9 @@
 
-import React, { useState } from 'react';
+import React from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import { PrivateRoute } from '@/components/auth/PrivateRoute';
-import Sidebar from './Sidebar';
-import Header from './Header';
+import Sidebar from '@/components/layouts/Sidebar';
+import Header from '@/components/layouts/Header';
 
 const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
   const { user } = useAuth();

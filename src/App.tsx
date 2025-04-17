@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { ThemeProvider } from './contexts/theme';
 import { AppProvider } from './contexts/AppContext';
 import { AuthProvider } from './hooks/useAuth';
@@ -20,7 +20,6 @@ import CreatorNetwork from './pages/CreatorNetwork';
 import VRIntegration from './pages/VRIntegration';
 import Audio from './pages/Audio';
 import NotFound from './pages/NotFound';
-import Index from './pages/Index';
 import Chat from './pages/Chat';
 import Pricing from './pages/Pricing';
 import VideoEditing from './pages/VideoEditing';
@@ -38,9 +37,10 @@ function App() {
             <DesktopProvider>
               <Router>
                 <Routes>
-                  <Route path="/auth" element={<Auth />} />
-                  <Route path="/" element={<Index />} />
+                  {/* Landing should be the default route */}
+                  <Route path="/" element={<Landing />} />
                   <Route path="/landing" element={<Landing />} />
+                  <Route path="/auth" element={<Auth />} />
                   
                   <Route path="/dashboard" element={<Dashboard />} />
                   <Route path="/dashboard/scenes" element={<Scenes />} />

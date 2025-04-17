@@ -15,6 +15,12 @@ export const applyThemeToDOM = (theme: CustomTheme) => {
   root.style.setProperty('--muted', hexToHSL(colors.muted) || '#4a5568');
   root.style.setProperty('--border', hexToHSL(colors.border) || '#2d3748');
 
+  // Meta-specific colors for the app
+  root.style.setProperty('--meta-dark-blue', hexToHSL(colors.background));
+  root.style.setProperty('--meta-teal', hexToHSL(colors.primary));
+  root.style.setProperty('--meta-slate', hexToHSL(colors.secondary));
+  root.style.setProperty('--meta-purple', hexToHSL(colors.accent));
+
   // Add data attributes to detect theme changes
   root.setAttribute('data-custom-theme', theme.id);
   root.setAttribute('data-theme-mode', theme.isDark ? 'dark' : 'light');
@@ -37,6 +43,12 @@ export const clearCustomTheme = () => {
   root.style.removeProperty('--accent');
   root.style.removeProperty('--muted');
   root.style.removeProperty('--border');
+  
+  // Reset Meta-specific colors
+  root.style.removeProperty('--meta-dark-blue');
+  root.style.removeProperty('--meta-teal');
+  root.style.removeProperty('--meta-slate');
+  root.style.removeProperty('--meta-purple');
   
   console.log('Custom theme cleared');
 };

@@ -2,6 +2,7 @@
 import React, { createContext, useContext } from 'react';
 import { useThemeToggle } from './useThemeToggle';
 import { Theme, ThemeContextType } from './types';
+import { CustomThemeProvider } from './CustomThemeContext';
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
@@ -23,7 +24,9 @@ export const ThemeProvider: React.FC<{
 
   return (
     <ThemeContext.Provider value={themeContextValue}>
-      {children}
+      <CustomThemeProvider>
+        {children}
+      </CustomThemeProvider>
     </ThemeContext.Provider>
   );
 };

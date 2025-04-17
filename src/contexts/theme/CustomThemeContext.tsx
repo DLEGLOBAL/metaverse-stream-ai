@@ -24,21 +24,24 @@ export const CustomThemeProvider: React.FC<{ children: React.ReactNode }> = ({ c
     if (activeCustomThemeId) {
       const activeTheme = customThemes.find(t => t.id === activeCustomThemeId);
       if (activeTheme) {
-        console.log('Applying theme:', activeTheme.name);
+        console.log('Applying custom theme:', activeTheme.name);
         applyThemeToDOM(activeTheme);
         // Update the theme context to match dark/light mode
         setTheme(activeTheme.isDark ? 'dark' : 'light');
       }
     } else {
-      console.log('Clearing custom theme');
+      console.log('No active custom theme, reverting to default theme system');
       clearCustomTheme();
+      // Let the default theme system take over
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      setTheme(prefersDark ? 'dark' : 'light');
     }
   }, [activeCustomThemeId, customThemes, setTheme]);
 
   const applyCustomTheme = (id: string) => {
     const themeToApply = customThemes.find(t => t.id === id);
     if (themeToApply) {
-      console.log('User requested theme:', themeToApply.name);
+      console.log('User requested to apply theme:', themeToApply.name);
       setActiveCustomThemeId(id);
       
       toast({
@@ -51,6 +54,7 @@ export const CustomThemeProvider: React.FC<{ children: React.ReactNode }> = ({ c
   const resetToDefaultTheme = () => {
     console.log('Resetting to default theme');
     setActiveCustomThemeId(null);
+    clearCustomTheme();
     
     // Apply default theme through the theme context
     const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
