@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Sidebar from '@/components/dashboard/Sidebar';
 import Header from '@/components/dashboard/Header';
 import { Button } from '@/components/ui/button';
@@ -9,6 +9,11 @@ import { toast } from '@/hooks/use-toast';
 
 const Community = () => {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  
+  // Empty data structures instead of mock data
+  const followers = [];
+  const messages = [];
+  const announcements = [];
   
   const handleShowAnnouncement = () => {
     toast({
@@ -24,10 +29,33 @@ const Community = () => {
     });
   };
   
-  // Empty data structures instead of mock data
-  const followers = [];
-  const messages = [];
-  const announcements = [];
+  // Check if running in Electron environment
+  const isElectron = () => {
+    return window.electron !== undefined;
+  };
+
+  // Use effect to check platform info when app loads
+  useEffect(() => {
+    if (isElectron()) {
+      // Log platform info for debugging
+      console.log(`Running on platform: ${window.electron?.platform}`);
+      
+      // Add electron-specific event listeners if needed
+      window.electron?.onStartStreaming(() => {
+        toast({
+          title: "Stream Started",
+          description: "Stream started from system tray",
+        });
+      });
+      
+      window.electron?.onStopStreaming(() => {
+        toast({
+          title: "Stream Stopped",
+          description: "Stream stopped from system tray",
+        });
+      });
+    }
+  }, []);
 
   return (
     <div className="min-h-screen bg-meta-slate">
@@ -128,6 +156,9 @@ const Community = () => {
             <Card className="glass-card h-full flex flex-col">
               <CardHeader className="pb-2">
                 <CardTitle className="text-white">Live Chat</CardTitle>
+                {isElectron() && (
+                  <span className="text-xs text-meta-teal">Desktop Mode Active</span>
+                )}
               </CardHeader>
               <CardContent className="flex-grow flex flex-col">
                 <div className="flex-grow space-y-3 overflow-y-auto">
