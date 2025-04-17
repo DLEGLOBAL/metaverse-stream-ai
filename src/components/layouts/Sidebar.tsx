@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
@@ -41,7 +40,7 @@ const Sidebar = () => {
             <img 
               src="/lovable-uploads/d9e95c26-442b-4d04-b224-4cf3e84ae483.png" 
               alt="MetaStream Logo" 
-              className="h-10 w-auto rounded-lg shadow-sm hover:shadow-md brightness-110 contrast-125"
+              className="h-16 w-auto rounded-xl shadow-lg hover:shadow-xl brightness-125 contrast-150 transform transition-transform hover:scale-105"
             />
           )}
           <Button 
@@ -95,4 +94,3 @@ const Sidebar = () => {
 };
 
 export default Sidebar;
-
