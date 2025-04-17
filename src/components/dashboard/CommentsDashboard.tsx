@@ -19,56 +19,7 @@ interface Comment {
 }
 
 const CommentsDashboard = () => {
-  const [comments, setComments] = useState<Comment[]>([
-    {
-      id: '1',
-      author: 'StreamFan42',
-      message: 'Great content! How do you set up that lighting?',
-      time: '2m ago',
-      platform: 'twitch',
-      likes: 3
-    },
-    {
-      id: '2',
-      author: 'ContentCreator',
-      message: 'Just subscribed! Love the stream quality.',
-      time: '5m ago',
-      platform: 'youtube',
-      likes: 7
-    },
-    {
-      id: '3',
-      author: 'GamingPro',
-      message: 'What microphone are you using? The audio is super clear.',
-      time: '8m ago',
-      platform: 'twitch',
-      isHighlighted: true
-    },
-    {
-      id: '4',
-      author: 'TechEnthusiast',
-      message: 'Can you do a tutorial on stream setup next week?',
-      time: '12m ago',
-      platform: 'youtube',
-      isAnswered: true
-    },
-    {
-      id: '5',
-      author: 'SocialMediaUser',
-      message: 'Just shared your stream with my followers!',
-      time: '15m ago',
-      platform: 'facebook',
-      likes: 12
-    },
-    {
-      id: '6',
-      author: 'DesignLover',
-      message: 'The graphics on your overlay are amazing. Custom made?',
-      time: '18m ago',
-      platform: 'instagram',
-      isHighlighted: true
-    }
-  ]);
+  const [comments, setComments] = useState<Comment[]>([]);
   
   const [replyText, setReplyText] = useState('');
   const [activeTab, setActiveTab] = useState('all');
@@ -162,7 +113,7 @@ const CommentsDashboard = () => {
               {filteredComments.length === 0 ? (
                 <div className="flex flex-col items-center justify-center py-8 text-gray-400">
                   <MessageSquare className="h-12 w-12 mb-2 opacity-20" />
-                  <p>No comments matching your criteria</p>
+                  <p>No comments found</p>
                 </div>
               ) : (
                 filteredComments.map(comment => (
