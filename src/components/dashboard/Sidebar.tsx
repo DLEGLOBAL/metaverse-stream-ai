@@ -1,22 +1,17 @@
 
 import React, { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import { Camera, Layers, Radio, Bot, Settings, Video, Users, Network, Headphones, Headset, Home, DollarSign, Palette, BarChart, Tv, Globe } from 'lucide-react';
+import { useLocation } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { useTheme } from '@/contexts/theme';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { getNavigationItems } from './navigation/navigationData';
+import { NavigationItem } from './navigation/NavigationItem';
+import { StatusIndicator } from './navigation/StatusIndicator';
 
 interface SidebarProps {
   collapsed: boolean;
   toggleSidebar: () => void;
-}
-
-interface NavigationItem {
-  icon: React.ReactNode;
-  label: string;
-  path: string;
-  external?: boolean;
 }
 
 const Sidebar = ({ collapsed, toggleSidebar }: SidebarProps) => {
@@ -29,25 +24,6 @@ const Sidebar = ({ collapsed, toggleSidebar }: SidebarProps) => {
     return () => setIsMounted(false);
   }, []);
   
-  const navigation: NavigationItem[] = [
-    { icon: <Home size={20} />, label: 'Dashboard', path: '/dashboard' },
-    { icon: <Layers size={20} />, label: 'Scenes', path: '/dashboard/scenes' },
-    { icon: <Camera size={20} />, label: 'Sources', path: '/dashboard/sources' },
-    { icon: <Radio size={20} />, label: 'Streaming', path: '/dashboard/streaming' },
-    { icon: <Bot size={20} />, label: 'AI Tools', path: '/dashboard/ai-tools' },
-    { icon: <Video size={20} />, label: 'Video Editing', path: '/dashboard/video-editing' },
-    { icon: <Headphones size={20} />, label: 'Audio', path: '/dashboard/audio' },
-    { icon: <Headset size={20} />, label: 'VR Integration', path: '/dashboard/vr' },
-    { icon: <Tv size={20} />, label: 'IPTV Platform', path: 'https://meta-stream.shop/', external: true },
-    { icon: <Globe size={20} />, label: 'Metaverse', path: 'https://web.meta-stadiums.com/', external: true },
-    { icon: <Users size={20} />, label: 'Community', path: '/dashboard/community' },
-    { icon: <Network size={20} />, label: 'Creator Network', path: '/dashboard/creator-network' },
-    { icon: <Palette size={20} />, label: 'Branding', path: '/dashboard/branding' },
-    { icon: <BarChart size={20} />, label: 'Analytics', path: '/dashboard/analytics' },
-    { icon: <DollarSign size={20} />, label: 'Pricing', path: '/dashboard/pricing' },
-    { icon: <Settings size={20} />, label: 'Settings', path: '/dashboard/settings' },
-  ];
-  
   if (!isMounted) {
     return null; // Prevent hydration issues
   }
@@ -55,6 +31,8 @@ const Sidebar = ({ collapsed, toggleSidebar }: SidebarProps) => {
   const isCurrentPath = (path: string) => {
     return location.pathname === path;
   };
+  
+  const navigationItems = getNavigationItems();
   
   return (
     <aside 
@@ -100,112 +78,20 @@ const Sidebar = ({ collapsed, toggleSidebar }: SidebarProps) => {
         <nav className="flex-1 overflow-hidden py-4">
           <ScrollArea className="h-full px-2 touch-auto">
             <ul className="space-y-1">
-              {navigation.map((item) => (
-                <li key={item.path}>
-                  {item.external ? (
-                    <a
-                      href={item.path}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className={cn(
-                        "flex items-center px-3 py-2 rounded-lg transition-colors",
-                        theme === 'dark'
-                          ? "text-gray-300 hover:bg-meta-slate/40 hover:text-white"
-                          : "text-gray-700 hover:bg-gray-100",
-                        collapsed ? "justify-center" : ""
-                      )}
-                    >
-                      <span className="flex-shrink-0">{item.icon}</span>
-                      <span 
-                        className={cn(
-                          "ml-3 transition-opacity duration-200",
-                          collapsed ? "hidden opacity-0" : "block opacity-100"
-                        )}
-                      >
-                        {item.label}
-                      </span>
-                      
-                      {!collapsed && (
-                        <svg 
-                          className="ml-auto h-4 w-4 opacity-70" 
-                          xmlns="http://www.w3.org/2000/svg" 
-                          viewBox="0 0 24 24" 
-                          fill="none" 
-                          stroke="currentColor" 
-                          strokeWidth="2" 
-                          strokeLinecap="round" 
-                          strokeLinejoin="round"
-                        >
-                          <path d="M7 7h10v10" />
-                          <path d="M7 17 17 7" />
-                        </svg>
-                      )}
-                    </a>
-                  ) : (
-                    <Link
-                      to={item.path}
-                      className={cn(
-                        "flex items-center px-3 py-2 rounded-lg transition-colors",
-                        isCurrentPath(item.path) 
-                          ? "bg-meta-teal text-meta-dark-blue" 
-                          : theme === 'dark'
-                            ? "text-gray-300 hover:bg-meta-slate/40 hover:text-white"
-                            : "text-gray-700 hover:bg-gray-100",
-                        collapsed ? "justify-center" : ""
-                      )}
-                    >
-                      <span className="flex-shrink-0">{item.icon}</span>
-                      <span 
-                        className={cn(
-                          "ml-3 transition-opacity duration-200",
-                          collapsed ? "hidden opacity-0" : "block opacity-100"
-                        )}
-                      >
-                        {item.label}
-                      </span>
-                    </Link>
-                  )}
-                </li>
+              {navigationItems.map((item) => (
+                <NavigationItem 
+                  key={item.path}
+                  item={item}
+                  isCurrentPath={isCurrentPath(item.path)}
+                  collapsed={collapsed}
+                  theme={theme}
+                />
               ))}
             </ul>
           </ScrollArea>
         </nav>
         
-        <div className="p-4">
-          <div 
-            className={cn(
-              "p-3 rounded-lg", 
-              theme === 'dark' 
-                ? "bg-meta-purple/20 border border-meta-purple/20" 
-                : "bg-meta-teal/10 border border-meta-teal/20"
-            )}
-          >
-            <div className={cn(
-              "flex items-center", 
-              collapsed ? "justify-center" : "justify-between"
-            )}>
-              <span className={cn(
-                "flex items-center",
-                collapsed ? "hidden" : "flex"
-              )}>
-                <span className={theme === 'dark' ? "text-meta-purple" : "text-meta-teal"}>
-                  {theme === 'dark' ? "Pro" : "Free"}
-                </span>
-                <span className="bg-gray-300/20 h-4 w-px mx-2"></span>
-                <span className={theme === 'dark' ? "text-gray-300" : "text-gray-500"}>
-                  2 TB Used
-                </span>
-              </span>
-              <Button 
-                size="icon" 
-                variant="ghost"
-                className={theme === 'dark' ? "text-meta-purple hover:text-white hover:bg-meta-purple/20" : "text-meta-teal hover:text-meta-dark-blue hover:bg-meta-teal/20"}
-              >
-                <Settings size={collapsed ? 18 : 16} />
-              </Button>
-            </div>
-          </div>
-        </div>
+        <StatusIndicator collapsed={collapsed} theme={theme} />
       </div>
     </aside>
   );
