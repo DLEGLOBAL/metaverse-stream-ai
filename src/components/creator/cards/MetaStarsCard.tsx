@@ -1,8 +1,8 @@
 
 import React from 'react';
-import { Star } from 'lucide-react';
+import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import MetaStarsFeatures from './MetaStarsFeatures';
+import { Crown } from 'lucide-react';
 
 interface MetaStarsCardProps {
   title: string;
@@ -22,35 +22,31 @@ const MetaStarsCard: React.FC<MetaStarsCardProps> = ({
   onSubscribe
 }) => {
   return (
-    <div className="rounded-lg overflow-hidden border border-yellow-500/30 bg-gradient-to-b from-yellow-950/20 to-transparent">
-      <div className="p-6">
-        <div className="flex items-center gap-2 mb-3">
-          <div className="p-2 rounded-full bg-yellow-500/10 text-yellow-400">
-            <Star className="h-5 w-5" />
-          </div>
+    <Card className="border-gray-700 hover:border-meta-teal/50 transition-colors overflow-hidden">
+      <div className="bg-gradient-to-r from-meta-purple to-meta-dark-blue/80 p-4">
+        <div className="flex items-center gap-2 mb-2">
+          <Crown className="h-5 w-5 text-yellow-400" />
           <h3 className="text-xl font-semibold">{title}</h3>
         </div>
-        
-        <p className="text-gray-400 mb-4">{description}</p>
-        
-        <div className="mb-6">
-          <div className="flex items-baseline">
+        <p className="text-gray-300 text-sm">{description}</p>
+      </div>
+      <CardContent className="p-6">
+        <div className="mb-6 text-center">
+          <div className="flex items-baseline justify-center">
             <span className="text-3xl font-bold">{price}</span>
             <span className="text-gray-400 ml-2">/{period}</span>
           </div>
-          <p className="text-yellow-400 text-sm mt-1">{additionalInfo}</p>
+          <p className="text-gray-400 text-sm mt-1">{additionalInfo}</p>
         </div>
         
         <Button 
-          className="w-full bg-yellow-500/20 border border-yellow-500/30 hover:bg-yellow-500/30 text-yellow-400"
+          className="w-full bg-button-gradient text-meta-dark-blue hover:brightness-110"
           onClick={onSubscribe}
         >
-          Subscribe {title}
+          Subscribe Now
         </Button>
-      </div>
-      
-      <MetaStarsFeatures />
-    </div>
+      </CardContent>
+    </Card>
   );
 };
 
