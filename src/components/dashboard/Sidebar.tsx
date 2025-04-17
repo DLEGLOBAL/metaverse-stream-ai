@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Camera, Layers, Radio, Bot, Settings, Video, Users, Network, Headphones, Headset, Home, DollarSign, Palette, BarChart, Tv } from 'lucide-react';
+import { Camera, Layers, Radio, Bot, Settings, Video, Users, Network, Headphones, Headset, Home, DollarSign, Palette, BarChart, Tv, Globe } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { useTheme } from '@/contexts/theme';
@@ -39,6 +39,7 @@ const Sidebar = ({ collapsed, toggleSidebar }: SidebarProps) => {
     { icon: <Headphones size={20} />, label: 'Audio', path: '/dashboard/audio' },
     { icon: <Headset size={20} />, label: 'VR Integration', path: '/dashboard/vr' },
     { icon: <Tv size={20} />, label: 'IPTV Platform', path: 'https://meta-stream.shop/', external: true },
+    { icon: <Globe size={20} />, label: 'Metaverse', path: 'https://web.meta-stadiums.com/', external: true },
     { icon: <Users size={20} />, label: 'Community', path: '/dashboard/community' },
     { icon: <Network size={20} />, label: 'Creator Network', path: '/dashboard/creator-network' },
     { icon: <Palette size={20} />, label: 'Branding', path: '/dashboard/branding' },
