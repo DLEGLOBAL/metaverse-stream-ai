@@ -20,7 +20,7 @@ export interface ThemeColors {
 export interface CustomThemeContextType {
   customThemes: CustomTheme[];
   activeCustomThemeId: string | null;
-  addCustomTheme: (theme: Omit<CustomTheme, 'id'>) => void;
+  addCustomTheme: (theme: Omit<CustomTheme, 'id'>) => string;
   updateCustomTheme: (id: string, theme: Partial<CustomTheme>) => void;
   deleteCustomTheme: (id: string) => void;
   applyCustomTheme: (id: string) => void;

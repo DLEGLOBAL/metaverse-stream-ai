@@ -6,7 +6,7 @@ import { useCustomTheme } from '@/contexts/theme/CustomThemeContext';
 import { CustomTheme } from '@/contexts/theme/customTheme.types';
 import { ThemeFormDialog } from './theme/ThemeFormDialog';
 import { ThemeActions } from './theme/ThemeActions';
-import { useThemeForm } from './theme/useThemeForm';
+import { useThemeForm, defaultThemeValues } from './theme/useThemeForm';
 
 const ThemeTab = () => {
   const { 
@@ -29,7 +29,7 @@ const ThemeTab = () => {
     ? customThemes.find(theme => theme.id === activeCustomThemeId) 
     : null;
   
-  const handleCreateTheme = (data: typeof form.defaultValues) => {
+  const handleCreateTheme = (data: typeof defaultThemeValues) => {
     const { name, description, isDark, ...colors } = data;
     
     addCustomTheme({
@@ -51,7 +51,7 @@ const ThemeTab = () => {
     form.reset();
   };
   
-  const handleEditTheme = (data: typeof editForm.defaultValues) => {
+  const handleEditTheme = (data: typeof defaultThemeValues) => {
     if (!editingThemeId) return;
     
     const { name, description, isDark, ...colors } = data;

@@ -1,4 +1,3 @@
-
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { CustomTheme, CustomThemeContextType } from './customTheme.types';
 import { useTheme } from './ThemeContext';
@@ -142,7 +141,7 @@ export const CustomThemeProvider: React.FC<{ children: React.ReactNode }> = ({ c
     root.style.setProperty('--border', hexToHSL(colors.border));
   };
 
-  const addCustomTheme = (theme: Omit<CustomTheme, 'id'>) => {
+  const addCustomTheme = (theme: Omit<CustomTheme, 'id'>): string => {
     const newTheme: CustomTheme = {
       ...theme,
       id: uuidv4()

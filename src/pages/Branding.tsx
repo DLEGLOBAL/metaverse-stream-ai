@@ -89,12 +89,14 @@ const Branding = () => {
     });
 
     // Apply the newly created custom theme
-    applyCustomTheme(customThemeId);
-    
-    toast({
-      title: "Theme Applied",
-      description: `The ${theme.name} theme has been added to your custom themes and applied.`,
-    });
+    if (customThemeId) {
+      applyCustomTheme(customThemeId);
+      
+      toast({
+        title: "Theme Applied",
+        description: `The ${theme.name} theme has been added to your custom themes and applied.`,
+      });
+    }
   };
 
   const handleDownload = (type: string) => {

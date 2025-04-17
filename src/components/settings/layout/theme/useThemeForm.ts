@@ -1,7 +1,7 @@
 
 import { useForm } from 'react-hook-form';
 
-const defaultValues = {
+export const defaultThemeValues = {
   name: '',
   description: '',
   isDark: true,
@@ -15,5 +15,5 @@ const defaultValues = {
 };
 
 export const useThemeForm = () => {
-  return useForm({ defaultValues });
+  return useForm({ defaultValues: defaultThemeValues });
 };
