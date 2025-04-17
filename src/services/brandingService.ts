@@ -57,13 +57,17 @@ export const generateBranding = async (
     } catch (supabaseError) {
       console.warn('Supabase client invocation failed, falling back to fetch:', supabaseError);
       
+      // Get the current session using the correct API
+      const { data: sessionData } = await supabase.auth.getSession();
+      const accessToken = sessionData?.session?.access_token;
+      
       // Fallback to direct fetch if Supabase client fails
       const response = await fetch(`${FUNCTION_BASE_URL}/generate-branding`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           // Add authorization headers if needed
-          'Authorization': `Bearer ${supabase.auth.session()?.access_token}`,
+          ...(accessToken ? { 'Authorization': `Bearer ${accessToken}` } : {}),
         },
         body: JSON.stringify({
           prompt,
