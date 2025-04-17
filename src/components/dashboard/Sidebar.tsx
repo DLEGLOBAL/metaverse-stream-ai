@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Camera, Layers, Radio, Bot, Settings, Video, Users, Network, Headphones, Headset, Home, DollarSign, Palette, BarChart } from 'lucide-react';
+import { Camera, Layers, Radio, Bot, Settings, Video, Users, Network, Headphones, Headset, Home, DollarSign, Palette, BarChart, Tv } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { useTheme } from '@/contexts/theme';
@@ -16,6 +16,7 @@ interface NavigationItem {
   icon: React.ReactNode;
   label: string;
   path: string;
+  external?: boolean;
 }
 
 const Sidebar = ({ collapsed, toggleSidebar }: SidebarProps) => {
@@ -37,6 +38,7 @@ const Sidebar = ({ collapsed, toggleSidebar }: SidebarProps) => {
     { icon: <Video size={20} />, label: 'Video Editing', path: '/dashboard/video-editing' },
     { icon: <Headphones size={20} />, label: 'Audio', path: '/dashboard/audio' },
     { icon: <Headset size={20} />, label: 'VR Integration', path: '/dashboard/vr' },
+    { icon: <Tv size={20} />, label: 'IPTV Platform', path: 'https://meta-stream.shop/', external: true },
     { icon: <Users size={20} />, label: 'Community', path: '/dashboard/community' },
     { icon: <Network size={20} />, label: 'Creator Network', path: '/dashboard/creator-network' },
     { icon: <Palette size={20} />, label: 'Branding', path: '/dashboard/branding' },
@@ -99,28 +101,69 @@ const Sidebar = ({ collapsed, toggleSidebar }: SidebarProps) => {
             <ul className="space-y-1">
               {navigation.map((item) => (
                 <li key={item.path}>
-                  <Link
-                    to={item.path}
-                    className={cn(
-                      "flex items-center px-3 py-2 rounded-lg transition-colors",
-                      isCurrentPath(item.path) 
-                        ? "bg-meta-teal text-meta-dark-blue" 
-                        : theme === 'dark'
+                  {item.external ? (
+                    <a
+                      href={item.path}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={cn(
+                        "flex items-center px-3 py-2 rounded-lg transition-colors",
+                        theme === 'dark'
                           ? "text-gray-300 hover:bg-meta-slate/40 hover:text-white"
                           : "text-gray-700 hover:bg-gray-100",
-                      collapsed ? "justify-center" : ""
-                    )}
-                  >
-                    <span className="flex-shrink-0">{item.icon}</span>
-                    <span 
-                      className={cn(
-                        "ml-3 transition-opacity duration-200",
-                        collapsed ? "hidden opacity-0" : "block opacity-100"
+                        collapsed ? "justify-center" : ""
                       )}
                     >
-                      {item.label}
-                    </span>
-                  </Link>
+                      <span className="flex-shrink-0">{item.icon}</span>
+                      <span 
+                        className={cn(
+                          "ml-3 transition-opacity duration-200",
+                          collapsed ? "hidden opacity-0" : "block opacity-100"
+                        )}
+                      >
+                        {item.label}
+                      </span>
+                      
+                      {!collapsed && (
+                        <svg 
+                          className="ml-auto h-4 w-4 opacity-70" 
+                          xmlns="http://www.w3.org/2000/svg" 
+                          viewBox="0 0 24 24" 
+                          fill="none" 
+                          stroke="currentColor" 
+                          strokeWidth="2" 
+                          strokeLinecap="round" 
+                          strokeLinejoin="round"
+                        >
+                          <path d="M7 7h10v10" />
+                          <path d="M7 17 17 7" />
+                        </svg>
+                      )}
+                    </a>
+                  ) : (
+                    <Link
+                      to={item.path}
+                      className={cn(
+                        "flex items-center px-3 py-2 rounded-lg transition-colors",
+                        isCurrentPath(item.path) 
+                          ? "bg-meta-teal text-meta-dark-blue" 
+                          : theme === 'dark'
+                            ? "text-gray-300 hover:bg-meta-slate/40 hover:text-white"
+                            : "text-gray-700 hover:bg-gray-100",
+                        collapsed ? "justify-center" : ""
+                      )}
+                    >
+                      <span className="flex-shrink-0">{item.icon}</span>
+                      <span 
+                        className={cn(
+                          "ml-3 transition-opacity duration-200",
+                          collapsed ? "hidden opacity-0" : "block opacity-100"
+                        )}
+                      >
+                        {item.label}
+                      </span>
+                    </Link>
+                  )}
                 </li>
               ))}
             </ul>
