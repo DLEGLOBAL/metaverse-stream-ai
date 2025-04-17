@@ -1,6 +1,7 @@
 
 import React, { Suspense } from 'react';
 import DashboardErrorBoundary from './DashboardErrorBoundary';
+import CommentsDashboard from './CommentsDashboard';
 
 // Lazy load components
 const LazyStreamPreview = React.lazy(() => import('@/components/dashboard/StreamPreview'));
@@ -55,6 +56,11 @@ const DashboardContent = () => {
             </div>
           </div>
         </div>
+        
+        {/* Comments Section - Full Width */}
+        <DashboardErrorBoundary>
+          <CommentsDashboard />
+        </DashboardErrorBoundary>
       </div>
       
       {/* Sidebar - 1 col */}

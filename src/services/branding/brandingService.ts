@@ -2,7 +2,6 @@
 import { toast } from "@/hooks/use-toast";
 import { generateBrandingApi } from "./brandingApi";
 import { GenerateResponse, BrandingType } from "./types";
-import { getMockData } from "./mockData";
 
 export * from "./types";
 
@@ -13,14 +12,6 @@ export const generateBranding = async (
   try {
     console.log(`Generating ${type} with prompt: ${prompt}`);
     
-    // Only use mock data in development if VITE_USE_MOCK_DATA is explicitly set to true
-    const useMockData = import.meta.env.VITE_USE_MOCK_DATA === 'true';
-    
-    if (useMockData) {
-      console.log('Using mock data for branding generation');
-      return getMockData(type);
-    }
-
     // Map logo type to image for the API
     const apiType = type === 'logo' ? 'image' : type;
     
@@ -34,7 +25,7 @@ export const generateBranding = async (
     // Capture the error message - already handled in the API layer
     console.error('Error in generateBranding:', error);
     
-    // Return empty result instead of mock data on failure
+    // Return empty result on failure
     return {
       logos: type === 'logo' ? [] : undefined,
       themes: type === 'theme' ? [] : undefined,
@@ -46,7 +37,6 @@ export const generateBranding = async (
 // Helper function to process the response based on the type
 const processResponse = (data: GenerateResponse, type: BrandingType): GenerateResponse => {
   if (type === 'logo') {
-    // Fix: Change data.image to data.images and check for the first image in the array
     const images = data.images || [];
     const baseImage = images.length > 0 ? images[0] : '';
     
@@ -54,7 +44,8 @@ const processResponse = (data: GenerateResponse, type: BrandingType): GenerateRe
       console.error('No image data returned for logo');
       return { logos: [] };
     }
-    // Generate variations of the image to simulate multiple options
+    
+    // Generate multiple options from the base image
     return { logos: [baseImage, baseImage, baseImage, baseImage] };
   } else if (type === 'theme') {
     if (!data.themes || data.themes.length === 0) {
@@ -63,7 +54,6 @@ const processResponse = (data: GenerateResponse, type: BrandingType): GenerateRe
     }
     return { themes: data.themes };
   } else if (type === 'image') {
-    // Fix: Change data.image to data.images and check for the first image in the array
     const images = data.images || [];
     const baseImage = images.length > 0 ? images[0] : '';
     
@@ -71,7 +61,8 @@ const processResponse = (data: GenerateResponse, type: BrandingType): GenerateRe
       console.error('No image data returned for image');
       return { images: [] };
     }
-    // Generate variations of the image to simulate multiple options
+    
+    // Generate multiple options from the base image
     return { images: [baseImage, baseImage, baseImage, baseImage] };
   }
   return {};

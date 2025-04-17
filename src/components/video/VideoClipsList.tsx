@@ -6,12 +6,18 @@ import { toast } from '@/hooks/use-toast';
 
 interface VideoClipsListProps {
   onAddHistory?: (action: string) => void;
+  onAddClip?: (track: number) => void;
+  onRemoveClip?: (clipId: string) => void;
 }
 
-const VideoClipsList = ({ onAddHistory }: VideoClipsListProps) => {
+const VideoClipsList = ({ onAddHistory, onAddClip, onRemoveClip }: VideoClipsListProps) => {
   const [expandedClip, setExpandedClip] = useState<number | null>(0);
   
-  const handleAddClip = () => {
+  const handleAddClip = (track = 0) => {
+    if (onAddClip) {
+      onAddClip(track);
+    }
+    
     toast({
       title: "Media Added",
       description: "New media has been added to your timeline.",
@@ -33,7 +39,11 @@ const VideoClipsList = ({ onAddHistory }: VideoClipsListProps) => {
     }
   };
   
-  const handleRemoveClip = (clipName: string) => {
+  const handleRemoveClip = (clipId: string, clipName: string) => {
+    if (onRemoveClip) {
+      onRemoveClip(clipId);
+    }
+    
     toast({
       title: "Clip Removed",
       description: `"${clipName}" has been removed from the timeline.`,
@@ -61,6 +71,7 @@ const VideoClipsList = ({ onAddHistory }: VideoClipsListProps) => {
   
   const clips = [
     { 
+      id: 'clip-1',
       name: 'Main Clip', 
       duration: '00:12:30', 
       type: 'video',
@@ -72,6 +83,7 @@ const VideoClipsList = ({ onAddHistory }: VideoClipsListProps) => {
       }
     },
     { 
+      id: 'clip-2',
       name: 'Background Music', 
       duration: '00:03:45', 
       type: 'audio',
@@ -83,6 +95,7 @@ const VideoClipsList = ({ onAddHistory }: VideoClipsListProps) => {
       }
     },
     { 
+      id: 'clip-3',
       name: 'Overlay Effect', 
       duration: '00:05:10', 
       type: 'effect',
@@ -102,7 +115,7 @@ const VideoClipsList = ({ onAddHistory }: VideoClipsListProps) => {
           <Scissors className="h-4 w-4 mr-1" />
           Split Clip
         </Button>
-        <Button variant="outline" onClick={handleAddClip}>
+        <Button variant="outline" onClick={() => handleAddClip()}>
           <Plus className="h-4 w-4 mr-1" />
           Add Media
         </Button>
@@ -162,7 +175,7 @@ const VideoClipsList = ({ onAddHistory }: VideoClipsListProps) => {
                       variant="outline" 
                       size="sm" 
                       className="h-7 text-xs text-red-500 hover:text-red-400 hover:border-red-800"
-                      onClick={() => handleRemoveClip(clip.name)}
+                      onClick={() => handleRemoveClip(clip.id, clip.name)}
                     >
                       <Trash2 className="h-3 w-3 mr-1" />
                       Remove

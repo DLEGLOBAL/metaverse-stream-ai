@@ -18,10 +18,15 @@ import { toast } from '@/hooks/use-toast';
 
 interface VideoMultitrackControlsProps {
   onAddHistory?: (action: string) => void;
+  onAddClip?: (track: number) => void;
 }
 
-const VideoMultitrackControls = ({ onAddHistory }: VideoMultitrackControlsProps) => {
-  const handleAddTrack = (trackType: string) => {
+const VideoMultitrackControls = ({ onAddHistory, onAddClip }: VideoMultitrackControlsProps) => {
+  const handleAddTrack = (trackType: string, trackIndex = 0) => {
+    if (onAddClip) {
+      onAddClip(trackIndex);
+    }
+    
     toast({
       title: `${trackType} Track Added`,
       description: `A new ${trackType.toLowerCase()} track has been added to your timeline.`,
@@ -52,19 +57,19 @@ const VideoMultitrackControls = ({ onAddHistory }: VideoMultitrackControlsProps)
             <Scissors className="h-4 w-4 mr-1" />
             Split Clip
           </Button>
-          <Button variant="outline" onClick={() => handleAddTrack('Video')}>
+          <Button variant="outline" onClick={() => handleAddTrack('Video', 0)}>
             <Film className="h-4 w-4 mr-1" />
             Add Video
           </Button>
-          <Button variant="outline" onClick={() => handleAddTrack('Audio')}>
+          <Button variant="outline" onClick={() => handleAddTrack('Audio', 1)}>
             <Music className="h-4 w-4 mr-1" />
             Add Audio
           </Button>
-          <Button variant="outline" onClick={() => handleAddTrack('Text')}>
+          <Button variant="outline" onClick={() => handleAddTrack('Text', 2)}>
             <Type className="h-4 w-4 mr-1" />
             Add Text
           </Button>
-          <Button variant="outline" onClick={() => handleAddTrack('Image')}>
+          <Button variant="outline" onClick={() => handleAddTrack('Image', 2)}>
             <ImagePlus className="h-4 w-4 mr-1" />
             Add Image
           </Button>

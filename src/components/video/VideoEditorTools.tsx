@@ -21,6 +21,8 @@ interface VideoEditorToolsProps {
   onUndo: () => void;
   onRedo: () => void;
   onAddHistory: (action: string) => void;
+  onAddClip?: (track: number) => void;
+  onRemoveClip?: (clipId: string) => void;
 }
 
 const VideoEditorTools = ({
@@ -32,7 +34,9 @@ const VideoEditorTools = ({
   editHistory,
   onUndo,
   onRedo,
-  onAddHistory
+  onAddHistory,
+  onAddClip,
+  onRemoveClip
 }: VideoEditorToolsProps) => {
   return (
     <>
@@ -73,11 +77,18 @@ const VideoEditorTools = ({
           </TabsList>
           
           <TabsContent value="multitrack" className="h-full">
-            <VideoMultitrackControls onAddHistory={onAddHistory} />
+            <VideoMultitrackControls 
+              onAddHistory={onAddHistory} 
+              onAddClip={onAddClip}
+            />
           </TabsContent>
           
           <TabsContent value="clips" className="h-full">
-            <VideoClipsList onAddHistory={onAddHistory} />
+            <VideoClipsList 
+              onAddHistory={onAddHistory} 
+              onAddClip={onAddClip}
+              onRemoveClip={onRemoveClip}
+            />
           </TabsContent>
           
           <TabsContent value="effects" className="h-full">
