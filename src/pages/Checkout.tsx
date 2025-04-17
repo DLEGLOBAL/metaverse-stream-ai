@@ -1,19 +1,65 @@
 
-import React, { useState } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useSearchParams, useLocation } from 'react-router-dom';
 import DashboardLayout from '@/components/layouts/DashboardLayout';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, Loader2 } from 'lucide-react';
-import { initiateCheckout } from '@/services/paymentService';
+import { ArrowLeft, Loader2, CheckCircle } from 'lucide-react';
+import { initiateCheckout, validatePayment } from '@/services/paymentService';
 import { toast } from '@/hooks/use-toast';
 
 const Checkout = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [searchParams] = useSearchParams();
   const plan = searchParams.get('plan');
   const cycle = searchParams.get('cycle');
   const [isProcessing, setIsProcessing] = useState(false);
+  const [isComplete, setIsComplete] = useState(false);
+  
+  // Check if returning from payment
+  useEffect(() => {
+    const paymentId = searchParams.get('payment_id');
+    if (paymentId) {
+      // Validate the payment if returning from Square
+      handlePaymentValidation(paymentId);
+    }
+  }, [location]);
+  
+  // Validate payment after returning from Square checkout
+  const handlePaymentValidation = async (paymentId: string) => {
+    setIsProcessing(true);
+    try {
+      const result = await validatePayment(paymentId);
+      if (result.success) {
+        setIsComplete(true);
+        toast({
+          title: "Payment Successful",
+          description: `Thank you for subscribing to the ${plan} plan!`,
+        });
+        
+        // Redirect to dashboard after short delay
+        setTimeout(() => {
+          navigate('/dashboard');
+        }, 3000);
+      } else {
+        toast({
+          title: "Payment Verification Failed",
+          description: result.message || "Unable to verify your payment. Please contact support.",
+          variant: "destructive"
+        });
+      }
+    } catch (error) {
+      console.error("Payment validation error:", error);
+      toast({
+        title: "System Error",
+        description: "An unexpected error occurred. Please try again or contact support.",
+        variant: "destructive"
+      });
+    } finally {
+      setIsProcessing(false);
+    }
+  };
   
   // Get price based on plan and cycle
   const getPrice = () => {
@@ -52,17 +98,11 @@ const Checkout = () => {
     try {
       const success = await initiateCheckout(plan, cycle, price);
       
-      if (success) {
-        // In a real implementation, this would redirect to Square
-        // For now, we'll simulate a successful payment
-        setTimeout(() => {
-          toast({
-            title: "Payment Successful",
-            description: `Thank you for subscribing to the ${plan} plan!`,
-          });
-          navigate('/dashboard');
-        }, 2000);
+      if (!success) {
+        setIsProcessing(false);
       }
+      // If success is true, the user will be redirected to Square or 
+      // a success message will be shown in demo mode
     } catch (error) {
       console.error("Checkout error:", error);
       toast({
@@ -70,10 +110,33 @@ const Checkout = () => {
         description: "An error occurred during checkout. Please try again.",
         variant: "destructive"
       });
-    } finally {
       setIsProcessing(false);
     }
   };
+
+  if (isComplete) {
+    return (
+      <DashboardLayout>
+        <div className="container mx-auto py-8">
+          <Card className="max-w-2xl mx-auto">
+            <CardContent className="p-8 text-center">
+              <CheckCircle className="w-16 h-16 text-meta-teal mx-auto mb-4" />
+              <h2 className="text-2xl font-bold mb-4">Payment Complete!</h2>
+              <p className="mb-6">
+                Thank you for subscribing to the {plan} plan. Your account has been updated.
+              </p>
+              <Button 
+                onClick={() => navigate('/dashboard')}
+                className="bg-meta-teal hover:bg-meta-teal/90 text-meta-dark-blue"
+              >
+                Go to Dashboard
+              </Button>
+            </CardContent>
+          </Card>
+        </div>
+      </DashboardLayout>
+    );
+  }
 
   return (
     <DashboardLayout>
