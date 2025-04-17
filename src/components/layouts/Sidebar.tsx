@@ -5,28 +5,8 @@ import { useAuth } from '@/hooks/useAuth';
 import { useTheme } from '@/contexts/theme';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Button } from '@/components/ui/button';
-import { ChevronLeft, ChevronRight, Home, Settings, Video, Mic, Radio, Paintbrush, Users, GitBranch, Glasses, LineChart } from 'lucide-react';
-
-// Define navigation items and sort them alphabetically
-const getNavigationItems = () => {
-  const items = [
-    { name: 'AI Tools', path: '/dashboard/ai-tools', icon: GitBranch },
-    { name: 'Audio', path: '/dashboard/audio', icon: Mic },
-    { name: 'Branding', path: '/dashboard/branding', icon: Paintbrush },
-    { name: 'Community', path: '/dashboard/community', icon: Users },
-    { name: 'Creator Network', path: '/dashboard/creator-network', icon: Users },
-    { name: 'Dashboard', path: '/dashboard', icon: Home },
-    { name: 'Scenes', path: '/dashboard/scenes', icon: LineChart },
-    { name: 'Settings', path: '/dashboard/settings', icon: Settings },
-    { name: 'Sources', path: '/dashboard/sources', icon: Video },
-    { name: 'Streaming', path: '/dashboard/streaming', icon: Radio },
-    { name: 'Studio', path: '/dashboard/studio', icon: Video },
-    { name: 'VR Integration', path: '/dashboard/vr', icon: Glasses },
-  ];
-  
-  // Sort alphabetically by name
-  return items.sort((a, b) => a.name.localeCompare(b.name));
-};
+import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { getNavigationItems } from '@/components/dashboard/navigation/navigationData';
 
 const Sidebar = () => {
   const [collapsed, setCollapsed] = useState(false);
@@ -38,8 +18,13 @@ const Sidebar = () => {
     setCollapsed(!collapsed);
   };
 
-  // Get sorted navigation items
-  const navigationItems = getNavigationItems();
+  // Get sorted navigation items - always fresh to ensure consistency
+  const navigationItems = getNavigationItems().map(item => ({
+    name: item.label,
+    path: item.path,
+    icon: () => item.icon,
+    external: item.external
+  }));
 
   return (
     <aside className={`fixed inset-y-0 left-0 z-30 transition-all duration-300 ease-in-out ${collapsed ? 'w-16' : 'w-64'} bg-meta-dark-blue border-r border-meta-slate/10`}>
@@ -68,7 +53,18 @@ const Sidebar = () => {
               const isActive = location.pathname === item.path || 
                               (item.path !== '/dashboard' && location.pathname.startsWith(item.path));
               
-              return (
+              return item.external ? (
+                <a
+                  key={item.path}
+                  href={item.path}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`flex items-center px-3 py-2 rounded-md transition-colors text-gray-300 hover:bg-meta-slate/20 hover:text-white ${collapsed ? 'justify-center' : ''}`}
+                >
+                  {React.createElement(item.icon(), { size: collapsed ? 20 : 18 })}
+                  {!collapsed && <span className="ml-3">{item.name}</span>}
+                </a>
+              ) : (
                 <Link
                   key={item.path}
                   to={item.path}
@@ -78,7 +74,7 @@ const Sidebar = () => {
                       : 'text-gray-300 hover:bg-meta-slate/20 hover:text-white'
                   } ${collapsed ? 'justify-center' : ''}`}
                 >
-                  <item.icon size={collapsed ? 20 : 18} />
+                  {React.createElement(item.icon(), { size: collapsed ? 20 : 18 })}
                   {!collapsed && <span className="ml-3">{item.name}</span>}
                 </Link>
               );

@@ -35,6 +35,7 @@ const Sidebar = ({ collapsed, toggleSidebar }: SidebarProps) => {
            (path !== '/dashboard' && location.pathname.startsWith(path));
   };
   
+  // Always get fresh navigation items to ensure consistency
   const navigationItems = getNavigationItems();
   
   return (

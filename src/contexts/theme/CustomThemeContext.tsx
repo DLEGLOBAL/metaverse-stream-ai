@@ -19,23 +19,43 @@ export const CustomThemeProvider: React.FC<{ children: React.ReactNode }> = ({ c
     deleteCustomTheme,
   } = useCustomThemeState();
 
-  // Apply CSS variables when active custom theme changes
+  // Apply CSS variables when active custom theme changes or when the component mounts
   useEffect(() => {
-    if (activeCustomThemeId) {
-      const activeTheme = customThemes.find(t => t.id === activeCustomThemeId);
-      if (activeTheme) {
-        console.log('Applying custom theme:', activeTheme.name);
-        applyThemeToDOM(activeTheme);
-        // Update the theme context to match dark/light mode
-        setTheme(activeTheme.isDark ? 'dark' : 'light');
+    const applyActiveTheme = () => {
+      if (activeCustomThemeId) {
+        const activeTheme = customThemes.find(t => t.id === activeCustomThemeId);
+        if (activeTheme) {
+          console.log('Applying custom theme:', activeTheme.name);
+          applyThemeToDOM(activeTheme);
+          // Update the theme context to match dark/light mode
+          setTheme(activeTheme.isDark ? 'dark' : 'light');
+        }
+      } else {
+        console.log('No active custom theme, reverting to default theme system');
+        clearCustomTheme();
+        // Let the default theme system take over
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        const savedTheme = localStorage.getItem('metastream-theme');
+        if (savedTheme && (savedTheme === 'light' || savedTheme === 'dark')) {
+          setTheme(savedTheme as 'light' | 'dark');
+        } else {
+          setTheme(prefersDark ? 'dark' : 'light');
+        }
       }
-    } else {
-      console.log('No active custom theme, reverting to default theme system');
-      clearCustomTheme();
-      // Let the default theme system take over
-      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      setTheme(prefersDark ? 'dark' : 'light');
-    }
+    };
+
+    applyActiveTheme();
+
+    // Add route change listener for consistent theme application
+    const handleRouteChange = () => {
+      setTimeout(applyActiveTheme, 100); // Small delay to ensure DOM is ready
+    };
+
+    window.addEventListener('popstate', handleRouteChange);
+
+    return () => {
+      window.removeEventListener('popstate', handleRouteChange);
+    };
   }, [activeCustomThemeId, customThemes, setTheme]);
 
   const applyCustomTheme = (id: string) => {
