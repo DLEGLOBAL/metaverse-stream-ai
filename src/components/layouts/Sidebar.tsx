@@ -38,7 +38,11 @@ const Sidebar = () => {
       <div className="flex flex-col h-full">
         <div className="flex items-center justify-between h-16 px-4 border-b border-meta-slate/10">
           {!collapsed && (
-            <div className="text-lg font-semibold text-white">MetaStream</div>
+            <img 
+              src="/lovable-uploads/d9e95c26-442b-4d04-b224-4cf3e84ae483.png" 
+              alt="MetaStream Logo" 
+              className="h-10 w-auto rounded-lg shadow-sm hover:shadow-md brightness-110 contrast-125"
+            />
           )}
           <Button 
             variant="ghost" 
@@ -91,3 +95,4 @@ const Sidebar = () => {
 };
 
 export default Sidebar;
+
