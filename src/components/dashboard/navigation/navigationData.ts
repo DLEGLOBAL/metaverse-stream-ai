@@ -1,4 +1,5 @@
-import { Camera, Layers, Radio, Bot, Settings, Video, Users, Network, Headphones, Headset, Home, DollarSign, Palette, BarChart, Tv, Globe } from 'lucide-react';
+
+import { Camera, Layers, Radio, Bot, Settings, Video, Users, Network, Headphones, Headset, Home, DollarSign, Palette, Tv, Globe } from 'lucide-react';
 import React from 'react';
 
 export interface NavigationItem {
@@ -22,7 +23,6 @@ export const getNavigationItems = (): NavigationItem[] => [
   { icon: React.createElement(Users, { size: 20 }), label: 'Community', path: '/dashboard/community' },
   { icon: React.createElement(Network, { size: 20 }), label: 'Creator Network', path: '/dashboard/creator-network' },
   { icon: React.createElement(Palette, { size: 20 }), label: 'Branding', path: '/dashboard/branding' },
-  { icon: React.createElement(BarChart, { size: 20 }), label: 'Analytics', path: '/dashboard/analytics' },
   { icon: React.createElement(DollarSign, { size: 20 }), label: 'Pricing', path: '/dashboard/pricing' },
   { icon: React.createElement(Settings, { size: 20 }), label: 'Settings', path: '/dashboard/settings' },
 ];

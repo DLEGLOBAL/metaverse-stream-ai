@@ -23,7 +23,6 @@ import Chat from './pages/Chat';
 import Pricing from './pages/Pricing';
 import VideoEditing from './pages/VideoEditing';
 import Branding from './pages/Branding';
-import Analytics from './pages/Analytics';
 
 import './App.css';
 
@@ -51,7 +50,6 @@ function App() {
               <Route path="/dashboard/pricing" element={<Pricing />} />
               <Route path="/dashboard/video-editing" element={<VideoEditing />} />
               <Route path="/dashboard/branding" element={<Branding />} />
-              <Route path="/dashboard/analytics" element={<Analytics />} />
               
               <Route path="/scenes" element={<Scenes />} />
               <Route path="/sources" element={<Sources />} />
@@ -67,7 +65,6 @@ function App() {
               <Route path="/pricing" element={<Pricing />} />
               <Route path="/video-editing" element={<VideoEditing />} />
               <Route path="/branding" element={<Branding />} />
-              <Route path="/analytics" element={<Analytics />} />
               
               <Route path="*" element={<NotFound />} />
             </Routes>
