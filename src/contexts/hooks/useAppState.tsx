@@ -4,7 +4,7 @@ import {
   Scene, Source, AiFeature, Stats, StreamStatus,
   ScheduledStream, AudioSettings, StreamAlert
 } from '../types';
-import { Camera, Computer, Mic } from 'lucide-react';
+import { Camera, Computer, Mic, Bot } from 'lucide-react';
 
 export const useAppState = () => {
   // Scene state
@@ -63,6 +63,21 @@ export const useAppState = () => {
       enabled: true,
       hasSlider: true,
       sliderValue: 75
+    },
+    {
+      id: 3,
+      name: 'Voice Commands',
+      description: 'Control your stream with your voice',
+      enabled: false,
+      hasSlider: false
+    },
+    {
+      id: 4,
+      name: 'AI Assistant',
+      description: 'Get help and suggestions in real-time',
+      enabled: true,
+      hasSlider: true,
+      sliderValue: 60
     }
   ]);
   

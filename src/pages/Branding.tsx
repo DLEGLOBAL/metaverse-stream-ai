@@ -107,59 +107,57 @@ const Branding = () => {
   };
 
   return (
-    <React.Fragment>
+    <DashboardLayout>
       <Helmet>
         <title>AI Branding Generator | MetaStream</title>
       </Helmet>
-      <DashboardLayout>
-        <div className="flex flex-col gap-6 p-6">
-          <div className="rounded-lg bg-gradient-to-r from-meta-dark-blue to-meta-purple p-6 text-white">
-            <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-              <div className="flex-1">
-                <div className="flex items-center gap-2">
-                  <h1 className="text-3xl font-bold">AI Branding Generator</h1>
-                  <Sparkles className="h-6 w-6 text-meta-teal" />
-                </div>
-                <p className="mt-2 text-lg opacity-90">
-                  Create your perfect streaming brand with AI-generated logos, themes, and images.
-                </p>
+      <div className="flex flex-col gap-6 p-6">
+        <div className="rounded-lg bg-gradient-to-r from-meta-dark-blue to-meta-purple p-6 text-white">
+          <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+            <div className="flex-1">
+              <div className="flex items-center gap-2">
+                <h1 className="text-3xl font-bold">AI Branding Generator</h1>
+                <Sparkles className="h-6 w-6 text-meta-teal" />
               </div>
+              <p className="mt-2 text-lg opacity-90">
+                Create your perfect streaming brand with AI-generated logos, themes, and images.
+              </p>
             </div>
           </div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            {/* Prompt Input Section */}
-            <Card className="lg:col-span-1">
-              <CardHeader>
-                <CardTitle>Generate Your Brand</CardTitle>
-                <CardDescription>
-                  Describe what you want and our AI will create options for you.
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <BrandingPromptForm 
-                  form={form}
-                  onSubmit={onSubmit}
-                  isGenerating={isGenerating}
-                  activeTab={activeTab}
-                  setActiveTab={setActiveTab}
-                  generatePromptSuggestion={generatePromptSuggestion}
-                />
-              </CardContent>
-            </Card>
-
-            {/* Generated Content Display */}
-            <BrandingContentDisplay 
-              activeTab={activeTab}
-              generatedItems={generatedItems}
-              onDownload={handleDownload}
-              onDelete={handleDeleteItem}
-              onApplyTheme={handleApplyTheme}
-            />
-          </div>
         </div>
-      </DashboardLayout>
-    </React.Fragment>
+
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {/* Prompt Input Section */}
+          <Card className="lg:col-span-1">
+            <CardHeader>
+              <CardTitle>Generate Your Brand</CardTitle>
+              <CardDescription>
+                Describe what you want and our AI will create options for you.
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <BrandingPromptForm 
+                form={form}
+                onSubmit={onSubmit}
+                isGenerating={isGenerating}
+                activeTab={activeTab}
+                setActiveTab={setActiveTab}
+                generatePromptSuggestion={generatePromptSuggestion}
+              />
+            </CardContent>
+          </Card>
+
+          {/* Generated Content Display */}
+          <BrandingContentDisplay 
+            activeTab={activeTab}
+            generatedItems={generatedItems}
+            onDownload={handleDownload}
+            onDelete={handleDeleteItem}
+            onApplyTheme={handleApplyTheme}
+          />
+        </div>
+      </div>
+    </DashboardLayout>
   );
 };
 

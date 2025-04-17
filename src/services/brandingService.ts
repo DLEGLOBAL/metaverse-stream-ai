@@ -26,6 +26,7 @@ export const generateBranding = async (
   type: 'logo' | 'theme' | 'image'
 ): Promise<GenerateResponse> => {
   try {
+    console.log(`Generating ${type} with prompt: ${prompt}`);
     const response = await fetch(`${FUNCTION_BASE_URL}/generate-branding`, {
       method: 'POST',
       headers: {
@@ -39,10 +40,12 @@ export const generateBranding = async (
 
     if (!response.ok) {
       const errorData = await response.json();
-      throw new Error(errorData.error || 'Failed to generate content');
+      console.error('Error response from generate-branding:', errorData);
+      throw new Error(errorData.error || `Failed to generate ${type}`);
     }
 
     const data = await response.json();
+    console.log(`Generated ${type} successfully:`, data);
 
     // Process the response based on the type
     if (type === 'logo') {
