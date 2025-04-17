@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { useDesktop } from '@/contexts/DesktopContext';
-import { Cpu, Memory, Activity, Wifi } from 'lucide-react';
+import { Cpu, Database, Activity, Wifi } from 'lucide-react';
 import { useAppContext } from '@/contexts/AppContext';
 import { useTheme } from '@/contexts/theme';
 
@@ -29,7 +29,7 @@ const DesktopStatusBar = ({ className = '' }: DesktopStatusBarProps) => {
         </div>
         
         <div className="flex items-center">
-          <Memory className="h-3 w-3 mr-1 text-meta-teal" />
+          <Database className="h-3 w-3 mr-1 text-meta-teal" />
           <span>v{version.app}</span>
         </div>
       </div>
