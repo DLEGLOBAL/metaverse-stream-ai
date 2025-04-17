@@ -22,7 +22,7 @@ const Sidebar = () => {
   const navigationItems = getNavigationItems().map(item => ({
     name: item.label,
     path: item.path,
-    icon: () => item.icon,
+    icon: item.icon,
     external: item.external
   }));
 
@@ -61,7 +61,7 @@ const Sidebar = () => {
                   rel="noopener noreferrer"
                   className={`flex items-center px-3 py-2 rounded-md transition-colors text-gray-300 hover:bg-meta-slate/20 hover:text-white ${collapsed ? 'justify-center' : ''}`}
                 >
-                  {React.createElement(item.icon(), { size: collapsed ? 20 : 18 })}
+                  {item.icon}
                   {!collapsed && <span className="ml-3">{item.name}</span>}
                 </a>
               ) : (
@@ -74,7 +74,7 @@ const Sidebar = () => {
                       : 'text-gray-300 hover:bg-meta-slate/20 hover:text-white'
                   } ${collapsed ? 'justify-center' : ''}`}
                 >
-                  {React.createElement(item.icon(), { size: collapsed ? 20 : 18 })}
+                  {item.icon}
                   {!collapsed && <span className="ml-3">{item.name}</span>}
                 </Link>
               );
