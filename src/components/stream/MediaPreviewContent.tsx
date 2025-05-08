@@ -11,7 +11,7 @@ interface MediaPreviewContentProps {
 
 const MediaPreviewContent: React.FC<MediaPreviewContentProps> = ({ isStreamPreviewAvailable }) => {
   const { sources, toggleSourceActive } = useAppContext();
-  const [error, setError] = useState<{type: 'camera' | 'microphone' | 'display' | 'general', message?: string} | null>(null);
+  const [error, setError] = useState<{type: 'camera' | 'microphone' | 'display' | 'general' | 'server', message?: string} | null>(null);
   
   // Check for errors in console logs
   useEffect(() => {
@@ -20,6 +20,23 @@ const MediaPreviewContent: React.FC<MediaPreviewContentProps> = ({ isStreamPrevi
       setError(null);
     }
   }, [isStreamPreviewAvailable]);
+
+  // Listen for relay server errors
+  useEffect(() => {
+    const handleRelayError = (event: CustomEvent) => {
+      console.log('Relay server error detected:', event.detail);
+      setError({
+        type: 'server',
+        message: event.detail.message || 'Could not connect to the relay server'
+      });
+    };
+
+    window.addEventListener('relay-server-error', handleRelayError as EventListener);
+    
+    return () => {
+      window.removeEventListener('relay-server-error', handleRelayError as EventListener);
+    };
+  }, []);
 
   const handleRetry = () => {
     // Find the camera source

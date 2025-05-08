@@ -27,6 +27,17 @@ interface RelayResponse {
  */
 let websocket: WebSocket | null = null;
 let mediaRecorder: MediaRecorder | null = null;
+let connectionAttempts = 0;
+const MAX_RETRY_ATTEMPTS = 3;
+const RETRY_DELAY = 2000; // 2 seconds
+
+// Custom event for relay server errors
+const dispatchRelayServerError = (message: string) => {
+  const event = new CustomEvent('relay-server-error', { 
+    detail: { message } 
+  });
+  window.dispatchEvent(event);
+};
 
 /**
  * Initializes a connection to the relay server and starts streaming
@@ -40,6 +51,9 @@ export const startRelayStream = async (
   platforms: StreamingPlatform[]
 ): Promise<RelayResponse> => {
   try {
+    // Reset connection attempts
+    connectionAttempts = 0;
+    
     // Close any existing connection
     if (websocket) {
       websocket.close();
@@ -54,20 +68,59 @@ export const startRelayStream = async (
     // Ensure we have at least one platform with a stream key
     const enabledPlatforms = platforms.filter(p => p.streamKey.trim() !== '');
     if (enabledPlatforms.length === 0) {
-      throw new Error('No stream keys configured');
+      const errorMessage = 'No stream keys configured';
+      dispatchRelayServerError(errorMessage);
+      throw new Error(errorMessage);
     }
     
+    return await connectToRelayServer(mediaStream, platforms);
+  } catch (error) {
+    console.error('Error connecting to relay server:', error);
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error connecting to relay server';
+    dispatchRelayServerError(errorMessage);
+    
+    return {
+      success: false,
+      error: errorMessage,
+    };
+  }
+};
+
+/**
+ * Connect to relay server with retry logic
+ */
+const connectToRelayServer = async (
+  mediaStream: MediaStream,
+  platforms: StreamingPlatform[]
+): Promise<RelayResponse> => {
+  try {
     // Connect to the relay server via WebSocket
-    websocket = new WebSocket(`ws://${new URL(RELAY_SERVER_URL).host}`);
+    const wsUrl = `ws://${new URL(RELAY_SERVER_URL).host}`;
+    console.log(`Connecting to relay server at ${wsUrl}`);
+    
+    websocket = new WebSocket(wsUrl);
     
     return new Promise((resolve, reject) => {
       if (!websocket) {
-        reject(new Error('WebSocket connection failed to initialize'));
+        const errorMessage = 'WebSocket connection failed to initialize';
+        dispatchRelayServerError(errorMessage);
+        reject(new Error(errorMessage));
         return;
       }
       
+      // Set timeout for connection
+      const connectionTimeout = setTimeout(() => {
+        if (websocket && websocket.readyState !== WebSocket.OPEN) {
+          const errorMessage = 'Connection to relay server timed out';
+          dispatchRelayServerError(errorMessage);
+          websocket.close();
+          reject(new Error(errorMessage));
+        }
+      }, 10000); // 10 second timeout
+      
       websocket.onopen = () => {
         console.log('Connected to relay server');
+        clearTimeout(connectionTimeout);
         
         // Send initialization data with platform info
         websocket.send(JSON.stringify({
@@ -102,29 +155,65 @@ export const startRelayStream = async (
           });
         } catch (error) {
           console.error('MediaRecorder error:', error);
+          const errorMessage = error instanceof Error ? error.message : 'Media recorder initialization failed';
+          dispatchRelayServerError(errorMessage);
           reject(error);
         }
       };
       
       websocket.onerror = (error) => {
+        clearTimeout(connectionTimeout);
         console.error('WebSocket error:', error);
-        reject(new Error('WebSocket connection error'));
+        const errorMessage = 'WebSocket connection error';
+        dispatchRelayServerError(errorMessage);
+        
+        // Try to reconnect if under max attempts
+        if (connectionAttempts < MAX_RETRY_ATTEMPTS) {
+          connectionAttempts++;
+          console.log(`Retry attempt ${connectionAttempts} of ${MAX_RETRY_ATTEMPTS}`);
+          
+          setTimeout(() => {
+            connectToRelayServer(mediaStream, platforms)
+              .then(resolve)
+              .catch(reject);
+          }, RETRY_DELAY * connectionAttempts);
+        } else {
+          dispatchRelayServerError(`Failed to connect after ${MAX_RETRY_ATTEMPTS} attempts`);
+          reject(new Error(`Connection failed after ${MAX_RETRY_ATTEMPTS} attempts`));
+        }
       };
       
-      websocket.onclose = () => {
-        console.log('WebSocket connection closed');
+      websocket.onclose = (event) => {
+        clearTimeout(connectionTimeout);
+        console.log(`WebSocket connection closed with code ${event.code}: ${event.reason}`);
+        
         // Stop the media recorder if it's still running
         if (mediaRecorder && mediaRecorder.state !== 'inactive') {
           mediaRecorder.stop();
         }
         mediaRecorder = null;
+        
+        // If this wasn't intentional and we haven't exceeded retry attempts, try to reconnect
+        if (!event.wasClean && connectionAttempts < MAX_RETRY_ATTEMPTS) {
+          connectionAttempts++;
+          console.log(`Connection closed unexpectedly. Retry attempt ${connectionAttempts} of ${MAX_RETRY_ATTEMPTS}`);
+          
+          setTimeout(() => {
+            connectToRelayServer(mediaStream, platforms)
+              .then(resolve)
+              .catch(reject);
+          }, RETRY_DELAY * connectionAttempts);
+        }
       };
     });
   } catch (error) {
-    console.error('Error connecting to relay server:', error);
+    console.error('Error in connectToRelayServer:', error);
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error in relay server connection';
+    dispatchRelayServerError(errorMessage);
+    
     return {
       success: false,
-      error: error instanceof Error ? error.message : 'Unknown error',
+      error: errorMessage,
     };
   }
 };
@@ -144,7 +233,7 @@ export const stopRelayStream = async (): Promise<RelayResponse> => {
     
     // Close the WebSocket connection
     if (websocket) {
-      websocket.close();
+      websocket.close(1000, "Stream ended by user");
       websocket = null;
     }
     
@@ -168,11 +257,32 @@ export const stopRelayStream = async (): Promise<RelayResponse> => {
  */
 export const checkRelayServerAvailability = async (): Promise<boolean> => {
   try {
+    console.log(`Checking relay server availability at ${RELAY_SERVER_URL}/health`);
+    
     // Use a simple health check endpoint to determine if the relay server is running
-    const response = await fetch(`${RELAY_SERVER_URL}/health`);
-    return response.ok;
+    const response = await fetch(`${RELAY_SERVER_URL}/health`, {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json'
+      },
+      // Add timeout with AbortController
+      signal: AbortSignal.timeout(5000)
+    });
+    
+    const isAvailable = response.ok;
+    console.log(`Relay server available: ${isAvailable}`);
+    
+    if (!isAvailable) {
+      dispatchRelayServerError('Relay server health check failed');
+    }
+    
+    return isAvailable;
   } catch (error) {
     console.error('Error checking relay server availability:', error);
+    
+    // Dispatch custom error event
+    dispatchRelayServerError('Could not connect to relay server');
+    
     return false;
   }
 };
