@@ -1,7 +1,6 @@
-
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Cpu, HardDrive, MemoryStick, Zap, Info, Server, Globe, Signal } from 'lucide-react';
+import { Cpu, HardDrive, MemoryStick, Zap, Info, Server, Globe, Signal, AlertCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Separator } from '@/components/ui/separator';
