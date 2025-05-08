@@ -49,10 +49,11 @@ export const activateRealDevice = async (
     let constraints: MediaStreamConstraints = {};
     
     if (source.type === 'camera') {
+      // Try with less restrictive constraints first
       constraints = { 
         video: {
-          width: { ideal: 1920 },
-          height: { ideal: 1080 }
+          width: { ideal: 1280 },
+          height: { ideal: 720 }
         } 
       };
     } else if (source.type === 'audio') {
@@ -73,6 +74,28 @@ export const activateRealDevice = async (
         
         activeStreams['display'] = displayStream;
         
+        // Add track ended listener
+        displayStream.getVideoTracks().forEach(track => {
+          track.addEventListener('ended', () => {
+            // When the user stops sharing (e.g., by clicking the browser's "Stop sharing" button),
+            // we need to update our UI state
+            const sourceIndex = sources.findIndex(s => s.type === 'display');
+            if (sourceIndex >= 0) {
+              const updatedSources = [...sources];
+              updatedSources[sourceIndex] = {...updatedSources[sourceIndex], active: false};
+              setSources(updatedSources);
+              
+              // Remove from active streams
+              delete activeStreams['display'];
+              
+              toast({
+                title: 'Screen Sharing Ended',
+                description: 'You have stopped sharing your screen.'
+              });
+            }
+          });
+        });
+        
         toast({
           title: 'Screen Share Activated',
           description: `${source.name} is now active`,
@@ -83,9 +106,20 @@ export const activateRealDevice = async (
         return true;
       } catch (error) {
         console.error('Error getting display media:', error);
+        let errorMessage = 'Could not access screen sharing. Please check permissions.';
+        
+        // More specific error messages
+        if (error instanceof Error) {
+          if (error.name === 'NotAllowedError') {
+            errorMessage = 'Screen sharing permission was denied. Please try again and allow access.';
+          } else if (error.name === 'AbortError') {
+            errorMessage = 'Screen sharing was cancelled.';
+          }
+        }
+        
         toast({
           title: 'Screen Share Error',
-          description: 'Could not access screen sharing. Please check permissions.',
+          description: errorMessage,
           variant: 'destructive',
         });
         return false;
@@ -120,9 +154,25 @@ export const activateRealDevice = async (
         return true;
       } catch (error) {
         console.error(`Error getting ${source.type} media:`, error);
+        
+        let errorMessage = `Could not access your ${source.type}. Please check permissions.`;
+        
+        // More specific error messages based on the error type
+        if (error instanceof Error) {
+          if (error.name === 'NotAllowedError') {
+            errorMessage = `${source.type === 'camera' ? 'Camera' : 'Microphone'} access denied. Please enable permissions in your browser settings.`;
+          } else if (error.name === 'NotFoundError') {
+            errorMessage = `No ${source.type === 'camera' ? 'camera' : 'microphone'} found. Please check your device connections.`;
+          } else if (error.name === 'NotReadableError') {
+            errorMessage = `Could not start ${source.type} source. It may be in use by another application.`;
+          } else if (error.name === 'OverconstrainedError') {
+            errorMessage = `Your ${source.type} does not meet the required constraints. Try a different device.`;
+          }
+        }
+        
         toast({
           title: `${source.type === 'camera' ? 'Camera' : 'Microphone'} Error`,
-          description: `Could not access your ${source.type}. Please check permissions.`,
+          description: errorMessage,
           variant: 'destructive',
         });
         return false;
@@ -166,4 +216,59 @@ export const deactivateRealDevice = (sourceId: number): void => {
 export const createBroadcastStream = () => {
   // TODO: Implement this to create a single stream from camera + display + audio
   // that can be sent to the relay server
+};
+
+// A utility function to check if the browser supports media access
+export const checkMediaAccess = async (): Promise<{camera: boolean, microphone: boolean}> => {
+  const result = { camera: false, microphone: false };
+  
+  try {
+    // Check if getUserMedia is supported
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+      console.log("getUserMedia not supported in this browser");
+      return result;
+    }
+    
+    // Check camera permissions
+    try {
+      const cameraStream = await navigator.mediaDevices.getUserMedia({ video: true });
+      result.camera = true;
+      cameraStream.getTracks().forEach(track => track.stop());
+    } catch (e) {
+      console.log("Camera permission denied or not available");
+    }
+    
+    // Check microphone permissions
+    try {
+      const audioStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      result.microphone = true;
+      audioStream.getTracks().forEach(track => track.stop());
+    } catch (e) {
+      console.log("Microphone permission denied or not available");
+    }
+  } catch (e) {
+    console.error("Error checking media permissions:", e);
+  }
+  
+  return result;
+};
+
+// Get all available media devices
+export const getAvailableMediaDevices = async (): Promise<MediaDeviceInfo[]> => {
+  try {
+    // First request permission to ensure device labels are populated
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: true });
+      stream.getTracks().forEach(track => track.stop());
+    } catch (e) {
+      console.log("Could not get initial permissions:", e);
+    }
+    
+    // Then enumerate devices
+    const devices = await navigator.mediaDevices.enumerateDevices();
+    return devices;
+  } catch (error) {
+    console.error("Error getting available devices:", error);
+    return [];
+  }
 };
