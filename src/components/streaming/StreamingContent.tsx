@@ -16,7 +16,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 const StreamingContent: React.FC = () => {
   const [activeTab, setActiveTab] = useState("keys");
-  const { stats, relayServerAvailable } = useAppContext();
+  const { stats, streamStatus, isRelayServerAvailable, startStream, stopStream } = useAppContext();
   
   const [platformStates, setPlatformStates] = useState<Record<number, boolean>>({
     1: true,  // Twitch
@@ -67,6 +67,11 @@ const StreamingContent: React.FC = () => {
     // This would typically open an OAuth flow
     console.log(`Connect to platform with ID: ${id}`);
   };
+
+  // Calculate active platform count for StreamStatusCard
+  const getActivePlatformCount = (): number => {
+    return Object.values(platformStates).filter(Boolean).length;
+  };
   
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-4 h-full">
@@ -81,7 +86,7 @@ const StreamingContent: React.FC = () => {
           
           <TabsContent value="keys" className="space-y-4">
             <StreamKeyManager />
-            {relayServerAvailable ? (
+            {isRelayServerAvailable ? (
               <ServerRelayInfo />
             ) : (
               <StreamAlerts />
@@ -108,8 +113,13 @@ const StreamingContent: React.FC = () => {
         </Tabs>
       </div>
       <div className="space-y-4">
-        <StreamStatusCard />
-        <StreamStats stats={stats} />
+        <StreamStatusCard 
+          streamStatus={streamStatus} 
+          activeStreamPlatforms={getActivePlatformCount()}
+          onStartStream={startStream}
+          onStopStream={stopStream}
+        />
+        <StreamStats stats={stats} streamStatus={streamStatus} />
         <StreamChat />
       </div>
     </div>
