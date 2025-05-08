@@ -39,11 +39,38 @@ export const useStreamKeys = () => {
     });
   };
 
+  const updatePlatformConfig = (platformName: string, config: Partial<PlatformKey>) => {
+    setStreamKeys(prev => {
+      const updated = prev.map(platform => {
+        if (platform.platform === platformName) {
+          // Handle nested customConfig updates
+          if (config.customConfig) {
+            return {
+              ...platform,
+              ...config,
+              customConfig: {
+                ...platform.customConfig,
+                ...config.customConfig
+              }
+            };
+          }
+          // Handle regular updates
+          return { ...platform, ...config };
+        }
+        return platform;
+      });
+      
+      // Save to localStorage
+      localStorage.setItem('streamKeys', JSON.stringify(updated));
+      return updated;
+    });
+  };
+
   const handleSaveKeys = () => {
     localStorage.setItem('streamKeys', JSON.stringify(streamKeys));
     toast({
       title: "Stream Keys Saved",
-      description: "Your stream keys have been saved securely in your browser.",
+      description: "Your stream keys and advanced configurations have been saved securely in your browser.",
     });
   };
 
@@ -90,6 +117,7 @@ export const useStreamKeys = () => {
     copiedKey,
     setActiveTab,
     handleStreamKeyChange,
+    updatePlatformConfig,
     handleSaveKeys,
     handleCopyUrl,
     handleCopyKey,

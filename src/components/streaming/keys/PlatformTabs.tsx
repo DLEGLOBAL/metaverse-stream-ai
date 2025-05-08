@@ -18,6 +18,7 @@ interface PlatformTabsProps {
   handleCopyKey: (key: string) => void;
   copiedUrl: boolean;
   copiedKey: boolean;
+  updatePlatformConfig?: (platform: string, config: Partial<PlatformKey>) => void;
 }
 
 const PlatformTabs: React.FC<PlatformTabsProps> = ({
@@ -32,6 +33,7 @@ const PlatformTabs: React.FC<PlatformTabsProps> = ({
   handleCopyKey,
   copiedUrl,
   copiedKey,
+  updatePlatformConfig
 }) => {
   return (
     <Tabs defaultValue={activeTab} value={activeTab} onValueChange={setActiveTab}>
@@ -55,6 +57,7 @@ const PlatformTabs: React.FC<PlatformTabsProps> = ({
             copiedUrl={copiedUrl}
             copiedKey={copiedKey}
             activeTab={activeTab}
+            onUpdatePlatformConfig={updatePlatformConfig}
           />
         </TabsContent>
       ))}
@@ -63,7 +66,7 @@ const PlatformTabs: React.FC<PlatformTabsProps> = ({
         onClick={handleSaveKeys}
         className="mt-4 w-full bg-button-gradient text-meta-dark-blue hover:brightness-110"
       >
-        <Save className="h-4 w-4 mr-2" /> Save All Stream Keys
+        <Save className="h-4 w-4 mr-2" /> Save All Stream Keys & Settings
       </Button>
     </Tabs>
   );

@@ -69,7 +69,59 @@ export const startStream = (
         return;
       }
       
-      activeDestinations = enabledPlatforms.map((p: any) => p.platform);
+      // Process platforms and handle advanced configurations
+      const processedPlatforms = enabledPlatforms.map((platform: any) => {
+        const processed = { 
+          platform: platform.platform, 
+          rtmpUrl: platform.rtmpUrl, 
+          streamKey: platform.streamKey 
+        };
+        
+        // Handle custom RTMP configurations
+        if (platform.isAdvanced && platform.customConfig) {
+          // Handle TikTok Beta Program
+          if (platform.platform === 'TikTok' && platform.customConfig.betaProgram) {
+            console.log('Using TikTok custom RTMP beta configuration');
+            
+            // In a real implementation, we might have special handling for TikTok's beta program
+            toast({
+              title: 'TikTok Beta',
+              description: 'Using TikTok Custom RTMP Beta configuration.',
+            });
+          }
+          
+          // Handle Instagram proxy
+          if (platform.platform === 'Instagram' && platform.customConfig.proxyEnabled) {
+            console.log('Using Instagram proxy:', platform.customConfig.proxyType);
+            
+            // Set the custom RTMP URL for the proxy
+            if (platform.customConfig.proxyUrl) {
+              processed.rtmpUrl = platform.customConfig.proxyUrl;
+            } else {
+              // Set default proxy URLs based on the type
+              switch (platform.customConfig.proxyType) {
+                case 'yellowduck':
+                  processed.rtmpUrl = 'rtmp://localhost:1935/rtmp';
+                  break;
+                case 'android-emulator':
+                  processed.rtmpUrl = 'rtmp://127.0.0.1:1935/live';
+                  break;
+                default:
+                  processed.rtmpUrl = platform.rtmpUrl;
+              }
+            }
+            
+            toast({
+              title: 'Instagram Proxy',
+              description: `Using ${platform.customConfig.proxyType} proxy for Instagram streaming.`,
+            });
+          }
+        }
+        
+        return processed;
+      });
+      
+      activeDestinations = processedPlatforms.map((p: any) => p.platform);
       
       // Check if we have the stream for broadcast
       if (!window.streamForBroadcast) {
@@ -85,7 +137,7 @@ export const startStream = (
       checkRelayServerAvailability().then(isAvailable => {
         if (isAvailable) {
           // Connect to relay server
-          startRelayStream(window.streamForBroadcast, enabledPlatforms)
+          startRelayStream(window.streamForBroadcast, processedPlatforms)
             .then(response => {
               if (response.success) {
                 toast({

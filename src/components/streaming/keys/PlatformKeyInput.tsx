@@ -11,10 +11,11 @@ interface PlatformKeyInputProps {
   showPassword?: boolean;
   onTogglePassword?: () => void;
   onChange?: (value: string) => void;
-  onCopy: (value: string) => void;
-  copied: boolean;
-  inputType?: 'url' | 'key';
+  onCopy?: (value: string) => void;
+  copied?: boolean;
+  inputType: 'url' | 'key' | 'custom';
   helperText?: string;
+  placeholder?: string;
 }
 
 const PlatformKeyInput: React.FC<PlatformKeyInputProps> = ({
@@ -26,26 +27,25 @@ const PlatformKeyInput: React.FC<PlatformKeyInputProps> = ({
   onTogglePassword,
   onChange,
   onCopy,
-  copied,
-  inputType = 'url',
+  copied = false,
+  inputType,
   helperText,
+  placeholder
 }) => {
   return (
     <div>
-      <label className="block text-sm font-medium text-gray-300 mb-1">
-        {label}
-      </label>
+      <label className="block text-sm font-medium text-gray-300 mb-1">{label}</label>
       <div className="relative">
         <input 
           type={isPassword && !showPassword ? "password" : "text"} 
           value={value}
-          onChange={onChange ? (e) => onChange(e.target.value) : undefined}
+          placeholder={placeholder}
+          onChange={(e) => onChange?.(e.target.value)}
           className="w-full bg-meta-dark-blue border border-meta-teal/30 rounded-md py-2 pl-3 pr-20 text-white"
-          placeholder={isPassword ? "Enter your stream key" : undefined}
           readOnly={readOnly}
         />
         <div className="absolute right-1 top-1 flex">
-          {isPassword && onTogglePassword && (
+          {isPassword && (
             <Button 
               variant="ghost" 
               size="icon" 
@@ -55,17 +55,16 @@ const PlatformKeyInput: React.FC<PlatformKeyInputProps> = ({
               {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
             </Button>
           )}
-          <Button 
-            variant="ghost" 
-            size="icon" 
-            className="h-8 w-8 hover:bg-meta-teal/10 text-gray-400"
-            onClick={() => onCopy(value)}
-          >
-            {copied ? 
-              <CopyCheck className="h-4 w-4 text-meta-teal" /> : 
-              <Link className="h-4 w-4" />
-            }
-          </Button>
+          {onCopy && (
+            <Button 
+              variant="ghost" 
+              size="icon" 
+              className="h-8 w-8 hover:bg-meta-teal/10 text-gray-400"
+              onClick={() => onCopy(value)}
+            >
+              {copied ? <CopyCheck className="h-4 w-4 text-meta-teal" /> : <Link className="h-4 w-4" />}
+            </Button>
+          )}
         </div>
       </div>
       {helperText && <p className="text-xs text-gray-500 mt-1">{helperText}</p>}

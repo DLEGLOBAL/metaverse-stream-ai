@@ -13,6 +13,7 @@ const StreamKeyManager: React.FC = () => {
     copiedKey,
     setActiveTab,
     handleStreamKeyChange,
+    updatePlatformConfig,
     handleSaveKeys,
     handleCopyUrl,
     handleCopyKey,
@@ -22,7 +23,7 @@ const StreamKeyManager: React.FC = () => {
   return (
     <Card className="glass-card mb-4">
       <CardHeader className="pb-2">
-        <CardTitle className="text-white">Stream Keys</CardTitle>
+        <CardTitle className="text-white">Stream Keys & Advanced RTMP Configuration</CardTitle>
       </CardHeader>
       <CardContent>
         <PlatformTabs
@@ -37,6 +38,7 @@ const StreamKeyManager: React.FC = () => {
           handleCopyKey={handleCopyKey}
           copiedUrl={copiedUrl}
           copiedKey={copiedKey}
+          updatePlatformConfig={updatePlatformConfig}
         />
       </CardContent>
     </Card>
