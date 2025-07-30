@@ -2,7 +2,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { ThemeProvider } from './contexts/theme';
-import { AppProvider } from './contexts/AppContext';
+import { AppProvider } from './contexts/AppContextProvider';
 import { AuthProvider } from './hooks/useAuth';
 import { VRProvider } from './contexts/VRContext';
 import { DesktopProvider } from './contexts/DesktopContext';
