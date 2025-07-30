@@ -165,6 +165,17 @@ export const activateRealDevice = async (
             errorMessage = `No ${source.type === 'camera' ? 'camera' : 'microphone'} found. Please check your device connections.`;
           } else if (error.name === 'NotReadableError') {
             errorMessage = `${source.type === 'camera' ? 'Camera' : 'Microphone'} is currently in use by another application. Please close other apps using your ${source.type} and try again.`;
+            
+            // For camera issues, try to help users by suggesting specific solutions
+            if (source.type === 'camera') {
+              // Try to release any existing camera streams first
+              if (activeStreams['camera']) {
+                activeStreams['camera'].getTracks().forEach(track => track.stop());
+                delete activeStreams['camera'];
+              }
+              
+              errorMessage += ' Common solutions: Close video conferencing apps (Zoom, Teams, Skype), browser tabs using camera, or restart your browser.';
+            }
           } else if (error.name === 'OverconstrainedError') {
             // Try with less restrictive constraints for camera
             if (source.type === 'camera') {
