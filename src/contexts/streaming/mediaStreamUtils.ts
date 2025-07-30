@@ -164,9 +164,28 @@ export const activateRealDevice = async (
           } else if (error.name === 'NotFoundError') {
             errorMessage = `No ${source.type === 'camera' ? 'camera' : 'microphone'} found. Please check your device connections.`;
           } else if (error.name === 'NotReadableError') {
-            errorMessage = `Could not start ${source.type} source. It may be in use by another application.`;
+            errorMessage = `${source.type === 'camera' ? 'Camera' : 'Microphone'} is currently in use by another application. Please close other apps using your ${source.type} and try again.`;
           } else if (error.name === 'OverconstrainedError') {
-            errorMessage = `Your ${source.type} does not meet the required constraints. Try a different device.`;
+            // Try with less restrictive constraints for camera
+            if (source.type === 'camera') {
+              console.log('Trying with lower resolution constraints...');
+              try {
+                const fallbackStream = await navigator.mediaDevices.getUserMedia({ 
+                  video: { width: 640, height: 480 } 
+                });
+                activeStreams['camera'] = fallbackStream;
+                toast({
+                  title: 'Camera Activated',
+                  description: `${source.name} is now active (lower resolution)`,
+                });
+                setIsStreamPreviewAvailable(true);
+                return true;
+              } catch (fallbackError) {
+                errorMessage = `Your camera does not support the required settings. Please try a different camera.`;
+              }
+            } else {
+              errorMessage = `Your ${source.type} does not meet the required constraints. Try a different device.`;
+            }
           }
         }
         
