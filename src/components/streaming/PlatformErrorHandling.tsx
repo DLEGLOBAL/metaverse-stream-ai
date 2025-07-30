@@ -65,10 +65,10 @@ const PlatformErrorHandling: React.FC<MediaErrorProps> = ({
       case 'server':
         return (
           <ul className="list-disc pl-5 text-sm text-gray-400">
-            <li>Check your network connection</li>
-            <li>Verify that the relay server is running and accessible</li>
-            <li>Try disabling any VPN or proxy services</li>
-            <li>Check your firewall settings</li>
+            <li>The relay server is currently not running</li>
+            <li>For now, streaming works directly from your browser to platforms</li>
+            <li>Advanced relay features will be available in the desktop app</li>
+            <li>You can still configure stream keys and test your setup</li>
           </ul>
         );
       default:

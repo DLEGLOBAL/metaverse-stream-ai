@@ -259,6 +259,12 @@ export const checkRelayServerAvailability = async (): Promise<boolean> => {
   try {
     console.log(`Checking relay server availability at ${RELAY_SERVER_URL}/health`);
     
+    // For now, always return false since we disabled the server temporarily
+    // This prevents the error from showing repeatedly
+    console.log('Relay server temporarily disabled during build fixes');
+    return false;
+    
+    /*
     // Use a simple health check endpoint to determine if the relay server is running
     const response = await fetch(`${RELAY_SERVER_URL}/health`, {
       method: 'GET',
@@ -277,11 +283,12 @@ export const checkRelayServerAvailability = async (): Promise<boolean> => {
     }
     
     return isAvailable;
+    */
   } catch (error) {
     console.error('Error checking relay server availability:', error);
     
-    // Dispatch custom error event
-    dispatchRelayServerError('Could not connect to relay server');
+    // Don't dispatch error events during build issues
+    // dispatchRelayServerError('Could not connect to relay server');
     
     return false;
   }

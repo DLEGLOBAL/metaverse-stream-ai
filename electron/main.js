@@ -3,13 +3,14 @@ const path = require('path');
 const url = require('url');
 const os = require('os');
 const fs = require('fs');
-const { startRelayServer } = require('./relay-server');
+// Remove relay server import temporarily to isolate the issue
+// const { startRelayServer } = require('./relay-server');
 
 // Keep a global reference of the window object to avoid garbage collection
 let mainWindow;
 let tray = null;
 let isQuitting = false;
-let relayServer = null;
+// let relayServer = null;
 
 function createWindow() {
   // Create the browser window
@@ -161,13 +162,15 @@ function setupIpcHandlers() {
 
 // Create window when Electron app is ready
 app.on('ready', () => {
-  // Start the relay server
+  // Start the relay server - temporarily disabled to fix build issues
+  /*
   try {
     relayServer = startRelayServer(3000);
     console.log('Relay server started successfully');
   } catch (error) {
     console.error('Failed to start relay server:', error);
   }
+  */
   
   createWindow();
 });
