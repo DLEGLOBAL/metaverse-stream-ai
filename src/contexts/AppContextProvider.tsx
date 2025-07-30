@@ -21,6 +21,7 @@ const TikTok = (props) => (
 );
 
 export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  console.log('AppProvider: Rendering with children:', !!children);
   const {
     scenes, setScenes,
     sources, setSources,
@@ -115,6 +116,11 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const getActivePlatformsCount = () => {
     return Object.values(platformStates).filter(Boolean).length;
   };
+
+  console.log('AppProvider: About to render context with value keys:', Object.keys({
+    scenes, sources, aiFeatures, stats, streamStatus, activeSceneId,
+    isStreamPreviewAvailable, scheduledStreams, isRecording, audioSettings, streamAlerts
+  }));
 
   return (
     <CustomThemeProvider>

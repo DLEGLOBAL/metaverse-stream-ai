@@ -13,7 +13,10 @@ type HeaderProps = {
 };
 
 const Header = ({ sidebarCollapsed }: HeaderProps) => {
-  const { streamStatus, startStream } = useAppContext();
+  console.log('Header component: About to call useAppContext');
+  const appContext = useAppContext();
+  console.log('Header component: AppContext received:', appContext ? 'success' : 'undefined');
+  const { streamStatus, startStream } = appContext;
   const { isDesktop, platform } = useDesktop();
 
   const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
