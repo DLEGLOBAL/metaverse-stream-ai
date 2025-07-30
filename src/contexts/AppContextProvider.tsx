@@ -10,7 +10,6 @@ import { useScheduleHandlers } from './hooks/useScheduleHandlers';
 import { useAudioHandlers } from './hooks/useAudioHandlers';
 import { useAlertHandlers } from './hooks/useAlertHandlers';
 import { AppContext } from './AppContext';
-import { ThemeProvider } from './theme/ThemeContext';
 import { CustomThemeProvider } from './theme/CustomThemeContext';
 import { useAppInitializer } from './hooks/useAppInitializer';
 import { Facebook, Twitch, Youtube } from 'lucide-react';
@@ -118,53 +117,51 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   };
 
   return (
-    <ThemeProvider>
-      <CustomThemeProvider>
-        <AppContext.Provider
-          value={{
-            scenes,
-            sources,
-            aiFeatures,
-            stats,
-            streamStatus,
-            activeSceneId,
-            isStreamPreviewAvailable,
-            scheduledStreams,
-            isRecording,
-            audioSettings,
-            streamAlerts,
-            setScenes,
-            setSources,
-            setAiFeatures,
-            setStats,
-            setStreamStatus,
-            setStreamAlerts,
-            toggleSceneActive,
-            toggleSourceActive,
-            toggleAiFeature,
-            updateAiFeatureSlider,
-            startStream,
-            stopStream,
-            testStream,
-            startRecording,
-            stopRecording,
-            scheduleStream,
-            deleteScheduledStream,
-            updateAudioSettings,
-            toggleStreamAlert,
-            updateStreamAlert,
-            isRelayServerAvailable,
-            setRelayServerAvailable,
-            platforms,
-            platformStates,
-            onPlatformToggle,
-            onConnectPlatform,
-            getActivePlatformsCount
-          }}
-        >
-          {children}
-        </AppContext.Provider>
-      </CustomThemeProvider>
-    </ThemeProvider>
+    <CustomThemeProvider>
+      <AppContext.Provider
+        value={{
+          scenes,
+          sources,
+          aiFeatures,
+          stats,
+          streamStatus,
+          activeSceneId,
+          isStreamPreviewAvailable,
+          scheduledStreams,
+          isRecording,
+          audioSettings,
+          streamAlerts,
+          setScenes,
+          setSources,
+          setAiFeatures,
+          setStats,
+          setStreamStatus,
+          setStreamAlerts,
+          toggleSceneActive,
+          toggleSourceActive,
+          toggleAiFeature,
+          updateAiFeatureSlider,
+          startStream,
+          stopStream,
+          testStream,
+          startRecording,
+          stopRecording,
+          scheduleStream,
+          deleteScheduledStream,
+          updateAudioSettings,
+          toggleStreamAlert,
+          updateStreamAlert,
+          isRelayServerAvailable,
+          setRelayServerAvailable,
+          platforms,
+          platformStates,
+          onPlatformToggle,
+          onConnectPlatform,
+          getActivePlatformsCount
+        }}
+      >
+        {children}
+      </AppContext.Provider>
+    </CustomThemeProvider>
   );
 };
